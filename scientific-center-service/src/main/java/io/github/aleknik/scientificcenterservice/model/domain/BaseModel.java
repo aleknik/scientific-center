@@ -1,4 +1,4 @@
-package io.github.aleknik.scientificcenterservice.model;
+package io.github.aleknik.scientificcenterservice.model.domain;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
