@@ -143,7 +143,7 @@
       <bpmn:incoming>SequenceFlow_1o3v9nz</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_0nz6r7f</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1t2t1fg</bpmn:outgoing>
-      <bpmn:multiInstanceLoopCharacteristics camunda:collection="${reviewers}" />
+      <bpmn:multiInstanceLoopCharacteristics camunda:collection="${reviewers}" camunda:elementVariable="reviewer" />
     </bpmn:userTask>
     <bpmn:sequenceFlow id="SequenceFlow_1t2t1fg" sourceRef="Task_0s4dlj5" targetRef="Task_1x2vac9" />
     <bpmn:sequenceFlow id="SequenceFlow_0sb5dnp" name="Yes" sourceRef="ExclusiveGateway_0klg0a7" targetRef="Task_02jgury">
