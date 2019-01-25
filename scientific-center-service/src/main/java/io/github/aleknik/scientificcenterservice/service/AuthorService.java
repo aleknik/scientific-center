@@ -1,5 +1,6 @@
 package io.github.aleknik.scientificcenterservice.service;
 
+import io.github.aleknik.scientificcenterservice.controller.exception.BadRequestException;
 import io.github.aleknik.scientificcenterservice.model.domain.Author;
 import io.github.aleknik.scientificcenterservice.repositroy.UserRepository;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,9 @@ public class AuthorService {
     }
 
     public Author createAuthor(Author author) {
+        if (userRepository.findByEmail(author.getEmail()).isPresent()) {
+            throw new BadRequestException("Email taken");
+        }
         return userRepository.save(author);
     }
 }

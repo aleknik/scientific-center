@@ -52,9 +52,19 @@
       <bpmn:outgoing>SequenceFlow_0h421us</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:sequenceFlow id="SequenceFlow_0h421us" sourceRef="Task_1oedcoy" targetRef="Task_0yk4dfp" />
+    <bpmn:boundaryEvent id="BoundaryEvent_1tal2of" attachedToRef="Task_0yk4dfp">
+      <bpmn:outgoing>SequenceFlow_0h0p37c</bpmn:outgoing>
+      <bpmn:errorEventDefinition errorRef="Error_1l9lii8" />
+    </bpmn:boundaryEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_0h0p37c" sourceRef="BoundaryEvent_1tal2of" targetRef="EndEvent_0ek3zar" />
+    <bpmn:endEvent id="EndEvent_0ek3zar">
+      <bpmn:incoming>SequenceFlow_0h0p37c</bpmn:incoming>
+      <bpmn:errorEventDefinition errorRef="Error_1l9lii8" />
+    </bpmn:endEvent>
   </bpmn:process>
-  <bpmn:error id="Error_0dxrjhq" name="Error_07cv2br" />
-  <bpmn:error id="Error_0dkzjsb" name="Error_2q9dvkv" errorCode="1" />
+  <bpmn:error id="Error_0dxrjhq" />
+  <bpmn:error id="Error_0dkzjsb" />
+  <bpmn:error id="Error_1l9lii8" name="UserDataInvalid" errorCode="UserDataInvalid" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="registration">
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
@@ -81,6 +91,17 @@
         <di:waypoint x="393" y="120" />
         <di:waypoint x="535" y="120" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="BoundaryEvent_1p3zptw_di" bpmnElement="BoundaryEvent_1tal2of">
+        <dc:Bounds x="550" y="142" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0h0p37c_di" bpmnElement="SequenceFlow_0h0p37c">
+        <di:waypoint x="568" y="178" />
+        <di:waypoint x="568" y="240" />
+        <di:waypoint x="636" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="EndEvent_1f994ad_di" bpmnElement="EndEvent_0ek3zar">
+        <dc:Bounds x="636" y="222" width="36" height="36" />
+      </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
 </bpmn:definitions>

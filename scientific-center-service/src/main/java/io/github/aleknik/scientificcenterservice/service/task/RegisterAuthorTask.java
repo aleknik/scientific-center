@@ -4,6 +4,7 @@ import io.github.aleknik.scientificcenterservice.model.domain.Address;
 import io.github.aleknik.scientificcenterservice.model.domain.Author;
 import io.github.aleknik.scientificcenterservice.service.AuthorService;
 import org.camunda.bpm.engine.IdentityService;
+import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.camunda.bpm.engine.identity.User;
@@ -24,7 +25,11 @@ public class RegisterAuthorTask implements JavaDelegate {
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
         Author author = createAuthor(delegateExecution);
-        author = authorService.createAuthor(author);
+        try {
+            author = authorService.createAuthor(author);
+        } catch (Exception e) {
+            throw new BpmnError("UserDataInvalid");
+        }
         final User user = identityService.newUser(String.valueOf(author.getId()));
         user.setPassword(author.getPassword());
         identityService.saveUser(user);
