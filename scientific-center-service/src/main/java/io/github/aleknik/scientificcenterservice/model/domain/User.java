@@ -17,10 +17,20 @@ public class User extends BaseModel {
 
     private String lastName;
 
+    private String processEngineUserId;
+
     @Embedded
     private Address address;
 
     public User() {
+    }
+
+    public User(String email, String password, String firstName, String lastName, Address address) {
+        this.email = email;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.address = address;
     }
 
     public String getEmail() {
@@ -61,5 +71,13 @@ public class User extends BaseModel {
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    public String getProcessEngineUserId() {
+        return processEngineUserId;
+    }
+
+    public void setProcessEngineUserId(String processEngineUserId) {
+        this.processEngineUserId = processEngineUserId;
     }
 }

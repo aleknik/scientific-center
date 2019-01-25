@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_0kzvlyk" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="2.0.3">
+  <bpmn:process id="registration" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>SequenceFlow_1pfpl95</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_1pfpl95" sourceRef="StartEvent_1" targetRef="Task_1oedcoy" />
+    <bpmn:endEvent id="EndEvent_0rqq6v3">
+      <bpmn:incoming>SequenceFlow_015dkum</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_015dkum" sourceRef="Task_0yk4dfp" targetRef="EndEvent_0rqq6v3" />
+    <bpmn:serviceTask id="Task_0yk4dfp" name="Create new user" camunda:class="io.github.aleknik.scientificcenterservice.service.task.RegisterAuthorTask">
+      <bpmn:incoming>SequenceFlow_0h421us</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_015dkum</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:userTask id="Task_1oedcoy" name="Submit user info">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="email" label="Email" type="string">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="password" label="Password" type="string">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="firstName" label="First name" type="string">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="lastName" label="Last name" type="string">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="city" label="City" type="string">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="country" label="Country" type="string">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_1pfpl95</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0h421us</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="SequenceFlow_0h421us" sourceRef="Task_1oedcoy" targetRef="Task_0yk4dfp" />
+  </bpmn:process>
+  <bpmn:error id="Error_0dxrjhq" name="Error_07cv2br" />
+  <bpmn:error id="Error_0dkzjsb" name="Error_2q9dvkv" errorCode="1" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="registration">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="173" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1pfpl95_di" bpmnElement="SequenceFlow_1pfpl95">
+        <di:waypoint x="209" y="120" />
+        <di:waypoint x="293" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="EndEvent_0rqq6v3_di" bpmnElement="EndEvent_0rqq6v3">
+        <dc:Bounds x="809" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_015dkum_di" bpmnElement="SequenceFlow_015dkum">
+        <di:waypoint x="635" y="120" />
+        <di:waypoint x="809" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ServiceTask_1bhnws8_di" bpmnElement="Task_0yk4dfp">
+        <dc:Bounds x="535" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="UserTask_1mjaasy_di" bpmnElement="Task_1oedcoy">
+        <dc:Bounds x="293" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0h421us_di" bpmnElement="SequenceFlow_0h421us">
+        <di:waypoint x="393" y="120" />
+        <di:waypoint x="535" y="120" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

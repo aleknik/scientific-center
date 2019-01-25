@@ -1,0 +1,45 @@
+package io.github.aleknik.scientificcenterservice.service.task;
+
+import io.github.aleknik.scientificcenterservice.model.domain.Address;
+import io.github.aleknik.scientificcenterservice.model.domain.Author;
+import io.github.aleknik.scientificcenterservice.service.AuthorService;
+import org.camunda.bpm.engine.IdentityService;
+import org.camunda.bpm.engine.delegate.DelegateExecution;
+import org.camunda.bpm.engine.delegate.JavaDelegate;
+import org.camunda.bpm.engine.identity.User;
+import org.springframework.stereotype.Service;
+
+@Service
+public class RegisterAuthorTask implements JavaDelegate {
+
+    private final AuthorService authorService;
+
+    private final IdentityService identityService;
+
+    public RegisterAuthorTask(AuthorService authorService, IdentityService identityService) {
+        this.authorService = authorService;
+        this.identityService = identityService;
+    }
+
+    @Override
+    public void execute(DelegateExecution delegateExecution) throws Exception {
+        Author author = createAuthor(delegateExecution);
+        author = authorService.createAuthor(author);
+        final User user = identityService.newUser(String.valueOf(author.getId()));
+        user.setPassword(author.getPassword());
+        identityService.saveUser(user);
+    }
+
+
+    private Author createAuthor(DelegateExecution delegateExecution) {
+        String email = (String) delegateExecution.getVariable("email");
+        String password = (String) delegateExecution.getVariable("password");
+        String firstName = (String) delegateExecution.getVariable("firstName");
+        String lastName = (String) delegateExecution.getVariable("lastName");
+        String city = (String) delegateExecution.getVariable("city");
+        String country = (String) delegateExecution.getVariable("country");
+
+        final Author author = new Author(email, password, firstName, lastName, new Address(city, country));
+        return author;
+    }
+}
