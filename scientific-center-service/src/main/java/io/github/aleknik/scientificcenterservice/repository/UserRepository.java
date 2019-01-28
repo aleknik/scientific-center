@@ -1,4 +1,4 @@
-package io.github.aleknik.scientificcenterservice.repositroy;
+package io.github.aleknik.scientificcenterservice.repository;
 
 import io.github.aleknik.scientificcenterservice.model.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;

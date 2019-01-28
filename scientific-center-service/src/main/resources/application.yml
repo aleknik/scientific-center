@@ -17,3 +17,7 @@ camunda.bpm:
     create: All tasks
 
 camunda.bpm.webapp.index-redirect-enabled: false
+
+elasticsearch.clustername: science-center-app
+elasticsearch.host: localhost
+elasticsearch.port: 9300

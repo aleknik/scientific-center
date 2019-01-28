@@ -5,7 +5,7 @@
       <bpmn:outgoing>SequenceFlow_1ki2csy</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="SequenceFlow_1ki2csy" sourceRef="StartEvent_1" targetRef="Task_0wboww9" />
-    <bpmn:userTask id="Task_0wboww9" name="Choose jurnal" camunda:assignee="${authorId}">
+    <bpmn:userTask id="Task_0wboww9" name="Choose journal" camunda:assignee="${authorId}">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="name" label="Name" type="string">
@@ -18,7 +18,7 @@
       <bpmn:incoming>SequenceFlow_1ki2csy</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1jbchh9</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:exclusiveGateway id="ExclusiveGateway_0klg0a7" name="Is jurnal open access?">
+    <bpmn:exclusiveGateway id="ExclusiveGateway_0klg0a7" name="Is journal open access?">
       <bpmn:incoming>SequenceFlow_0867qkh</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1sg79d3</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_147nai9</bpmn:outgoing>
@@ -243,7 +243,7 @@
     </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="SequenceFlow_0wk8kwd" sourceRef="Task_02jgury" targetRef="ExclusiveGateway_0jed9jt" />
     <bpmn:sequenceFlow id="SequenceFlow_0867qkh" sourceRef="Task_0tlcw99" targetRef="ExclusiveGateway_0klg0a7" />
-    <bpmn:serviceTask id="Task_0tlcw99" name="Check jurnal type" camunda:class="io.github.aleknik.scientificcenterservice.service.task.TempTask">
+    <bpmn:serviceTask id="Task_0tlcw99" name="Check journal type" camunda:class="io.github.aleknik.scientificcenterservice.service.task.TempTask">
       <bpmn:incoming>SequenceFlow_1jbchh9</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0867qkh</bpmn:outgoing>
     </bpmn:serviceTask>
