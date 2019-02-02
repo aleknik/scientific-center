@@ -1,8 +1,7 @@
 package io.github.aleknik.scientificcenterservice.controller;
 
 import io.github.aleknik.scientificcenterservice.model.elasticsearch.PaperIndexUnit;
-import io.github.aleknik.scientificcenterservice.model.elasticsearch.Reviewer;
-import io.github.aleknik.scientificcenterservice.repository.elasticsearch.PaperRepository;
+import io.github.aleknik.scientificcenterservice.repository.elasticsearch.ESPaperRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,10 +13,10 @@ import java.util.Arrays;
 @RequestMapping("api/test")
 public class TestController {
 
-    private final PaperRepository paperRepository;
+    private final ESPaperRepository ESPaperRepository;
 
-    public TestController(PaperRepository paperRepository) {
-        this.paperRepository = paperRepository;
+    public TestController(ESPaperRepository ESPaperRepository) {
+        this.ESPaperRepository = ESPaperRepository;
     }
 
     @GetMapping
@@ -29,9 +28,9 @@ public class TestController {
         paperIndexUnit.setJournal("dsfsd");
         paperIndexUnit.setKeywords(Arrays.asList("Earth", "Mars", "Venus"));
         paperIndexUnit.setOpenAccess(true);
-        paperIndexUnit.setReviewers(Arrays.asList(new Reviewer("2", "sada", "sdad")));
+//        paperIndexUnit.setReviewers(Arrays.asList(new Reviewer("2", "sada", "sdad")));
 
-        final PaperIndexUnit index = paperRepository.index(paperIndexUnit);
+        final PaperIndexUnit index = ESPaperRepository.index(paperIndexUnit);
         return ResponseEntity.ok(index);
     }
 }

@@ -1,0 +1,17 @@
+/* You can add global styles to this file, and also import other style files */
+body {
+    padding-top: 4.5rem;
+  }
+  
+  .pointer {
+      cursor: pointer;
+  }
+  
+  .scroller {
+      height: 94vh;
+      overflow-y: scroll;
+  }
+
+  #toast-container > div {
+    opacity:1;
+}

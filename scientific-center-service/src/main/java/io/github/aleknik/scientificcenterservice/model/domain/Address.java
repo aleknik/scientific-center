@@ -6,6 +6,10 @@ public class Address {
 
     private String country;
 
+    private double longitude;
+
+    private double latitude;
+
     public Address(String city, String country) {
         this.city = city;
         this.country = country;
@@ -28,5 +32,21 @@ public class Address {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
     }
 }

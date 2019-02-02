@@ -21,3 +21,5 @@ camunda.bpm.webapp.index-redirect-enabled: false
 elasticsearch.clustername: science-center-app
 elasticsearch.host: localhost
 elasticsearch.port: 9300
+
+storage-location: C:/papers

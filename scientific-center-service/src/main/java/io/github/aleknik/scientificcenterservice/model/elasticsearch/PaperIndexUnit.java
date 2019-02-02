@@ -20,7 +20,7 @@ public class PaperIndexUnit {
     @Field(type = FieldType.Text, store = true)
     private String title;
 
-    @Field(type = FieldType.Text, store = true)
+    @Field(type = FieldType.Keyword, store = true)
     private String externalId;
 
     @Field(type = FieldType.Text, store = true)
@@ -29,11 +29,17 @@ public class PaperIndexUnit {
     @Field(type = FieldType.Text, store = true)
     private List<String> keywords;
 
-    @Field(type = FieldType.Text, store = true)
+    @Field(type = FieldType.Boolean, store = true)
     private boolean openAccess;
 
+    @Field(type = FieldType.Object, store = true)
+    private Author author;
+
     @Field(type = FieldType.Nested, store = true)
-    private List<Reviewer> reviewers;
+    private List<Author> coauthors;
+
+    @Field(type = FieldType.Nested, store = true)
+    private List<ReviewerIndexUnit> reviewers;
 
     @Field(type = FieldType.Text, store = true)
     private String content;
@@ -94,11 +100,27 @@ public class PaperIndexUnit {
         this.openAccess = openAccess;
     }
 
-    public List<Reviewer> getReviewers() {
+    public Author getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Author author) {
+        this.author = author;
+    }
+
+    public List<Author> getCoauthors() {
+        return coauthors;
+    }
+
+    public void setCoauthors(List<Author> coauthors) {
+        this.coauthors = coauthors;
+    }
+
+    public List<ReviewerIndexUnit> getReviewers() {
         return reviewers;
     }
 
-    public void setReviewers(List<Reviewer> reviewers) {
+    public void setReviewers(List<ReviewerIndexUnit> reviewers) {
         this.reviewers = reviewers;
     }
 }
