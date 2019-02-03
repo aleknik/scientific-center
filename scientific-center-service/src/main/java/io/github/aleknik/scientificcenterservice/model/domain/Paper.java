@@ -1,9 +1,6 @@
 package io.github.aleknik.scientificcenterservice.model.domain;
 
-import org.glassfish.jersey.internal.util.JerseyPublisher;
-
 import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
 
 @Entity
