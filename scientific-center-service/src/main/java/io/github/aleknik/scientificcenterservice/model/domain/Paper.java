@@ -1,5 +1,7 @@
 package io.github.aleknik.scientificcenterservice.model.domain;
 
+import org.glassfish.jersey.internal.util.JerseyPublisher;
+
 import javax.persistence.*;
 import java.util.List;
 import java.util.Set;
@@ -9,11 +11,7 @@ public class Paper extends BaseModel {
 
     private String title;
 
-    private String externalId;
-
-    private String journal;
-
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
     private Set<Keyword> keywords;
 
     private boolean openAccess;
@@ -21,7 +19,7 @@ public class Paper extends BaseModel {
     @ManyToOne(fetch = FetchType.EAGER)
     private Author author;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
     private Set<UnregisteredAuthor> coauthors;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -36,22 +34,6 @@ public class Paper extends BaseModel {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public String getExternalId() {
-        return externalId;
-    }
-
-    public void setExternalId(String externalId) {
-        this.externalId = externalId;
-    }
-
-    public String getJournal() {
-        return journal;
-    }
-
-    public void setJournal(String journal) {
-        this.journal = journal;
     }
 
     public boolean isOpenAccess() {

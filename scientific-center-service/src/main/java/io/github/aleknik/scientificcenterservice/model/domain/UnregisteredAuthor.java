@@ -18,6 +18,13 @@ public class UnregisteredAuthor extends BaseModel {
     public UnregisteredAuthor() {
     }
 
+    public UnregisteredAuthor(String firstName, String lastName, Address address, String email) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.address = address;
+        this.email = email;
+    }
+
     public String getFirstName() {
         return firstName;
     }
