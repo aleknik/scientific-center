@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/shared/model/user.model';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { AuthService } from 'src/app/core/http/auth.service';
 
 @Component({
   selector: 'app-signin',
@@ -12,7 +13,7 @@ export class SigninComponent implements OnInit {
 
   user: User = new User();
 
-  constructor(
+  constructor(private authService: AuthService,
     private router: Router,
     private toastr: ToastrService) { }
 
@@ -20,10 +21,12 @@ export class SigninComponent implements OnInit {
   }
 
   signin() {
-    this.toastr.success(`Welcome ${this.user.username}`);
-    console.log("adsas");
-
-    this.router.navigateByUrl('');
+    this.authService.authenticate(this.user).subscribe(
+      response => {
+        this.toastr.success(`Welcome ${this.user.email}`);
+        this.router.navigateByUrl('');
+      },
+      err => { });
   }
 
 }

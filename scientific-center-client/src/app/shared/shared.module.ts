@@ -10,6 +10,7 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { TagInputModule } from 'ngx-chips';
+import { RoutesModule } from '../routes/routes.module';
 
 @NgModule({
   imports: [
@@ -27,7 +28,8 @@ import { TagInputModule } from 'ngx-chips';
       positionClass: 'toast-bottom-right'
     }),
     ReactiveFormsModule,
-    TagInputModule
+    TagInputModule,
+    RoutesModule
   ],
   declarations: [],
   exports: [
@@ -36,7 +38,8 @@ import { TagInputModule } from 'ngx-chips';
     FormsModule,
     TypeaheadModule,
     TabsModule,
-    TagInputModule
+    TagInputModule,
+    RoutesModule
   ],
 })
 export class SharedModule { }

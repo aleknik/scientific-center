@@ -3,8 +3,8 @@
   <form class="col-md-4 form" (ngSubmit)="signin()" #signinForm="ngForm">
     <h2 class="form-heading">Sign in</h2>
 
-    <label>Username</label>
-    <input type="text" class="form-control" [(ngModel)]="user.username" name="username" required autofocus>
+    <label>Email</label>
+    <input type="text" class="form-control" [(ngModel)]="user.email" name="email" required email autofocus>
     <label>Password</label>
     <input type="password" class="form-control" [(ngModel)]="user.password" name="password" required>
     <br />
