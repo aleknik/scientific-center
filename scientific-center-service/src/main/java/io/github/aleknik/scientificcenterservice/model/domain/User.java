@@ -1,9 +1,8 @@
 package io.github.aleknik.scientificcenterservice.model.domain;
 
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -18,6 +17,12 @@ public class User extends BaseModel {
     private String lastName;
 
     private String processEngineUserId;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    private List<Role> roles = new ArrayList<>();
 
     @Embedded
     private Address address;
@@ -79,5 +84,13 @@ public class User extends BaseModel {
 
     public void setProcessEngineUserId(String processEngineUserId) {
         this.processEngineUserId = processEngineUserId;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 }

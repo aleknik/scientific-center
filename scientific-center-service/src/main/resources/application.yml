@@ -1,12 +1,36 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:db
+    url: jdbc:h2:mem:db;DB_CLOSE_ON_EXIT=FALSE
+    driverClassName: org.h2.Driver
     username: root
     password: root
   h2.console:
     enabled: true
     path: /h2-console
     settings.web-allow-others: true
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    database: H2
+    show_sql: true
+    hibernate:
+      ddl-auto: create
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
+server:
+  port: 8085
+  ssl:
+    key-store: classpath:merchantKeyStore.p12
+    key-store-password: ${COIN10_MERCHANT_KEY_PASS}
+    key-password: ${COIN10_MERCHANT_KEY_PASS}
+    trust-store: classpath:merchantTrustStore.p12
+    trust-store-password: ${COIN10_MERCHANT_TRUST_PASS}
+    #    client-auth: want # Not specifying 'need' because we don't want two-way-auth for requests coming from our web client
+    trust-store-type: PKCS12
+    key-store-type: PKCS12
+    protocol: TLSv1.2
+  compression:
+    enabled: false # CRIME attack prevention
 
 camunda.bpm:
   admin-user:
@@ -27,3 +51,10 @@ storage-location: C:/papers
 geocoding:
   url: https://eu1.locationiq.com/v1/search.php
   key: ${GEOCODING_ACCESS_KEY}
+
+payment-service-url: https://localhost:8080/api
+
+token:
+  header: X-Auth-Token
+  secret: s3cr3t
+  expiration: 604800

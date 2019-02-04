@@ -20,7 +20,7 @@ public class Paper extends BaseModel {
     private Set<UnregisteredAuthor> coauthors;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    private Set<Staff> reviewers;
+    private Set<Editor> reviewers;
 
     public Paper() {
     }
@@ -65,11 +65,11 @@ public class Paper extends BaseModel {
         this.coauthors = coauthors;
     }
 
-    public Set<Staff> getReviewers() {
+    public Set<Editor> getReviewers() {
         return reviewers;
     }
 
-    public void setReviewers(Set<Staff> reviewers) {
+    public void setReviewers(Set<Editor> reviewers) {
         this.reviewers = reviewers;
     }
 }
