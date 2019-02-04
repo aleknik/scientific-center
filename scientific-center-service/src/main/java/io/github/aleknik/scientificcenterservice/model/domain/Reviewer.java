@@ -11,5 +11,8 @@ public class Reviewer extends User {
     private String title;
 
     @ManyToMany(fetch = FetchType.EAGER)
+    private Set<ScienceField> scienceFields;
+
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<Journal> journals;
 }

@@ -1,0 +1,19 @@
+<div class="row">
+  <!-- <div class="col-md-2"></div>
+  <div class="col-md-8">
+    <h2>Payment Methods</h2>
+    <div class="row" *ngFor="let method of methods">
+      <div class="col-md-6 float-right">{{method.method}}</div>
+      <div class="col-md-6"> <button>Register</button></div>
+
+    </div>
+  </div> -->
+  <div class="col-md-4"></div>
+  <ul class="list-group col-md-4">
+    <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let method of methods">
+      {{method.method}}
+      <button class="btn btn-lg btn-primary" (click)="redirect(method)" *ngIf="!method.linked">Register</button>
+      <button class="btn btn-lg btn-primary" *ngIf="method.linked" disabled="true">Linked</button>
+    </li>
+  </ul>
+</div>

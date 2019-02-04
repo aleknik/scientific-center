@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { SigninComponent } from '../auth/signin/signin.component';
 import { PaperListComponent } from '../papers/paper-list/paper-list.component';
 import { NewPaperComponent } from '../papers/new-paper/new-paper.component';
+import { RegisterPaymentComponent } from '../payments/register-payment/register-payment.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/papers', pathMatch: 'full' },
@@ -11,6 +12,8 @@ const routes: Routes = [
 
   { path: 'papers', component: PaperListComponent },
   { path: 'papers/new', component: NewPaperComponent },
+
+  { path: 'payments/register', component: RegisterPaymentComponent },
 
 ];
 

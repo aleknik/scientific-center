@@ -25,10 +25,11 @@ public class Reviewer {
     public Reviewer() {
     }
 
-    public Reviewer(String externalId, String firstName, String lastName) {
+    public Reviewer(String externalId, String firstName, String lastName, double lat, double lon) {
         this.externalId = externalId;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.location = new GeoPoint(lat, lon);
     }
 
     public String getExternalId() {

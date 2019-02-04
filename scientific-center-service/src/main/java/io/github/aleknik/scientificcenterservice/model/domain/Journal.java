@@ -7,6 +7,8 @@ public class Journal extends BaseModel {
 
     private String name;
 
+    private boolean openAccess;
+
     public Journal() {
     }
 
@@ -16,5 +18,13 @@ public class Journal extends BaseModel {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean isOpenAccess() {
+        return openAccess;
+    }
+
+    public void setOpenAccess(boolean openAccess) {
+        this.openAccess = openAccess;
     }
 }

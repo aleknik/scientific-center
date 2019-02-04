@@ -35,7 +35,7 @@ public class DataLoader implements ApplicationRunner {
         final Journal journal = addJournal("Journal 1");
         addEditor("editor@editor", "pass", "Aleksandar", "Nkolic", AddressConstants.NOVI_SAD, "dipl. inz.", journal);
 
-
+        addAuthor("author@author", "pass", "Luka", "Maletin", AddressConstants.NOVI_SAD);
     }
 
     private Journal addJournal(String name) {
@@ -61,5 +61,21 @@ public class DataLoader implements ApplicationRunner {
         editor.setRoles(roles);
 
         return (Editor) userService.createUser(editor);
+    }
+
+    private Author addAuthor(String email, String password, String firstName, String lastName, Address address) {
+        final Author author = new Author();
+        author.setEmail(email);
+        author.setPassword(passwordEncoder.encode(password));
+        author.setFirstName(firstName);
+        author.setLastName(lastName);
+        author.setAddress(address);
+
+        final List<Role> roles = new ArrayList<>();
+        final Role role = new Role(RoleConstants.AUTHOR);
+        roles.add(role);
+        author.setRoles(roles);
+
+        return (Author) userService.createUser(author);
     }
 }

@@ -19,6 +19,16 @@ public class Author {
     @GeoPointField
     private GeoPoint location;
 
+    public Author() {
+    }
+
+    public Author(String externalId, String firstName, String lastName, double lat, double lon) {
+        this.externalId = externalId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.location = new GeoPoint(lat, lon);
+    }
+
     public String getExternalId() {
         return externalId;
     }

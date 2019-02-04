@@ -6,6 +6,9 @@
   </button>
   <div class="collapse navbar-collapse" [collapse]="isCollapsed">
     <ul class="navbar-nav mr-auto">
+      <li class="nav-item" *ngIf="isAuthenticated()">
+        <a class="nav-link" routerLink="/payments/register">Payment methods</a>
+      </li>
     </ul>
 
     <ul class="navbar-nav ml-auto">

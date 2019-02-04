@@ -1,6 +1,7 @@
 package io.github.aleknik.scientificcenterservice.model.domain;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -11,16 +12,17 @@ public class Paper extends BaseModel {
     @OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
     private Set<Keyword> keywords;
 
-    private boolean openAccess;
-
     @ManyToOne(fetch = FetchType.EAGER)
     private Author author;
 
     @OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
-    private Set<UnregisteredAuthor> coauthors;
+    private Set<UnregisteredAuthor> coauthors = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
-    private Set<Editor> reviewers;
+    private Set<Editor> reviewers = new HashSet<>();
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Journal journal;
 
     public Paper() {
     }
@@ -31,14 +33,6 @@ public class Paper extends BaseModel {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public boolean isOpenAccess() {
-        return openAccess;
-    }
-
-    public void setOpenAccess(boolean openAccess) {
-        this.openAccess = openAccess;
     }
 
     public Author getAuthor() {
@@ -71,5 +65,13 @@ public class Paper extends BaseModel {
 
     public void setReviewers(Set<Editor> reviewers) {
         this.reviewers = reviewers;
+    }
+
+    public Journal getJournal() {
+        return journal;
+    }
+
+    public void setJournal(Journal journal) {
+        this.journal = journal;
     }
 }
