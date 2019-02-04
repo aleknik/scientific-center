@@ -82,7 +82,7 @@ public class PaperSearchService {
             paperSearchDto.setId(Long.parseLong(unit.getExternalId()));
             paperSearchDto.setOpenAccess(unit.isOpenAccess());
             paperSearchDto.setTitle(unit.getTitle());
-
+            paperSearchDto.setHighlight("sadas fsd fsd f sd fsd f sd as d asd ds g df ggfgg g dsf gdfg fdf gfsg dfg fgs df ");
             searchDtos.add(paperSearchDto);
         }
 

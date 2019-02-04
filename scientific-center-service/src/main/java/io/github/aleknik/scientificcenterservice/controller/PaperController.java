@@ -7,18 +7,19 @@ import io.github.aleknik.scientificcenterservice.security.RoleConstants;
 import io.github.aleknik.scientificcenterservice.service.PaperSearchService;
 import io.github.aleknik.scientificcenterservice.service.PaperService;
 import io.github.aleknik.scientificcenterservice.service.UserService;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -37,8 +38,8 @@ public class PaperController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('" + RoleConstants.AUTHOR + "')")
-    ResponseEntity createPaper(@RequestPart("data") @Valid CreatePaperRequestDto createPaperRequestDto,
-                               @RequestPart("file") @Valid @NotNull @NotBlank MultipartFile file) {
+    public ResponseEntity createPaper(@RequestPart("data") @Valid CreatePaperRequestDto createPaperRequestDto,
+                                      @RequestPart("file") @Valid @NotNull @NotBlank MultipartFile file) {
 
         final Author author = (Author) userService.findCurrentUser();
 
@@ -54,6 +55,24 @@ public class PaperController {
         final List<PaperSearchDto> result = paperSearchService.search();
 
         return ResponseEntity.ok(result);
+
+    }
+
+    @GetMapping("/download/{id}")
+    public ResponseEntity download(@PathVariable long id) {
+        final byte[] data = paperService.getPaperPdf(id);
+
+        ByteArrayResource resource = new ByteArrayResource(data);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "attachment; filename=" + UUID.randomUUID().toString() + ".pdf");
+
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(data.length)
+                .contentType(MediaType.parseMediaType("application/octet-stream"))
+                .body(resource);
 
     }
 

@@ -1,6 +1,7 @@
 package io.github.aleknik.scientificcenterservice.service;
 
 import io.github.aleknik.scientificcenterservice.controller.exception.BadRequestException;
+import io.github.aleknik.scientificcenterservice.controller.exception.NotFoundException;
 import io.github.aleknik.scientificcenterservice.model.domain.Address;
 import io.github.aleknik.scientificcenterservice.model.domain.Journal;
 import io.github.aleknik.scientificcenterservice.model.domain.Paper;
@@ -39,5 +40,13 @@ public class PaperService {
         final Paper savedPaper = paperRepository.save(paper);
         storageService.store(file, String.valueOf(savedPaper.getId()));
         return paper;
+    }
+
+    public byte[] getPaperPdf(long id) {
+        return storageService.load(String.valueOf(id));
+    }
+
+    public Paper findById(long id) {
+        return paperRepository.findById(id).orElseThrow(() -> new NotFoundException("Paper not found"));
     }
 }
