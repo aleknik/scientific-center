@@ -13,9 +13,11 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PaymentService paymentService;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PaymentService paymentService) {
         this.userRepository = userRepository;
+        this.paymentService = paymentService;
     }
 
     public User findByEmail(String email) {
@@ -30,5 +32,10 @@ public class UserService {
 
         final UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         return findByEmail(userDetails.getUsername());
+    }
+
+    public User createUser(User user) {
+        user = userRepository.save(user);
+        return paymentService.register(user);
     }
 }

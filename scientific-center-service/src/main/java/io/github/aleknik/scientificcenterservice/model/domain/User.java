@@ -18,6 +18,8 @@ public class User extends BaseModel {
 
     private String processEngineUserId;
 
+    private String PaymentServiceId;
+
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
@@ -92,5 +94,13 @@ public class User extends BaseModel {
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+
+    public String getPaymentServiceId() {
+        return PaymentServiceId;
+    }
+
+    public void setPaymentServiceId(String paymentServiceId) {
+        PaymentServiceId = paymentServiceId;
     }
 }

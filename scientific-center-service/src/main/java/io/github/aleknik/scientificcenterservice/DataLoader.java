@@ -4,6 +4,7 @@ import io.github.aleknik.scientificcenterservice.model.domain.*;
 import io.github.aleknik.scientificcenterservice.repository.JournalRepository;
 import io.github.aleknik.scientificcenterservice.repository.UserRepository;
 import io.github.aleknik.scientificcenterservice.security.RoleConstants;
+import io.github.aleknik.scientificcenterservice.service.UserService;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,10 +20,13 @@ public class DataLoader implements ApplicationRunner {
     private final JournalRepository journalRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public DataLoader(UserRepository userRepository, JournalRepository journalRepository, PasswordEncoder passwordEncoder) {
+    private final UserService userService;
+
+    public DataLoader(UserRepository userRepository, JournalRepository journalRepository, PasswordEncoder passwordEncoder, UserService userService) {
         this.userRepository = userRepository;
         this.journalRepository = journalRepository;
         this.passwordEncoder = passwordEncoder;
+        this.userService = userService;
     }
 
     @Override
@@ -56,6 +60,6 @@ public class DataLoader implements ApplicationRunner {
         roles.add(role);
         editor.setRoles(roles);
 
-        return userRepository.save(editor);
+        return (Editor) userService.createUser(editor);
     }
 }
