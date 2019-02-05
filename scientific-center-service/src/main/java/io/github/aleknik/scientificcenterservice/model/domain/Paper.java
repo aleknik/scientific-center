@@ -1,10 +1,12 @@
 package io.github.aleknik.scientificcenterservice.model.domain;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@Table(name = "paper")
 public class Paper extends BaseModel {
 
     private String title;
@@ -23,6 +25,10 @@ public class Paper extends BaseModel {
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Journal journal;
+
+    private Date publishDate;
+
+    private String paperAbstract;
 
     public Paper() {
     }
@@ -73,5 +79,21 @@ public class Paper extends BaseModel {
 
     public void setJournal(Journal journal) {
         this.journal = journal;
+    }
+
+    public Date getPublishDate() {
+        return publishDate;
+    }
+
+    public void setPublishDate(Date publishDate) {
+        this.publishDate = publishDate;
+    }
+
+    public String getPaperAbstract() {
+        return paperAbstract;
+    }
+
+    public void setPaperAbstract(String paperAbstract) {
+        this.paperAbstract = paperAbstract;
     }
 }

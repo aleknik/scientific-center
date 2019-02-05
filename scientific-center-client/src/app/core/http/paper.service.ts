@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Paper } from 'src/app/shared/model/paper.model';
 import { catchError } from 'rxjs/operators';
+import { PaperSearchResult } from 'src/app/shared/model/paper-search-result.model';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +22,16 @@ export class PaperService extends RestService {
     formData.append('data', new Blob([JSON.stringify(paper)], { type: 'application/json' }));
 
     return this.http.post<Paper>(this.baseUrl, formData)
+      .pipe(catchError(this.handleError<Paper>()));
+  }
+
+  searchPapers(): Observable<PaperSearchResult[]> {
+    return this.http.post<PaperSearchResult[]>(`${this.baseUrl}/search`, {})
+      .pipe(catchError(this.handleError<PaperSearchResult[]>()));
+  }
+
+  findById(id: number): Observable<Paper> {
+    return this.http.get<Paper>(`${this.baseUrl}/${id}`)
       .pipe(catchError(this.handleError<Paper>()));
   }
 }

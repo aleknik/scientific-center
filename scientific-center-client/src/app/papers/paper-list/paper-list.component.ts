@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { PaperSearchResult } from 'src/app/shared/model/paper-search-result.model';
+import { PaperService } from 'src/app/core/http/paper.service';
+import { PapersModule } from '../papers.module';
 
 @Component({
   selector: 'app-paper-list',
@@ -7,9 +10,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PaperListComponent implements OnInit {
 
-  constructor() { }
+  papers = new Array<PaperSearchResult>();
+
+  constructor(private paperService: PaperService) { }
 
   ngOnInit() {
+    this.getPapers();
+  }
+
+  getPapers() {
+    this.paperService.searchPapers().subscribe(result => {
+      this.papers = result;
+    })
   }
 
 }

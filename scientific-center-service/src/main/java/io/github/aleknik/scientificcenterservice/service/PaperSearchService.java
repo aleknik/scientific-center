@@ -13,6 +13,7 @@ import io.github.aleknik.scientificcenterservice.repository.elasticsearch.ESPape
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,6 +34,8 @@ public class PaperSearchService {
 
     public void indexPaper(long id) {
         final Paper paper = paperRepository.findById(id).orElseThrow(() -> new BadRequestException("Paper not found"));
+        paper.setPublishDate(new Date());
+        paperRepository.save(paper);
         final byte[] data = storageService.load(String.valueOf(id));
         final String text = pdfHandler.getText(data);
 

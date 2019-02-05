@@ -3,14 +3,16 @@ package io.github.aleknik.scientificcenterservice.model.domain;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "editor")
 public class Editor extends User {
 
     private String title;
 
     @OneToOne(fetch = FetchType.EAGER)
-    private Journal jurnal;
+    private Journal journal;
 
     public Editor() {
     }
@@ -23,11 +25,11 @@ public class Editor extends User {
         this.title = title;
     }
 
-    public Journal getJurnal() {
-        return jurnal;
+    public Journal getJournal() {
+        return journal;
     }
 
-    public void setJurnal(Journal jurnal) {
-        this.jurnal = jurnal;
+    public void setJournal(Journal journal) {
+        this.journal = journal;
     }
 }

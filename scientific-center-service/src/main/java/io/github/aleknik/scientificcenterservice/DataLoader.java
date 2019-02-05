@@ -10,6 +10,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,15 +33,17 @@ public class DataLoader implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
-        final Journal journal = addJournal("Journal 1");
+        final Journal journal = addJournal("Journal 1", BigDecimal.valueOf(1), false);
         addEditor("editor@editor", "pass", "Aleksandar", "Nkolic", AddressConstants.NOVI_SAD, "dipl. inz.", journal);
 
         addAuthor("author@author", "pass", "Luka", "Maletin", AddressConstants.NOVI_SAD);
     }
 
-    private Journal addJournal(String name) {
+    private Journal addJournal(String name, BigDecimal paperPrice, boolean openAccess) {
         final Journal journal = new Journal();
         journal.setName(name);
+        journal.setPaperPrice(paperPrice);
+        journal.setOpenAccess(openAccess);
 
         return journalRepository.save(journal);
     }
@@ -53,7 +56,8 @@ public class DataLoader implements ApplicationRunner {
         editor.setLastName(lastName);
         editor.setAddress(address);
         editor.setTitle(title);
-        editor.setJurnal(journal);
+        editor.setJournal(journal);
+        journal.setEditor(editor);
 
         final List<Role> roles = new ArrayList<>();
         final Role role = new Role(RoleConstants.EDITOR);

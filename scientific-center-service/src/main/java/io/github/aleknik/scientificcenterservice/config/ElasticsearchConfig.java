@@ -8,6 +8,8 @@ import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 
 import java.net.InetAddress;
@@ -36,6 +38,11 @@ public class ElasticsearchConfig {
         TransportClient client = new PreBuiltTransportClient(esSettings);
         client.addTransportAddress(new TransportAddress(InetAddress.getByName(EsHost), EsPort));
         return client;
+    }
+
+    @Bean
+    public ElasticsearchOperations elasticsearchTemplateBean() throws Exception {
+        return new ElasticsearchTemplate(client());
     }
 
 }

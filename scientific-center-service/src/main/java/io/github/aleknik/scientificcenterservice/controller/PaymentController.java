@@ -1,14 +1,14 @@
 package io.github.aleknik.scientificcenterservice.controller;
 
 import io.github.aleknik.scientificcenterservice.model.domain.User;
+import io.github.aleknik.scientificcenterservice.model.dto.PaymentStatus;
+import io.github.aleknik.scientificcenterservice.model.dto.PurchaseRequest;
 import io.github.aleknik.scientificcenterservice.security.RoleConstants;
 import io.github.aleknik.scientificcenterservice.service.PaymentService;
 import io.github.aleknik.scientificcenterservice.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/payments")
@@ -29,4 +29,27 @@ public class PaymentController {
 
         return ResponseEntity.ok(paymentService.getRegisterMethods(currentUser));
     }
+
+    @PostMapping("/buy-paper")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity buyPaper(@RequestBody PurchaseRequest purchaseRequest) {
+        final User currentUser = userService.findCurrentUser();
+        final String url = paymentService.buyPaper(purchaseRequest.getId(), currentUser,
+                purchaseRequest.getSuccessUrl(),
+                purchaseRequest.getErrorUrl());
+
+        return ResponseEntity.ok(url);
+    }
+
+
+    @GetMapping("/status/papers/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity getPaperStatus(@PathVariable long id) {
+        final User currentUser = userService.findCurrentUser();
+
+        final PaymentStatus paymentStatus = paymentService.paperStatus(id, currentUser);
+
+        return ResponseEntity.ok(paymentStatus.toString());
+    }
+
 }

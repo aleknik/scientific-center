@@ -29,7 +29,7 @@ import { RoutesModule } from '../routes/routes.module';
     }),
     ReactiveFormsModule,
     TagInputModule,
-    RoutesModule
+    RoutesModule,
   ],
   declarations: [],
   exports: [

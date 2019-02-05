@@ -2,6 +2,7 @@ package io.github.aleknik.scientificcenterservice.controller;
 
 import io.github.aleknik.scientificcenterservice.model.domain.*;
 import io.github.aleknik.scientificcenterservice.model.dto.CreatePaperRequestDto;
+import io.github.aleknik.scientificcenterservice.model.dto.PaperResponse;
 import io.github.aleknik.scientificcenterservice.model.dto.PaperSearchDto;
 import io.github.aleknik.scientificcenterservice.security.RoleConstants;
 import io.github.aleknik.scientificcenterservice.service.PaperSearchService;
@@ -46,15 +47,28 @@ public class PaperController {
         final Paper paper = paperService.createPaper(convertToPaper(createPaperRequestDto, author), file);
         paperSearchService.indexPaper(paper.getId());
 
-        return ResponseEntity.ok(paper);
+        return ResponseEntity.ok(paper.getId());
     }
 
     @PostMapping("/search")
-    ResponseEntity query() {
+    public ResponseEntity query() {
 
         final List<PaperSearchDto> result = paperSearchService.search();
 
         return ResponseEntity.ok(result);
+
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity findById(@PathVariable long id) {
+        final Paper paper = paperService.findById(id);
+
+        final PaperResponse paperResponse = new PaperResponse();
+        paperResponse.setTitle(paper.getTitle());
+        paperResponse.setPaperAbstract(paper.getPaperAbstract());
+        paperResponse.setPrice(paper.getJournal().getPaperPrice());
+
+        return ResponseEntity.ok(paperResponse);
 
     }
 
@@ -81,6 +95,7 @@ public class PaperController {
         final Paper paper = new Paper();
 
         paper.setAuthor(author);
+        paper.setPaperAbstract(createPaperRequestDto.getPaperAbstract());
         paper.setTitle(createPaperRequestDto.getTitle());
         paper.setKeywords(createPaperRequestDto.getKeywords().stream()
                 .map(Keyword::new).collect(Collectors.toSet()));
