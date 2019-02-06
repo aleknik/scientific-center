@@ -1,4 +1,6 @@
-package io.github.aleknik.scientificcenterservice.model.dto;
+package io.github.aleknik.scientificcenterservice.model.dto.payment;
+
+import io.github.aleknik.scientificcenterservice.model.dto.payment.PaymentStatus;
 
 public class PaymentStatusResponse {
 

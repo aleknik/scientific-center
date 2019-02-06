@@ -1,4 +1,4 @@
-package io.github.aleknik.scientificcenterservice.model.dto;
+package io.github.aleknik.scientificcenterservice.model.dto.auth;
 
 import javax.validation.constraints.NotEmpty;
 

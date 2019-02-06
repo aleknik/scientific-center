@@ -33,16 +33,19 @@ public class DataLoader implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
-        final Journal journal = addJournal("Journal 1", BigDecimal.valueOf(1), false);
-        addEditor("editor@editor", "pass", "Aleksandar", "Nkolic", AddressConstants.NOVI_SAD, "dipl. inz.", journal);
+        final Journal journal1 = addJournal("Journal 1", BigDecimal.valueOf(1), BigDecimal.valueOf(5), false);
+        final Journal journal2 = addJournal("Journal 2", BigDecimal.valueOf(1), BigDecimal.valueOf(5), true);
+        addEditor("editor@editor", "pass", "Aleksandar", "Nkolic", AddressConstants.NOVI_SAD, "dipl. inz.", journal1);
+        addEditor("editor2@editor", "pass", "Aleksandar", "Nkolic", AddressConstants.NOVI_SAD, "dipl. inz.", journal2);
 
         addAuthor("author@author", "pass", "Luka", "Maletin", AddressConstants.NOVI_SAD);
     }
 
-    private Journal addJournal(String name, BigDecimal paperPrice, boolean openAccess) {
+    private Journal addJournal(String name, BigDecimal paperPrice, BigDecimal subscriptionPrice, boolean openAccess) {
         final Journal journal = new Journal();
         journal.setName(name);
         journal.setPaperPrice(paperPrice);
+        journal.setSubscriptionPrice(subscriptionPrice);
         journal.setOpenAccess(openAccess);
 
         return journalRepository.save(journal);

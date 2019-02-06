@@ -20,8 +20,7 @@ export class PaperDetailsComponent implements OnInit {
 
   constructor(private paperService: PaperService,
     private route: ActivatedRoute,
-    private paymentService: PaymentService,
-    private location: Location) { }
+    private paymentService: PaymentService) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -57,6 +56,10 @@ export class PaperDetailsComponent implements OnInit {
   }
   showProcessing(): boolean {
     return this.status == "PROCESSING" || this.status == "NEW";
+  }
+
+  showDownload(): boolean {
+    return this.status == "SUCCESS" || this.paper.journal.openAccess;
   }
 
 }

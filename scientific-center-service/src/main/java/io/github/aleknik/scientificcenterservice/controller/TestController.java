@@ -1,6 +1,6 @@
 package io.github.aleknik.scientificcenterservice.controller;
 
-import io.github.aleknik.scientificcenterservice.model.dto.PaymentRequest;
+import io.github.aleknik.scientificcenterservice.model.dto.payment.PaymentRequest;
 import io.github.aleknik.scientificcenterservice.model.elasticsearch.PaperIndexUnit;
 import io.github.aleknik.scientificcenterservice.repository.elasticsearch.ESPaperRepository;
 import org.springframework.beans.factory.annotation.Value;

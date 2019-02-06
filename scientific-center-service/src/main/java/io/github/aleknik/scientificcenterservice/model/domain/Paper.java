@@ -1,6 +1,7 @@
 package io.github.aleknik.scientificcenterservice.model.domain;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -26,7 +27,10 @@ public class Paper extends BaseModel {
     @ManyToOne(fetch = FetchType.EAGER)
     private Journal journal;
 
-    private Date publishDate;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Issue issue;
+
+    private LocalDateTime publishDate;
 
     private String paperAbstract;
 
@@ -81,11 +85,11 @@ public class Paper extends BaseModel {
         this.journal = journal;
     }
 
-    public Date getPublishDate() {
+    public LocalDateTime getPublishDate() {
         return publishDate;
     }
 
-    public void setPublishDate(Date publishDate) {
+    public void setPublishDate(LocalDateTime publishDate) {
         this.publishDate = publishDate;
     }
 
@@ -95,5 +99,13 @@ public class Paper extends BaseModel {
 
     public void setPaperAbstract(String paperAbstract) {
         this.paperAbstract = paperAbstract;
+    }
+
+    public Issue getIssue() {
+        return issue;
+    }
+
+    public void setIssue(Issue issue) {
+        this.issue = issue;
     }
 }

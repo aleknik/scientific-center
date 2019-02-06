@@ -6,6 +6,8 @@ import { NewPaperComponent } from '../papers/new-paper/new-paper.component';
 import { RegisterPaymentComponent } from '../payments/register-payment/register-payment.component';
 import { PaperDetailsComponent } from '../papers/paper-details/paper-details.component';
 import { CallbackComponent } from '../payments/callback/callback.component';
+import { JournalListComponent } from '../journals/journal-list/journal-list.component';
+import { JournalDetailsComponent } from '../journals/journal-details/journal-details.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/papers', pathMatch: 'full' },
@@ -17,8 +19,10 @@ const routes: Routes = [
   { path: 'papers/details/:id', component: PaperDetailsComponent },
 
   { path: 'payments/register', component: RegisterPaymentComponent },
-  { path: 'payments/callback/:status', component: CallbackComponent }
+  { path: 'payments/callback/:status', component: CallbackComponent },
 
+  { path: 'journals', component: JournalListComponent },
+  { path: 'journals/details/:id', component: JournalDetailsComponent },
 ];
 
 @NgModule({

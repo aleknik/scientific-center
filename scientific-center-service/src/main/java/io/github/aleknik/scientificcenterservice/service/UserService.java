@@ -4,6 +4,7 @@ import io.github.aleknik.scientificcenterservice.controller.exception.ForbiddenE
 import io.github.aleknik.scientificcenterservice.controller.exception.NotFoundException;
 import io.github.aleknik.scientificcenterservice.model.domain.User;
 import io.github.aleknik.scientificcenterservice.repository.UserRepository;
+import io.github.aleknik.scientificcenterservice.service.payment.PaymentService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,10 +1,10 @@
 package io.github.aleknik.scientificcenterservice.controller;
 
 import io.github.aleknik.scientificcenterservice.model.domain.User;
-import io.github.aleknik.scientificcenterservice.model.dto.PaymentStatus;
-import io.github.aleknik.scientificcenterservice.model.dto.PurchaseRequest;
+import io.github.aleknik.scientificcenterservice.model.dto.payment.PaymentStatus;
+import io.github.aleknik.scientificcenterservice.model.dto.payment.PurchaseRequest;
 import io.github.aleknik.scientificcenterservice.security.RoleConstants;
-import io.github.aleknik.scientificcenterservice.service.PaymentService;
+import io.github.aleknik.scientificcenterservice.service.payment.PaymentService;
 import io.github.aleknik.scientificcenterservice.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -41,6 +41,17 @@ public class PaymentController {
         return ResponseEntity.ok(url);
     }
 
+    @PostMapping("/subscribe-journal")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity subscribeToJournal(@RequestBody PurchaseRequest purchaseRequest) {
+        final User currentUser = userService.findCurrentUser();
+        final String url = paymentService.subscribeToJournal(purchaseRequest.getId(), currentUser,
+                purchaseRequest.getSuccessUrl(),
+                purchaseRequest.getErrorUrl());
+
+        return ResponseEntity.ok(url);
+    }
+
 
     @GetMapping("/status/papers/{id}")
     @PreAuthorize("isAuthenticated()")
@@ -52,4 +63,13 @@ public class PaymentController {
         return ResponseEntity.ok(paymentStatus.toString());
     }
 
+    @GetMapping("/status/journals/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity getJournalStatus(@PathVariable long id) {
+        final User currentUser = userService.findCurrentUser();
+
+        final PaymentStatus paymentStatus = paymentService.JournalStatus(id, currentUser);
+
+        return ResponseEntity.ok(paymentStatus.toString());
+    }
 }

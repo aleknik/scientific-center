@@ -16,6 +16,8 @@ public class Journal extends BaseModel {
 
     private BigDecimal paperPrice;
 
+    private BigDecimal subscriptionPrice;
+
     @OneToOne(fetch = FetchType.EAGER, mappedBy = "journal")
     private Editor editor;
 
@@ -52,5 +54,13 @@ public class Journal extends BaseModel {
 
     public void setEditor(Editor editor) {
         this.editor = editor;
+    }
+
+    public BigDecimal getSubscriptionPrice() {
+        return subscriptionPrice;
+    }
+
+    public void setSubscriptionPrice(BigDecimal subscriptionPrice) {
+        this.subscriptionPrice = subscriptionPrice;
     }
 }

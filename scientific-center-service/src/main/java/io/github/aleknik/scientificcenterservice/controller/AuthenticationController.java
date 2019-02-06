@@ -1,8 +1,8 @@
 package io.github.aleknik.scientificcenterservice.controller;
 
 import io.github.aleknik.scientificcenterservice.model.domain.User;
-import io.github.aleknik.scientificcenterservice.model.dto.AuthenticationRequest;
-import io.github.aleknik.scientificcenterservice.model.dto.AuthenticationResponse;
+import io.github.aleknik.scientificcenterservice.model.dto.auth.AuthenticationRequest;
+import io.github.aleknik.scientificcenterservice.model.dto.auth.AuthenticationResponse;
 import io.github.aleknik.scientificcenterservice.security.TokenUtils;
 import io.github.aleknik.scientificcenterservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

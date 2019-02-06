@@ -1,4 +1,4 @@
-package io.github.aleknik.scientificcenterservice.service;
+package io.github.aleknik.scientificcenterservice.service.process;
 
 import io.github.aleknik.scientificcenterservice.model.dto.FormFieldDto;
 import org.camunda.bpm.engine.FormService;

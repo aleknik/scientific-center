@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { RoutesModule } from './routes/routes.module';
 import { PapersModule } from './papers/papers.module';
 import { PaymentsModule } from './payments/payments.module';
+import { JournalsModule } from './journals/journals.module';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { PaymentsModule } from './payments/payments.module';
     CoreModule,
     AuthModule,
     PapersModule,
-    PaymentsModule
+    PaymentsModule,
+    JournalsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

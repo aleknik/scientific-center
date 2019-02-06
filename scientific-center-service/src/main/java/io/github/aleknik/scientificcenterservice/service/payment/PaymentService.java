@@ -1,9 +1,12 @@
-package io.github.aleknik.scientificcenterservice.service;
+package io.github.aleknik.scientificcenterservice.service.payment;
 
 import io.github.aleknik.scientificcenterservice.controller.exception.NotFoundException;
+import io.github.aleknik.scientificcenterservice.model.domain.Journal;
 import io.github.aleknik.scientificcenterservice.model.domain.Paper;
 import io.github.aleknik.scientificcenterservice.model.domain.User;
-import io.github.aleknik.scientificcenterservice.model.dto.*;
+import io.github.aleknik.scientificcenterservice.model.dto.RegisteredMethodResponse;
+import io.github.aleknik.scientificcenterservice.model.dto.payment.*;
+import io.github.aleknik.scientificcenterservice.repository.JournalRepository;
 import io.github.aleknik.scientificcenterservice.repository.PaperRepository;
 import io.github.aleknik.scientificcenterservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,14 +24,16 @@ public class PaymentService {
     private final RestTemplate restTemplate;
     private final UserRepository userRepository;
     private final PaperRepository paperRepository;
+    private final JournalRepository journalRepository;
 
     @Value("${payment-service-url}")
     private String url;
 
-    public PaymentService(RestTemplate restTemplate, UserRepository userRepository, PaperRepository paperRepository) {
+    public PaymentService(RestTemplate restTemplate, UserRepository userRepository, PaperRepository paperRepository, JournalRepository journalRepository) {
         this.restTemplate = restTemplate;
         this.userRepository = userRepository;
         this.paperRepository = paperRepository;
+        this.journalRepository = journalRepository;
     }
 
     public User register(User user) {
@@ -68,6 +73,21 @@ public class PaymentService {
         return restTemplate.postForObject(url + "/payments", paymentRequest, String.class);
     }
 
+    public String subscribeToJournal(long id, User user, String successUrl, String errorUrl) {
+        final Journal journal = journalRepository.findById(id).orElseThrow(() -> new NotFoundException("Journal not found"));
+
+        final PaymentRequest paymentRequest = new PaymentRequest();
+        paymentRequest.setProductId(String.valueOf(id));
+        paymentRequest.setBuyerId(String.valueOf(user.getId()));
+        paymentRequest.setAmount(journal.getSubscriptionPrice());
+        paymentRequest.setClientId(journal.getEditor().getPaymentServiceId());
+        paymentRequest.setSubscriptionBased(true);
+        paymentRequest.setSuccessUrl(successUrl);
+        paymentRequest.setErrorUrl(errorUrl);
+
+        return restTemplate.postForObject(url + "/payments", paymentRequest, String.class);
+    }
+
     public PaymentStatus paperStatus(long id, User user) {
         final Paper paper = paperRepository.findById(id).orElseThrow(() -> new NotFoundException("Paper not found"));
 
@@ -75,6 +95,22 @@ public class PaymentService {
         paymentQuery.setBuyerId(String.valueOf(user.getId()));
         paymentQuery.setClientId(paper.getJournal().getEditor().getPaymentServiceId());
         paymentQuery.setProductId(String.valueOf(paper.getId()));
+
+        try {
+            return restTemplate.postForObject(url + "/payments/status", paymentQuery, PaymentStatusResponse.class)
+                    .getPaymentStatus();
+        } catch (RestClientException e) {
+            throw new NotFoundException("payment not found");
+        }
+    }
+
+    public PaymentStatus JournalStatus(long id, User user) {
+        final Journal journal = journalRepository.findById(id).orElseThrow(() -> new NotFoundException("Journal not found"));
+
+        final PaymentQuery paymentQuery = new PaymentQuery();
+        paymentQuery.setBuyerId(String.valueOf(user.getId()));
+        paymentQuery.setClientId(journal.getEditor().getPaymentServiceId());
+        paymentQuery.setProductId(String.valueOf(journal.getId()));
 
         try {
             return restTemplate.postForObject(url + "/payments/status", paymentQuery, PaymentStatusResponse.class)

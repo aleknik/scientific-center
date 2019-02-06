@@ -1,7 +1,8 @@
-package io.github.aleknik.scientificcenterservice.service;
+package io.github.aleknik.scientificcenterservice.service.util;
 
 import io.github.aleknik.scientificcenterservice.controller.exception.BadRequestException;
 import io.github.aleknik.scientificcenterservice.controller.exception.NotFoundException;
+import io.github.aleknik.scientificcenterservice.service.util.StorageService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

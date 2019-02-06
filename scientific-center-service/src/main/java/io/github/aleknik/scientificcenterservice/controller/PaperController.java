@@ -2,10 +2,10 @@ package io.github.aleknik.scientificcenterservice.controller;
 
 import io.github.aleknik.scientificcenterservice.model.domain.*;
 import io.github.aleknik.scientificcenterservice.model.dto.CreatePaperRequestDto;
-import io.github.aleknik.scientificcenterservice.model.dto.PaperResponse;
+import io.github.aleknik.scientificcenterservice.model.dto.PaperDto;
 import io.github.aleknik.scientificcenterservice.model.dto.PaperSearchDto;
 import io.github.aleknik.scientificcenterservice.security.RoleConstants;
-import io.github.aleknik.scientificcenterservice.service.PaperSearchService;
+import io.github.aleknik.scientificcenterservice.service.elasticsearch.PaperSearchService;
 import io.github.aleknik.scientificcenterservice.service.PaperService;
 import io.github.aleknik.scientificcenterservice.service.UserService;
 import org.springframework.core.io.ByteArrayResource;
@@ -45,7 +45,7 @@ public class PaperController {
         final Author author = (Author) userService.findCurrentUser();
 
         final Paper paper = paperService.createPaper(convertToPaper(createPaperRequestDto, author), file);
-        paperSearchService.indexPaper(paper.getId());
+        paperService.publishPaper(paper.getId());
 
         return ResponseEntity.ok(paper.getId());
     }
@@ -63,12 +63,12 @@ public class PaperController {
     public ResponseEntity findById(@PathVariable long id) {
         final Paper paper = paperService.findById(id);
 
-        final PaperResponse paperResponse = new PaperResponse();
-        paperResponse.setTitle(paper.getTitle());
-        paperResponse.setPaperAbstract(paper.getPaperAbstract());
-        paperResponse.setPrice(paper.getJournal().getPaperPrice());
+        final PaperDto paperDto = new PaperDto();
+        paperDto.setTitle(paper.getTitle());
+        paperDto.setPaperAbstract(paper.getPaperAbstract());
+        paperDto.setPrice(paper.getJournal().getPaperPrice());
 
-        return ResponseEntity.ok(paperResponse);
+        return ResponseEntity.ok(paperDto);
 
     }
 

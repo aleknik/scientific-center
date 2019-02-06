@@ -1,4 +1,4 @@
-package io.github.aleknik.scientificcenterservice.model.dto;
+package io.github.aleknik.scientificcenterservice.model.dto.payment;
 
 public class PurchaseRequest {
 

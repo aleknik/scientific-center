@@ -1,4 +1,4 @@
-package io.github.aleknik.scientificcenterservice.service;
+package io.github.aleknik.scientificcenterservice.service.util;
 
 import io.github.aleknik.scientificcenterservice.model.domain.Address;
 import io.github.aleknik.scientificcenterservice.model.dto.LocationDto;

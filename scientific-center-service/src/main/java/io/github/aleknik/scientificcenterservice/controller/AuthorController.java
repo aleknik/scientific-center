@@ -2,7 +2,7 @@ package io.github.aleknik.scientificcenterservice.controller;
 
 import io.github.aleknik.scientificcenterservice.model.dto.FormFieldDto;
 import io.github.aleknik.scientificcenterservice.model.dto.TaskFormDataDto;
-import io.github.aleknik.scientificcenterservice.service.ProcessService;
+import io.github.aleknik.scientificcenterservice.service.process.ProcessService;
 import org.camunda.bpm.engine.form.TaskFormData;
 import org.camunda.bpm.engine.task.Task;
 import org.springframework.http.ResponseEntity;

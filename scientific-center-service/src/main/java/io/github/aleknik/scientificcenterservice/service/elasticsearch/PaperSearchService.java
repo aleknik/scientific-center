@@ -1,4 +1,4 @@
-package io.github.aleknik.scientificcenterservice.service;
+package io.github.aleknik.scientificcenterservice.service.elasticsearch;
 
 import io.github.aleknik.scientificcenterservice.controller.exception.BadRequestException;
 import io.github.aleknik.scientificcenterservice.handler.PDFHandler;
@@ -8,12 +8,15 @@ import io.github.aleknik.scientificcenterservice.model.dto.PaperSearchDto;
 import io.github.aleknik.scientificcenterservice.model.elasticsearch.Author;
 import io.github.aleknik.scientificcenterservice.model.elasticsearch.PaperIndexUnit;
 import io.github.aleknik.scientificcenterservice.model.elasticsearch.Reviewer;
+import io.github.aleknik.scientificcenterservice.repository.IssueRepository;
 import io.github.aleknik.scientificcenterservice.repository.PaperRepository;
 import io.github.aleknik.scientificcenterservice.repository.elasticsearch.ESPaperRepository;
+import io.github.aleknik.scientificcenterservice.service.util.StorageService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,7 +28,10 @@ public class PaperSearchService {
     private final StorageService storageService;
     private final PaperRepository paperRepository;
 
-    public PaperSearchService(PDFHandler pdfHandler, ESPaperRepository esPaperRepository, StorageService storageService, PaperRepository paperRepository) {
+    public PaperSearchService(PDFHandler pdfHandler,
+                              ESPaperRepository esPaperRepository,
+                              StorageService storageService,
+                              PaperRepository paperRepository) {
         this.pdfHandler = pdfHandler;
         this.esPaperRepository = esPaperRepository;
         this.storageService = storageService;
@@ -34,8 +40,6 @@ public class PaperSearchService {
 
     public void indexPaper(long id) {
         final Paper paper = paperRepository.findById(id).orElseThrow(() -> new BadRequestException("Paper not found"));
-        paper.setPublishDate(new Date());
-        paperRepository.save(paper);
         final byte[] data = storageService.load(String.valueOf(id));
         final String text = pdfHandler.getText(data);
 

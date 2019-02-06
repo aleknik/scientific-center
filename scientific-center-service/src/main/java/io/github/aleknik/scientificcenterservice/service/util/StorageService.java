@@ -1,4 +1,4 @@
-package io.github.aleknik.scientificcenterservice.service;
+package io.github.aleknik.scientificcenterservice.service.util;
 
 import org.springframework.web.multipart.MultipartFile;
 

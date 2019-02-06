@@ -2,14 +2,14 @@ package io.github.aleknik.scientificcenterservice.model.dto;
 
 import java.math.BigDecimal;
 
-public class PaperResponse {
+public class PaperDto {
     private String title;
 
     private String paperAbstract;
 
     private BigDecimal price;
 
-    public PaperResponse() {
+    public PaperDto() {
     }
 
     public String getTitle() {

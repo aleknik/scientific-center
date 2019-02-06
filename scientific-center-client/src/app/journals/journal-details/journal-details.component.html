@@ -1,0 +1,12 @@
+<div class="row">
+  <div class="col-md-4"></div>
+  <div class="col-md-4">
+    <h2>{{journal.name}}</h2>
+    <div *ngIf="journal.openAccess">
+      <button *ngIf="showBuy()" class="btn btn-primary btn-block" (click)="buySubscription()">Subcribe</button>
+      <button *ngIf="showProcessing()" class="btn btn-primary btn-block" disabled="true">Validating
+        payment...</button>
+      <button *ngIf="showSuccess()" class="btn btn-success btn-block" disabled="true">Subscribed</button>
+    </div>
+  </div>
+</div>

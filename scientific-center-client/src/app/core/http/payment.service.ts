@@ -34,6 +34,22 @@ export class PaymentService extends RestService {
       .pipe(catchError(this.handleError<string>()));
   }
 
+  subscribeToJournal(id: number, successUrl: string, errorUrl: string): Observable<string> {
+    return this.http.post(`${this.baseUrl}/subscribe-journal`,
+      {
+        id,
+        successUrl,
+        errorUrl
+      },
+      { responseType: 'text' })
+      .pipe(catchError(this.handleError<string>()));
+  }
+
+  checkSubcriptionStatus(id: number): Observable<string> {
+    return this.http.get(`${this.baseUrl}/status/journals/${id}`,
+      { responseType: 'text' });
+  }
+
   checkPaperStatus(id: number): Observable<string> {
     return this.http.get(`${this.baseUrl}/status/papers/${id}`,
       { responseType: 'text' });
