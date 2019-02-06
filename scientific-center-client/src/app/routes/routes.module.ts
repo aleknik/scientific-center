@@ -8,6 +8,7 @@ import { PaperDetailsComponent } from '../papers/paper-details/paper-details.com
 import { CallbackComponent } from '../payments/callback/callback.component';
 import { JournalListComponent } from '../journals/journal-list/journal-list.component';
 import { JournalDetailsComponent } from '../journals/journal-details/journal-details.component';
+import { IssueDetailsComponent } from '../journals/issue-details/issue-details.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/papers', pathMatch: 'full' },
@@ -23,6 +24,7 @@ const routes: Routes = [
 
   { path: 'journals', component: JournalListComponent },
   { path: 'journals/details/:id', component: JournalDetailsComponent },
+  { path: 'journals/:journalId/issues/:issueId', component: IssueDetailsComponent },
 ];
 
 @NgModule({

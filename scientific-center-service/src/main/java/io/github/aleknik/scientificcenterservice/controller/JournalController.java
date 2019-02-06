@@ -1,6 +1,7 @@
 package io.github.aleknik.scientificcenterservice.controller;
 
 import io.github.aleknik.scientificcenterservice.model.domain.Journal;
+import io.github.aleknik.scientificcenterservice.model.dto.IssueDto;
 import io.github.aleknik.scientificcenterservice.model.dto.JournalDto;
 import io.github.aleknik.scientificcenterservice.service.JournalService;
 import org.springframework.http.ResponseEntity;
@@ -41,6 +42,10 @@ public class JournalController {
         final JournalDto journalDto = new JournalDto();
         journalDto.setName(journal.getName());
         journalDto.setOpenAccess(journal.isOpenAccess());
+
+        journalDto.setIssues(journal.getIssues().stream().map(issue ->
+                new IssueDto(issue.getId(), issue.getYear(), issue.getMonth()))
+                .collect(Collectors.toList()));
 
         return ResponseEntity.ok(journalDto);
     }

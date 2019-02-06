@@ -1,10 +1,8 @@
 package io.github.aleknik.scientificcenterservice.model.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Set;
 
 @Entity
 @Table(name = "journal")
@@ -20,6 +18,9 @@ public class Journal extends BaseModel {
 
     @OneToOne(fetch = FetchType.EAGER, mappedBy = "journal")
     private Editor editor;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "journal")
+    private Set<Issue> issues;
 
     public Journal() {
     }
@@ -62,5 +63,13 @@ public class Journal extends BaseModel {
 
     public void setSubscriptionPrice(BigDecimal subscriptionPrice) {
         this.subscriptionPrice = subscriptionPrice;
+    }
+
+    public Set<Issue> getIssues() {
+        return issues;
+    }
+
+    public void setIssues(Set<Issue> issues) {
+        this.issues = issues;
     }
 }

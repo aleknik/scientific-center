@@ -1,5 +1,7 @@
 package io.github.aleknik.scientificcenterservice.model.dto;
 
+import java.util.List;
+
 public class JournalDto {
 
     private long id;
@@ -7,6 +9,8 @@ public class JournalDto {
     private String name;
 
     private boolean openAccess;
+
+    private List<IssueDto> issues;
 
     public long getId() {
         return id;
@@ -30,5 +34,13 @@ public class JournalDto {
 
     public void setOpenAccess(boolean openAccess) {
         this.openAccess = openAccess;
+    }
+
+    public List<IssueDto> getIssues() {
+        return issues;
+    }
+
+    public void setIssues(List<IssueDto> issues) {
+        this.issues = issues;
     }
 }

@@ -15,7 +15,9 @@ public class PDFHandler implements DocumentHandler {
             final PDDocument doc = PDDocument.load(data);
 
             PDFTextStripper textStripper = new PDFTextStripper();
-            return textStripper.getText(doc);
+            final String text = textStripper.getText(doc);
+            doc.close();
+            return text;
         } catch (IOException ignored) {
         }
         return null;

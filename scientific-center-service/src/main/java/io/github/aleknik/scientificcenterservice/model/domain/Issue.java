@@ -20,6 +20,9 @@ public class Issue extends BaseModel {
 
     private Month month;
 
+    public Issue() {
+    }
+
     public Issue(Journal journal, int year, Month month) {
         this.journal = journal;
         this.year = year;

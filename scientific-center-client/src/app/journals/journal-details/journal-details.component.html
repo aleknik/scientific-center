@@ -10,3 +10,25 @@
     </div>
   </div>
 </div>
+<div class="row">
+  <div class="col-md-4"></div>
+  <div class="col-md-4">
+    <h2>Issues</h2>
+    <table class="table">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">Year</th>
+          <th scope="col">Month</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let issue of journal.issues">
+          <td scope="row">{{issue.year}}</td>
+          <td scope="row">{{issue.month}}</td>
+          <td><button class="btn btn-primary btn-block" [routerLink]="['/journals', journal.id, 'issues', issue.id]">Details</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
