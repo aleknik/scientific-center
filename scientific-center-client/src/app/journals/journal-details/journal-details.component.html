@@ -26,7 +26,8 @@
         <tr *ngFor="let issue of journal.issues">
           <td scope="row">{{issue.year}}</td>
           <td scope="row">{{issue.month}}</td>
-          <td><button class="btn btn-primary btn-block" [routerLink]="['/journals', journal.id, 'issues', issue.id]">Details</button></td>
+          <td><button class="btn btn-primary btn-block"
+              [routerLink]="['/journals', journal.id, 'issues', issue.id]">Details</button></td>
         </tr>
       </tbody>
     </table>

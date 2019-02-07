@@ -12,7 +12,7 @@
       <tbody>
         <tr *ngFor="let journal of journals">
           <td scope="row">{{journal.name}}</td>
-          <td><button class="btn btn-primary btn-block" [routerLink]="['/journals/details', journal.id]">Details</button></td>
+          <td><button class="btn btn-primary btn-block" [routerLink]="['/journals', journal.id]">Details</button></td>
         </tr>
       </tbody>
     </table>

@@ -59,7 +59,7 @@ export class PaperDetailsComponent implements OnInit {
   }
 
   showDownload(): boolean {
-    return this.status == "SUCCESS" || this.paper.journal.openAccess;
+    return this.status == "SUCCESS" || (this.paper && this.paper.journal && this.paper.journal.openAccess);
   }
 
 }

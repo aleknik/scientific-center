@@ -3,12 +3,15 @@ package io.github.aleknik.scientificcenterservice.controller;
 import io.github.aleknik.scientificcenterservice.model.domain.Issue;
 import io.github.aleknik.scientificcenterservice.model.dto.IssueDto;
 import io.github.aleknik.scientificcenterservice.model.dto.JournalDto;
+import io.github.aleknik.scientificcenterservice.model.dto.PaperDto;
 import io.github.aleknik.scientificcenterservice.service.IssueService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/issues")
@@ -33,6 +36,9 @@ public class IssueController {
 
         journalDto.setOpenAccess(issue.getJournal().isOpenAccess());
         issueDto.setJournal(journalDto);
+
+        issueDto.setPapers(issue.getPapers().stream().map(p ->
+                new PaperDto(p.getId(), p.getTitle())).collect(Collectors.toList()));
 
         return ResponseEntity.ok(issueDto);
     }

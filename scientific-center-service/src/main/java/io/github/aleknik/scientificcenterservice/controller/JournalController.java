@@ -42,6 +42,7 @@ public class JournalController {
         final JournalDto journalDto = new JournalDto();
         journalDto.setName(journal.getName());
         journalDto.setOpenAccess(journal.isOpenAccess());
+        journalDto.setId(journal.getId());
 
         journalDto.setIssues(journal.getIssues().stream().map(issue ->
                 new IssueDto(issue.getId(), issue.getYear(), issue.getMonth()))

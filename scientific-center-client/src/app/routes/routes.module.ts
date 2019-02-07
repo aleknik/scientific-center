@@ -17,13 +17,13 @@ const routes: Routes = [
 
   { path: 'papers', component: PaperListComponent },
   { path: 'papers/new', component: NewPaperComponent },
-  { path: 'papers/details/:id', component: PaperDetailsComponent },
+  { path: 'papers/:id', component: PaperDetailsComponent },
 
   { path: 'payments/register', component: RegisterPaymentComponent },
   { path: 'payments/callback/:status', component: CallbackComponent },
 
   { path: 'journals', component: JournalListComponent },
-  { path: 'journals/details/:id', component: JournalDetailsComponent },
+  { path: 'journals/:id', component: JournalDetailsComponent },
   { path: 'journals/:journalId/issues/:issueId', component: IssueDetailsComponent },
 ];
 

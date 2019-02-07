@@ -2,12 +2,13 @@ package io.github.aleknik.scientificcenterservice.controller;
 
 import io.github.aleknik.scientificcenterservice.model.domain.*;
 import io.github.aleknik.scientificcenterservice.model.dto.CreatePaperRequestDto;
+import io.github.aleknik.scientificcenterservice.model.dto.JournalDto;
 import io.github.aleknik.scientificcenterservice.model.dto.PaperDto;
 import io.github.aleknik.scientificcenterservice.model.dto.PaperSearchDto;
 import io.github.aleknik.scientificcenterservice.security.RoleConstants;
-import io.github.aleknik.scientificcenterservice.service.elasticsearch.PaperSearchService;
 import io.github.aleknik.scientificcenterservice.service.PaperService;
 import io.github.aleknik.scientificcenterservice.service.UserService;
+import io.github.aleknik.scientificcenterservice.service.elasticsearch.PaperSearchService;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -68,11 +69,17 @@ public class PaperController {
         paperDto.setPaperAbstract(paper.getPaperAbstract());
         paperDto.setPrice(paper.getJournal().getPaperPrice());
 
+        final JournalDto journalDto = new JournalDto();
+        journalDto.setOpenAccess(paper.getJournal().isOpenAccess());
+        journalDto.setName(paper.getJournal().getName());
+        paperDto.setJournalDto(journalDto);
+
         return ResponseEntity.ok(paperDto);
 
     }
 
     @GetMapping("/download/{id}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity download(@PathVariable long id) {
         final byte[] data = paperService.getPaperPdf(id);
 

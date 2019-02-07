@@ -1,6 +1,7 @@
 package io.github.aleknik.scientificcenterservice.model.dto;
 
 import java.time.Month;
+import java.util.List;
 
 public class IssueDto {
 
@@ -11,6 +12,8 @@ public class IssueDto {
     private Month month;
 
     private JournalDto journal;
+
+    private List<PaperDto> papers;
 
     public IssueDto() {
     }
@@ -52,5 +55,13 @@ public class IssueDto {
 
     public void setJournal(JournalDto journal) {
         this.journal = journal;
+    }
+
+    public List<PaperDto> getPapers() {
+        return papers;
+    }
+
+    public void setPapers(List<PaperDto> papers) {
+        this.papers = papers;
     }
 }

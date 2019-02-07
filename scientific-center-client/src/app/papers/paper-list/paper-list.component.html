@@ -15,7 +15,8 @@
           <td scope="row">{{paper.title}}</td>
           <td>{{paper.highlight}}</td>
           <td *ngIf="paper.openAccess"><button class="btn btn-primary btn-block">Download</button></td>
-          <td *ngIf="!paper.openAccess"><button class="btn btn-success btn-block" [routerLink]="['/papers/details', paper.id]">Buy</button></td>
+          <td *ngIf="!paper.openAccess"><button class="btn btn-success btn-block"
+              [routerLink]="['/papers', paper.id]">Buy</button></td>
         </tr>
       </tbody>
     </table>

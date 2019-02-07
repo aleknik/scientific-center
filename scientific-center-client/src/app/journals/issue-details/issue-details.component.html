@@ -10,3 +10,23 @@
     </div>
   </div>
 </div>
+<div class="row">
+  <div class="col-md-4"></div>
+  <div class="col-md-4">
+    <h2>Papers</h2>
+    <table class="table">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">Title</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let paper of issue.papers">
+          <td scope="row">{{paper.title}}</td>
+          <td><button class="btn btn-primary btn-block" [routerLink]="['/papers', paper.id]">Details</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -35,15 +35,15 @@ export class IssueDetailsComponent implements OnInit {
     });
   }
 
-  buySubscription() {
+  buyIssue() {
     const address = window.location.origin + "/#/payments/callback";
-    this.paymentService.subscribeToJournal(this.id, `${address}/success`, `${address}/error`).subscribe(res => {
+    this.paymentService.buyIssue(this.id, `${address}/success`, `${address}/error`).subscribe(res => {
       window.location.href = res;
     })
   }
 
   getStatus() {
-    this.paymentService.checkSubcriptionStatus(this.id).subscribe(res => {
+    this.paymentService.checkIssueStatus(this.id).subscribe(res => {
       this.status = res
     }, () => {
       this.status = null;

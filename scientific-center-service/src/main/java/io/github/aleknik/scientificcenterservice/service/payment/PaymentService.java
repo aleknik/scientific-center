@@ -1,11 +1,14 @@
 package io.github.aleknik.scientificcenterservice.service.payment;
 
+import io.github.aleknik.scientificcenterservice.controller.exception.BadRequestException;
 import io.github.aleknik.scientificcenterservice.controller.exception.NotFoundException;
+import io.github.aleknik.scientificcenterservice.model.domain.Issue;
 import io.github.aleknik.scientificcenterservice.model.domain.Journal;
 import io.github.aleknik.scientificcenterservice.model.domain.Paper;
 import io.github.aleknik.scientificcenterservice.model.domain.User;
 import io.github.aleknik.scientificcenterservice.model.dto.RegisteredMethodResponse;
 import io.github.aleknik.scientificcenterservice.model.dto.payment.*;
+import io.github.aleknik.scientificcenterservice.repository.IssueRepository;
 import io.github.aleknik.scientificcenterservice.repository.JournalRepository;
 import io.github.aleknik.scientificcenterservice.repository.PaperRepository;
 import io.github.aleknik.scientificcenterservice.repository.UserRepository;
@@ -25,15 +28,17 @@ public class PaymentService {
     private final UserRepository userRepository;
     private final PaperRepository paperRepository;
     private final JournalRepository journalRepository;
+    private final IssueRepository issueRepository;
 
     @Value("${payment-service-url}")
     private String url;
 
-    public PaymentService(RestTemplate restTemplate, UserRepository userRepository, PaperRepository paperRepository, JournalRepository journalRepository) {
+    public PaymentService(RestTemplate restTemplate, UserRepository userRepository, PaperRepository paperRepository, JournalRepository journalRepository, IssueRepository issueRepository) {
         this.restTemplate = restTemplate;
         this.userRepository = userRepository;
         this.paperRepository = paperRepository;
         this.journalRepository = journalRepository;
+        this.issueRepository = issueRepository;
     }
 
     public User register(User user) {
@@ -60,6 +65,10 @@ public class PaymentService {
 
     public String buyPaper(long id, User user, String successUrl, String errorUrl) {
         final Paper paper = paperRepository.findById(id).orElseThrow(() -> new NotFoundException("Paper not found"));
+
+        if(paper.getJournal().isOpenAccess()) {
+            throw new BadRequestException("Journal is open access");
+        }
 
         final PaymentRequest paymentRequest = new PaymentRequest();
         paymentRequest.setProductId(String.valueOf(id));
@@ -88,8 +97,37 @@ public class PaymentService {
         return restTemplate.postForObject(url + "/payments", paymentRequest, String.class);
     }
 
+    public String buyIssue(long id, User user, String successUrl, String errorUrl) {
+        final Issue issue = issueRepository.findById(id).orElseThrow(() -> new NotFoundException("Issue not found"));
+
+        if(issue.getJournal().isOpenAccess()) {
+            throw new BadRequestException("Journal is open access");
+        }
+
+        final PaymentRequest paymentRequest = new PaymentRequest();
+        paymentRequest.setProductId(String.valueOf(id));
+        paymentRequest.setBuyerId(String.valueOf(user.getId()));
+        paymentRequest.setAmount(issue.getJournal().getSubscriptionPrice());
+        paymentRequest.setClientId(issue.getJournal().getEditor().getPaymentServiceId());
+        paymentRequest.setSubscriptionBased(false);
+        paymentRequest.setSuccessUrl(successUrl);
+        paymentRequest.setErrorUrl(errorUrl);
+
+        return restTemplate.postForObject(url + "/payments", paymentRequest, String.class);
+    }
+
     public PaymentStatus paperStatus(long id, User user) {
         final Paper paper = paperRepository.findById(id).orElseThrow(() -> new NotFoundException("Paper not found"));
+
+        PaymentStatus issueStatus = PaymentStatus.CANCELED;
+        try {
+            issueStatus = issueStatus(paper.getIssue().getId(), user);
+        } catch (Exception ignored) {
+        }
+
+        if (issueStatus != PaymentStatus.CANCELED) {
+            return issueStatus;
+        }
 
         final PaymentQuery paymentQuery = new PaymentQuery();
         paymentQuery.setBuyerId(String.valueOf(user.getId()));
@@ -104,7 +142,7 @@ public class PaymentService {
         }
     }
 
-    public PaymentStatus JournalStatus(long id, User user) {
+    public PaymentStatus journalStatus(long id, User user) {
         final Journal journal = journalRepository.findById(id).orElseThrow(() -> new NotFoundException("Journal not found"));
 
         final PaymentQuery paymentQuery = new PaymentQuery();
@@ -119,4 +157,22 @@ public class PaymentService {
             throw new NotFoundException("payment not found");
         }
     }
+
+    public PaymentStatus issueStatus(long id, User user) {
+        final Issue issue = issueRepository.findById(id).orElseThrow(() -> new NotFoundException("Issue not found"));
+
+        final PaymentQuery paymentQuery = new PaymentQuery();
+        paymentQuery.setBuyerId(String.valueOf(user.getId()));
+        paymentQuery.setClientId(issue.getJournal().getEditor().getPaymentServiceId());
+        paymentQuery.setProductId(String.valueOf(issue.getId()));
+
+        try {
+            return restTemplate.postForObject(url + "/payments/status", paymentQuery, PaymentStatusResponse.class)
+                    .getPaymentStatus();
+        } catch (RestClientException e) {
+            throw new NotFoundException("payment not found");
+        }
+    }
+
+
 }
