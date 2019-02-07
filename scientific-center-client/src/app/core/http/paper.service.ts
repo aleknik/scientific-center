@@ -34,4 +34,9 @@ export class PaperService extends RestService {
     return this.http.get<Paper>(`${this.baseUrl}/${id}`)
       .pipe(catchError(this.handleError<Paper>()));
   }
+
+  downloadPaper(id: number) {
+    return this.http.get(`${this.baseUrl}/download/${id}`, { responseType: 'blob' })
+      .pipe(catchError(this.handleError<any>()));
+  }
 }

@@ -3,7 +3,7 @@ import { Paper } from 'src/app/shared/model/paper.model';
 import { PaperService } from 'src/app/core/http/paper.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PaymentService } from 'src/app/core/http/payment.service';
-import { Location } from '@angular/common';
+import * as FileSaver from "file-saver"
 
 @Component({
   selector: 'app-paper-details',
@@ -60,6 +60,15 @@ export class PaperDetailsComponent implements OnInit {
 
   showDownload(): boolean {
     return this.status == "SUCCESS" || (this.paper && this.paper.journal && this.paper.journal.openAccess);
+  }
+
+  download() {
+    this.paperService.downloadPaper(this.paperId).subscribe(res => this.downloadFile(res));
+  }
+
+  downloadFile(data) {
+    const blob = new Blob([data], { type: 'application/octet-stream' });
+    FileSaver.saveAs(blob, `${this.paper.title}.pdf`);
   }
 
 }

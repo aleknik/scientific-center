@@ -1,14 +1,17 @@
 package io.github.aleknik.scientificcenterservice.controller;
 
+import io.github.aleknik.scientificcenterservice.controller.exception.BadRequestException;
 import io.github.aleknik.scientificcenterservice.model.domain.*;
 import io.github.aleknik.scientificcenterservice.model.dto.CreatePaperRequestDto;
 import io.github.aleknik.scientificcenterservice.model.dto.JournalDto;
 import io.github.aleknik.scientificcenterservice.model.dto.PaperDto;
 import io.github.aleknik.scientificcenterservice.model.dto.PaperSearchDto;
+import io.github.aleknik.scientificcenterservice.model.dto.payment.PaymentStatus;
 import io.github.aleknik.scientificcenterservice.security.RoleConstants;
 import io.github.aleknik.scientificcenterservice.service.PaperService;
 import io.github.aleknik.scientificcenterservice.service.UserService;
 import io.github.aleknik.scientificcenterservice.service.elasticsearch.PaperSearchService;
+import io.github.aleknik.scientificcenterservice.service.payment.PaymentService;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -31,11 +34,13 @@ public class PaperController {
     private final PaperService paperService;
     private final UserService userService;
     private final PaperSearchService paperSearchService;
+    private final PaymentService paymentService;
 
-    public PaperController(PaperService paperService, UserService userService, PaperSearchService paperSearchService) {
+    public PaperController(PaperService paperService, UserService userService, PaperSearchService paperSearchService, PaymentService paymentService) {
         this.paperService = paperService;
         this.userService = userService;
         this.paperSearchService = paperSearchService;
+        this.paymentService = paymentService;
     }
 
     @PostMapping
@@ -81,8 +86,21 @@ public class PaperController {
     @GetMapping("/download/{id}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity download(@PathVariable long id) {
-        final byte[] data = paperService.getPaperPdf(id);
+        final User user = userService.findCurrentUser();
+        final Paper paper = paperService.findById(id);
 
+        if (!paper.getJournal().isOpenAccess()) {
+            PaymentStatus status = PaymentStatus.CANCELED;
+            try {
+                status = paymentService.paperStatus(id, user);
+            } catch (Exception ignored) {
+            }
+            if (status != PaymentStatus.SUCCESS) {
+                throw new BadRequestException("Paper is not bought");
+            }
+        }
+
+        final byte[] data = paperService.getPaperPdf(id);
         ByteArrayResource resource = new ByteArrayResource(data);
 
         HttpHeaders headers = new HttpHeaders();
