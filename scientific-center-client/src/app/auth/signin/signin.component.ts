@@ -23,7 +23,7 @@ export class SigninComponent implements OnInit {
   signin() {
     this.authService.authenticate(this.user).subscribe(
       response => {
-        this.toastr.success(`Welcome ${this.user.email}`);
+        this.toastr.success(`Welcome ${this.user.username}`);
         this.router.navigateByUrl('');
       },
       err => { });

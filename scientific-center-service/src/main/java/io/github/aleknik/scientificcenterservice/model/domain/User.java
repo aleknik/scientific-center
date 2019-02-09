@@ -10,6 +10,8 @@ public class User extends BaseModel {
 
     private String email;
 
+    private String username;
+
     private String password;
 
     private String firstName;
@@ -32,8 +34,9 @@ public class User extends BaseModel {
     public User() {
     }
 
-    public User(String email, String password, String firstName, String lastName, Address address) {
+    public User(String email, String username, String password, String firstName, String lastName, Address address) {
         this.email = email;
+        this.username = username;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -102,5 +105,13 @@ public class User extends BaseModel {
 
     public void setPaymentServiceId(String paymentServiceId) {
         PaymentServiceId = paymentServiceId;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

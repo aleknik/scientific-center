@@ -15,8 +15,8 @@ public class AuthorService {
     }
 
     public Author createAuthor(Author author) {
-        if (userRepository.findByEmail(author.getEmail()).isPresent()) {
-            throw new BadRequestException("Email taken");
+        if (userRepository.findByUsername(author.getUsername()).isPresent()) {
+            throw new BadRequestException("Username taken");
         }
         return userRepository.save(author);
     }

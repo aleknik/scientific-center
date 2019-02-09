@@ -38,13 +38,13 @@ public class RegisterAuthorTask implements JavaDelegate {
 
     private Author createAuthor(DelegateExecution delegateExecution) {
         String email = (String) delegateExecution.getVariable("email");
+        String username = (String) delegateExecution.getVariable("username");
         String password = (String) delegateExecution.getVariable("password");
         String firstName = (String) delegateExecution.getVariable("firstName");
         String lastName = (String) delegateExecution.getVariable("lastName");
         String city = (String) delegateExecution.getVariable("city");
         String country = (String) delegateExecution.getVariable("country");
 
-        final Author author = new Author(email, password, firstName, lastName, new Address(city, country));
-        return author;
+        return new Author(email, username, password, firstName, lastName, new Address(city, country));
     }
 }

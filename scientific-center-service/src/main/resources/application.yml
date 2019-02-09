@@ -52,7 +52,7 @@ geocoding:
   url: https://eu1.locationiq.com/v1/search.php
   key: ${GEOCODING_ACCESS_KEY}
 
-payment-service-url: https://localhost:8080/api
+payment-service-url: https://192.168.43.63:8080/api
 
 token:
   header: X-Auth-Token

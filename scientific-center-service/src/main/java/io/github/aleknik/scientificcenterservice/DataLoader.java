@@ -35,10 +35,10 @@ public class DataLoader implements ApplicationRunner {
 
         final Journal journal1 = addJournal("Journal 1", BigDecimal.valueOf(1), BigDecimal.valueOf(5), false);
         final Journal journal2 = addJournal("Journal 2", BigDecimal.valueOf(1), BigDecimal.valueOf(5), true);
-        addEditor("editor@editor", "pass", "Aleksandar", "Nkolic", AddressConstants.NOVI_SAD, "dipl. inz.", journal1);
-        addEditor("editor2@editor", "pass", "Aleksandar", "Nkolic", AddressConstants.NOVI_SAD, "dipl. inz.", journal2);
+        addEditor("editor@editor", "editor", "pass", "Aleksandar", "Nkolic", AddressConstants.NOVI_SAD, "dipl. inz.", journal1);
+        addEditor("editor2@editor", "editor2", "pass", "Aleksandar", "Nkolic", AddressConstants.NOVI_SAD, "dipl. inz.", journal2);
 
-        addAuthor("author@author", "pass", "Luka", "Maletin", AddressConstants.NOVI_SAD);
+        addAuthor("author@author", "author", "pass", "Luka", "Maletin", AddressConstants.NOVI_SAD);
     }
 
     private Journal addJournal(String name, BigDecimal paperPrice, BigDecimal subscriptionPrice, boolean openAccess) {
@@ -51,9 +51,10 @@ public class DataLoader implements ApplicationRunner {
         return journalRepository.save(journal);
     }
 
-    private Editor addEditor(String email, String password, String firstName, String lastName, Address address, String title, Journal journal) {
+    private Editor addEditor(String email, String username, String password, String firstName, String lastName, Address address, String title, Journal journal) {
         final Editor editor = new Editor();
         editor.setEmail(email);
+        editor.setUsername(username);
         editor.setPassword(passwordEncoder.encode(password));
         editor.setFirstName(firstName);
         editor.setLastName(lastName);
@@ -70,9 +71,10 @@ public class DataLoader implements ApplicationRunner {
         return (Editor) userService.createUser(editor);
     }
 
-    private Author addAuthor(String email, String password, String firstName, String lastName, Address address) {
+    private Author addAuthor(String email, String username, String password, String firstName, String lastName, Address address) {
         final Author author = new Author();
         author.setEmail(email);
+        author.setUsername(username);
         author.setPassword(passwordEncoder.encode(password));
         author.setFirstName(firstName);
         author.setLastName(lastName);

@@ -21,8 +21,8 @@ public class UserService {
         this.paymentService = paymentService;
     }
 
-    public User findByEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("User not found"));
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("User not found"));
     }
 
     public User findCurrentUser() {
@@ -32,7 +32,7 @@ public class UserService {
         }
 
         final UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        return findByEmail(userDetails.getUsername());
+        return findByUsername(userDetails.getUsername());
     }
 
     public User createUser(User user) {

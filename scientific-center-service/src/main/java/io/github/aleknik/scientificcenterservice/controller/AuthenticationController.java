@@ -43,13 +43,13 @@ public class AuthenticationController {
     public ResponseEntity authenticate(@Valid @RequestBody AuthenticationRequest authenticationRequest) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        authenticationRequest.getEmail(),
+                        authenticationRequest.getUsername(),
                         authenticationRequest.getPassword()
                 )
         );
 
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getEmail());
-        final User user = userService.findByEmail(userDetails.getUsername());
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+        final User user = userService.findByUsername(userDetails.getUsername());
         final String token = tokenUtils.generateToken(userDetails);
         return new ResponseEntity<>(new AuthenticationResponse(user.getId(), token), HttpStatus.OK);
     }

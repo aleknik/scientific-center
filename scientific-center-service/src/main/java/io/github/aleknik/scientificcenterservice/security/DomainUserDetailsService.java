@@ -25,7 +25,7 @@ public class DomainUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-        final User user = userRepository.findByEmail(username)
+        final User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(String.format("No user with username %s found!", username)));
         return createSpringSecurityUser(user);
     }
@@ -35,7 +35,7 @@ public class DomainUserDetailsService implements UserDetailsService {
                 .map(role -> new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toList());
 
-        return new org.springframework.security.core.userdetails.User(user.getEmail(),
+        return new org.springframework.security.core.userdetails.User(user.getUsername(),
                 user.getPassword(),
                 grantedAuthorities);
     }

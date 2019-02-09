@@ -14,7 +14,7 @@ export class NewPaperComponent implements OnInit {
 
   paper: Paper = new Paper()
   file: File;
-  scienceFields = ['Pizza', 'Pasta', 'Parmesan'];
+  scienceFields = ['Field1', 'Field2', 'Field3'];
   coauthor = new Author();
 
   constructor(private paperService: PaperService,

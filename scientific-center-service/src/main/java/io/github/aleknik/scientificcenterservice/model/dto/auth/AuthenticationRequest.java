@@ -9,10 +9,10 @@ import javax.validation.constraints.NotEmpty;
 public class AuthenticationRequest {
 
     /**
-     * User's email.
+     * User's username.
      */
     @NotEmpty
-    private String email;
+    private String username;
 
     /**
      * User's password.
@@ -23,17 +23,17 @@ public class AuthenticationRequest {
     public AuthenticationRequest() {
     }
 
-    public AuthenticationRequest(@NotEmpty String email, @NotEmpty String password) {
-        this.email = email;
+    public AuthenticationRequest(@NotEmpty String username, @NotEmpty String password) {
+        this.username = username;
         this.password = password;
     }
 
-    public String getEmail() {
-        return email;
+    public String getUsername() {
+        return username;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
