@@ -4,18 +4,17 @@ import io.github.aleknik.scientificcenterservice.controller.exception.BadRequest
 import io.github.aleknik.scientificcenterservice.handler.PDFHandler;
 import io.github.aleknik.scientificcenterservice.model.domain.Keyword;
 import io.github.aleknik.scientificcenterservice.model.domain.Paper;
-import io.github.aleknik.scientificcenterservice.model.dto.PaperSearchDto;
+import io.github.aleknik.scientificcenterservice.model.dto.elasticsearch.PaperSearchDto;
+import io.github.aleknik.scientificcenterservice.model.dto.elasticsearch.QueryDto;
 import io.github.aleknik.scientificcenterservice.model.elasticsearch.Author;
 import io.github.aleknik.scientificcenterservice.model.elasticsearch.PaperIndexUnit;
 import io.github.aleknik.scientificcenterservice.model.elasticsearch.Reviewer;
-import io.github.aleknik.scientificcenterservice.repository.IssueRepository;
 import io.github.aleknik.scientificcenterservice.repository.PaperRepository;
 import io.github.aleknik.scientificcenterservice.repository.elasticsearch.ESPaperRepository;
 import io.github.aleknik.scientificcenterservice.service.util.StorageService;
+import org.elasticsearch.index.query.QueryBuilder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,15 +26,18 @@ public class PaperSearchService {
     private final ESPaperRepository esPaperRepository;
     private final StorageService storageService;
     private final PaperRepository paperRepository;
+    private final QueryBuilderService queryBuilderService;
 
     public PaperSearchService(PDFHandler pdfHandler,
                               ESPaperRepository esPaperRepository,
                               StorageService storageService,
-                              PaperRepository paperRepository) {
+                              PaperRepository paperRepository,
+                              QueryBuilderService queryBuilderService) {
         this.pdfHandler = pdfHandler;
         this.esPaperRepository = esPaperRepository;
         this.storageService = storageService;
         this.paperRepository = paperRepository;
+        this.queryBuilderService = queryBuilderService;
     }
 
     public void indexPaper(long id) {
@@ -82,9 +84,11 @@ public class PaperSearchService {
         return paperIndexUnit;
     }
 
-    public List<PaperSearchDto> search() {
+    public List<PaperSearchDto> search(List<QueryDto> query) {
+        final QueryBuilder builder = queryBuilderService.build(query);
+
         final ArrayList<PaperSearchDto> searchDtos = new ArrayList<>();
-        for (PaperIndexUnit unit : esPaperRepository.findAll()) {
+        for (PaperIndexUnit unit : esPaperRepository.search(builder)) {
             final PaperSearchDto paperSearchDto = new PaperSearchDto();
             paperSearchDto.setId(Long.parseLong(unit.getExternalId()));
             paperSearchDto.setOpenAccess(unit.isOpenAccess());

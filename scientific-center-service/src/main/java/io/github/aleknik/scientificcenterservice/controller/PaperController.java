@@ -5,7 +5,8 @@ import io.github.aleknik.scientificcenterservice.model.domain.*;
 import io.github.aleknik.scientificcenterservice.model.dto.CreatePaperRequestDto;
 import io.github.aleknik.scientificcenterservice.model.dto.JournalDto;
 import io.github.aleknik.scientificcenterservice.model.dto.PaperDto;
-import io.github.aleknik.scientificcenterservice.model.dto.PaperSearchDto;
+import io.github.aleknik.scientificcenterservice.model.dto.elasticsearch.PaperSearchDto;
+import io.github.aleknik.scientificcenterservice.model.dto.elasticsearch.QueryDto;
 import io.github.aleknik.scientificcenterservice.model.dto.payment.PaymentStatus;
 import io.github.aleknik.scientificcenterservice.security.RoleConstants;
 import io.github.aleknik.scientificcenterservice.service.PaperService;
@@ -57,9 +58,9 @@ public class PaperController {
     }
 
     @PostMapping("/search")
-    public ResponseEntity query() {
+    public ResponseEntity query(@RequestBody List<QueryDto> query) {
 
-        final List<PaperSearchDto> result = paperSearchService.search();
+        final List<PaperSearchDto> result = paperSearchService.search(query);
 
         return ResponseEntity.ok(result);
 
