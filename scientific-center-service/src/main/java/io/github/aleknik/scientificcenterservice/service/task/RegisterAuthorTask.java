@@ -30,7 +30,7 @@ public class RegisterAuthorTask implements JavaDelegate {
         } catch (Exception e) {
             throw new BpmnError("UserDataInvalid");
         }
-        final User user = identityService.newUser(String.valueOf(author.getId()));
+        final User user = identityService.newUser(String.valueOf(author.getUsername()));
         user.setPassword(author.getPassword());
         identityService.saveUser(user);
     }
