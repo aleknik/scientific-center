@@ -44,6 +44,8 @@ public class PaperIndexUnit {
     @Field(type = FieldType.Text, store = true)
     private String content;
 
+    private String highlight;
+
     public PaperIndexUnit() {
     }
 
@@ -125,5 +127,13 @@ public class PaperIndexUnit {
 
     public void setReviewers(List<Reviewer> reviewers) {
         this.reviewers = reviewers;
+    }
+
+    public String getHighlight() {
+        return highlight;
+    }
+
+    public void setHighlight(String highlight) {
+        this.highlight = highlight;
     }
 }

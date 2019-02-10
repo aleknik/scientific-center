@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -60,7 +61,8 @@ public class PaperController {
     @PostMapping("/search")
     public ResponseEntity query(@RequestBody List<QueryDto> query) {
 
-        final List<PaperSearchDto> result = paperSearchService.search(query);
+        List<String> highlights = Arrays.asList("content");
+        final List<PaperSearchDto> result = paperSearchService.search(query, highlights);
 
         return ResponseEntity.ok(result);
 

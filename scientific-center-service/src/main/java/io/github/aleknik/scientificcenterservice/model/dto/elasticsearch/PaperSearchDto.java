@@ -13,6 +13,13 @@ public class PaperSearchDto {
     public PaperSearchDto() {
     }
 
+    public PaperSearchDto(long id, String title, String highlight, boolean openAccess) {
+        this.id = id;
+        this.title = title;
+        this.highlight = highlight;
+        this.openAccess = openAccess;
+    }
+
     public long getId() {
         return id;
     }

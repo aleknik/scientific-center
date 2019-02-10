@@ -12,11 +12,24 @@ import io.github.aleknik.scientificcenterservice.model.elasticsearch.Reviewer;
 import io.github.aleknik.scientificcenterservice.repository.PaperRepository;
 import io.github.aleknik.scientificcenterservice.repository.elasticsearch.ESPaperRepository;
 import io.github.aleknik.scientificcenterservice.service.util.StorageService;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.common.text.Text;
 import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.SearchResultMapper;
+import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
+import org.springframework.data.elasticsearch.core.aggregation.impl.AggregatedPageImpl;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,17 +40,20 @@ public class PaperSearchService {
     private final StorageService storageService;
     private final PaperRepository paperRepository;
     private final QueryBuilderService queryBuilderService;
+    private final ElasticsearchTemplate elasticsearchTemplate;
 
     public PaperSearchService(PDFHandler pdfHandler,
                               ESPaperRepository esPaperRepository,
                               StorageService storageService,
                               PaperRepository paperRepository,
-                              QueryBuilderService queryBuilderService) {
+                              QueryBuilderService queryBuilderService,
+                              ElasticsearchTemplate elasticsearchTemplate) {
         this.pdfHandler = pdfHandler;
         this.esPaperRepository = esPaperRepository;
         this.storageService = storageService;
         this.paperRepository = paperRepository;
         this.queryBuilderService = queryBuilderService;
+        this.elasticsearchTemplate = elasticsearchTemplate;
     }
 
     public void indexPaper(long id) {
@@ -84,20 +100,44 @@ public class PaperSearchService {
         return paperIndexUnit;
     }
 
-    public List<PaperSearchDto> search(List<QueryDto> query) {
+    public List<PaperSearchDto> search(List<QueryDto> query, List<String> highlightFields) {
         final QueryBuilder builder = queryBuilderService.build(query);
 
-        final ArrayList<PaperSearchDto> searchDtos = new ArrayList<>();
-        for (PaperIndexUnit unit : esPaperRepository.search(builder)) {
-            final PaperSearchDto paperSearchDto = new PaperSearchDto();
-            paperSearchDto.setId(Long.parseLong(unit.getExternalId()));
-            paperSearchDto.setOpenAccess(unit.isOpenAccess());
-            paperSearchDto.setTitle(unit.getTitle());
-            paperSearchDto.setHighlight("sadas fsd fsd f sd fsd f sd as d asd ds g df ggfgg g dsf gdfg fdf gfsg dfg fgs df ");
-            searchDtos.add(paperSearchDto);
-        }
+        SearchQuery searchQuery = new NativeSearchQueryBuilder()
+                .withQuery(builder)
+                .withHighlightFields(highlightFields.stream().map(HighlightBuilder.Field::new).toArray(HighlightBuilder.Field[]::new))
+                .build();
 
-        return searchDtos;
+        final AggregatedPage<PaperIndexUnit> results = elasticsearchTemplate.queryForPage(searchQuery, PaperIndexUnit.class, new SearchResultMapper() {
+            @Override
+            public <T> AggregatedPage<T> mapResults(SearchResponse response, Class<T> aClass, Pageable pageable) {
+                List<PaperIndexUnit> chunk = new ArrayList<>();
+                for (SearchHit searchHit : response.getHits()) {
+                    final Map<String, Object> map = searchHit.getSourceAsMap();
+                    PaperIndexUnit paper = new PaperIndexUnit();
+                    paper.setExternalId(String.valueOf(map.get("externalId")));
+                    paper.setTitle((String) map.get("title"));
+                    paper.setOpenAccess((Boolean) map.get("openAccess"));
+                    final String highlight = searchHit.getHighlightFields().values().stream()
+                            .flatMap(f -> Arrays.stream(f.fragments()))
+                            .map(Text::toString)
+                            .collect(Collectors.joining("..."));
+                    paper.setHighlight(highlight);
+                    chunk.add(paper);
+                }
+                if (chunk.size() > 0) {
+                    return new AggregatedPageImpl<>((List<T>) chunk);
+                }
+                return null;
+            }
+        });
+
+
+        return results != null ? results.stream()
+                .map(res -> new PaperSearchDto(Long.parseLong(res.getExternalId()),
+                        res.getTitle(), res.getHighlight(), res.isOpenAccess()))
+                .collect(Collectors.toList()) :
+                new ArrayList<>();
     }
 
 }

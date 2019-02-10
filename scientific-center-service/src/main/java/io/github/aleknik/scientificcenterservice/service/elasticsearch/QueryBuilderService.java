@@ -10,24 +10,40 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.elasticsearch.index.query.QueryBuilders.termQuery;
+
 @Service
 public class QueryBuilderService {
 
     public QueryBuilder build(List<QueryDto> query) {
-        final List<QueryBuilder> ors = new ArrayList<>();
-        BoolQueryBuilder builder = QueryBuilders.boolQuery();
+        final List<List<QueryBuilder>> ors = new ArrayList<>();
+        List<QueryBuilder> ands = new ArrayList<>();
 
         for (QueryDto queryDto : query) {
             if (queryDto.getOperator() == QueryOperator.OR) {
-                ors.add(builder);
-                builder = QueryBuilders.boolQuery();
+                ors.add(ands);
+                ands = new ArrayList<>();
             }
-            builder.must(build(queryDto));
+            ands.add(build(queryDto));
         }
-        ors.add(builder);
+        ors.add(ands);
+
+        BoolQueryBuilder builder;
+        List<QueryBuilder> orBuilders = new ArrayList<>();
+        for (List<QueryBuilder> or : ors) {
+            builder = QueryBuilders.boolQuery();
+            if (or.size() == 1) {
+                orBuilders.add(builder.should(or.get(0)));
+            } else {
+                for (QueryBuilder and : or) {
+                    builder.must(and);
+                }
+                orBuilders.add(builder);
+            }
+        }
 
         builder = QueryBuilders.boolQuery();
-        for (QueryBuilder or : ors) {
+        for (QueryBuilder or : orBuilders) {
             builder.should(or);
         }
 
@@ -38,9 +54,9 @@ public class QueryBuilderService {
 
         QueryBuilder retVal = null;
         if (query.isPhrase()) {
-            retVal = QueryBuilders.matchPhrasePrefixQuery(query.getField(), query.getQuery());
+            retVal = QueryBuilders.matchPhraseQuery(query.getField(), query.getQuery());
         } else {
-            retVal = QueryBuilders.termQuery(query.getField(), query.getQuery());
+            retVal = termQuery(query.getField(), query.getQuery());
         }
 
         return retVal;
