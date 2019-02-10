@@ -17,6 +17,10 @@ public class Editor extends User {
     public Editor() {
     }
 
+    public Editor(String email, String username, String password, String firstName, String lastName, Address address) {
+        super(email, username, password, firstName, lastName, address);
+    }
+
     public String getTitle() {
         return title;
     }

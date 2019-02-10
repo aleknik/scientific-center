@@ -2,6 +2,7 @@ package io.github.aleknik.scientificcenterservice.model.domain;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -21,6 +22,9 @@ public class Journal extends BaseModel {
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "journal")
     private Set<Issue> issues;
+
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "journals")
+    private Set<Reviewer> reviewers = new HashSet<>();
 
     public Journal() {
     }
@@ -71,5 +75,13 @@ public class Journal extends BaseModel {
 
     public void setIssues(Set<Issue> issues) {
         this.issues = issues;
+    }
+
+    public Set<Reviewer> getReviewers() {
+        return reviewers;
+    }
+
+    public void setReviewers(Set<Reviewer> reviewers) {
+        this.reviewers = reviewers;
     }
 }

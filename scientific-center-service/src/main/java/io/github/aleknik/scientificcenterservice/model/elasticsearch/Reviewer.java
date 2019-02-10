@@ -16,8 +16,8 @@ public class Reviewer {
     @Field(type = FieldType.Text, store = true)
     private String lastName;
 
-    @Field(type = FieldType.Text, store = true)
-    private String journal;
+    @Field(type = FieldType.Keyword, store = true)
+    private String journalId;
 
     @GeoPointField
     private GeoPoint location;
@@ -64,11 +64,11 @@ public class Reviewer {
         this.location = location;
     }
 
-    public String getJournal() {
-        return journal;
+    public String getJournalId() {
+        return journalId;
     }
 
-    public void setJournal(String journal) {
-        this.journal = journal;
+    public void setJournalId(String journalId) {
+        this.journalId = journalId;
     }
 }

@@ -37,6 +37,11 @@ public class UserService {
 
     public User createUser(User user) {
         user = userRepository.save(user);
-        return paymentService.register(user);
+//        try {
+//            return paymentService.register(user);
+//        } catch (Exception ignored) {
+//        }
+
+        return user;
     }
 }

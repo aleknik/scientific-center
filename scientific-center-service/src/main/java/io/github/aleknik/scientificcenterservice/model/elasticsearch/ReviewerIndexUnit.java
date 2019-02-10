@@ -1,5 +1,6 @@
 package io.github.aleknik.scientificcenterservice.model.elasticsearch;
 
+import io.github.aleknik.scientificcenterservice.model.domain.Reviewer;
 import org.elasticsearch.common.geo.GeoPoint;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
@@ -7,6 +8,8 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 import org.springframework.data.elasticsearch.annotations.GeoPointField;
 
 import javax.persistence.Id;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Document(indexName = ReviewerIndexUnit.INDEX_NAME, type = ReviewerIndexUnit.TYPE_NAME, shards = 1, replicas = 0)
 public class ReviewerIndexUnit {
@@ -26,13 +29,29 @@ public class ReviewerIndexUnit {
     @Field(type = FieldType.Text, store = true)
     private String lastName;
 
-    @Field(type = FieldType.Text, store = true)
-    private String journal;
+    @Field(type = FieldType.Nested, store = true)
+    private List<Journal> journals;
+
+    @Field(type = FieldType.Nested, store = true)
+    private List<ScienceField> scienceFields;
 
     @GeoPointField
     private GeoPoint location;
 
     public ReviewerIndexUnit() {
+    }
+
+    public ReviewerIndexUnit(Reviewer reviewer) {
+        this.setExternalId(String.valueOf(reviewer.getId()));
+        this.setFirstName(reviewer.getFirstName());
+        this.setLastName(reviewer.getLastName());
+        this.setJournals(reviewer.getJournals().stream().map(j ->
+                new Journal(String.valueOf(j.getId()), j.getName())).collect(Collectors.toList()));
+
+        this.setScienceFields(reviewer.getScienceFields().stream().map(sf ->
+                new ScienceField(String.valueOf(sf.getId()), sf.getName())).collect(Collectors.toList()));
+
+        this.setLocation(new GeoPoint(reviewer.getAddress().getLatitude(), reviewer.getAddress().getLongitude()));
     }
 
     public String getId() {
@@ -83,11 +102,20 @@ public class ReviewerIndexUnit {
         this.externalId = externalId;
     }
 
-    public String getJournal() {
-        return journal;
+
+    public List<Journal> getJournals() {
+        return journals;
     }
 
-    public void setJournal(String journal) {
-        this.journal = journal;
+    public void setJournals(List<Journal> journals) {
+        this.journals = journals;
+    }
+
+    public List<ScienceField> getScienceFields() {
+        return scienceFields;
+    }
+
+    public void setScienceFields(List<ScienceField> scienceFields) {
+        this.scienceFields = scienceFields;
     }
 }

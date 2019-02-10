@@ -8,7 +8,7 @@ import io.github.aleknik.scientificcenterservice.model.dto.elasticsearch.PaperSe
 import io.github.aleknik.scientificcenterservice.model.dto.elasticsearch.QueryDto;
 import io.github.aleknik.scientificcenterservice.model.elasticsearch.Author;
 import io.github.aleknik.scientificcenterservice.model.elasticsearch.PaperIndexUnit;
-import io.github.aleknik.scientificcenterservice.model.elasticsearch.Reviewer;
+import io.github.aleknik.scientificcenterservice.model.elasticsearch.ReviewerIndexUnit;
 import io.github.aleknik.scientificcenterservice.repository.PaperRepository;
 import io.github.aleknik.scientificcenterservice.repository.elasticsearch.ESPaperRepository;
 import io.github.aleknik.scientificcenterservice.service.util.StorageService;
@@ -90,12 +90,7 @@ public class PaperSearchService {
                         ca.getAddress().getLongitude()))
                 .collect(Collectors.toList()));
         paperIndexUnit.setContent(text);
-        paperIndexUnit.setReviewers(paper.getReviewers().stream()
-                .map(ca -> new Reviewer(String.valueOf(ca.getId()), ca.getFirstName(),
-                        ca.getLastName(),
-                        ca.getAddress().getLatitude(),
-                        ca.getAddress().getLongitude()))
-                .collect(Collectors.toList()));
+        paperIndexUnit.setReviewers(paper.getReviewers().stream().map(ReviewerIndexUnit::new).collect(Collectors.toList()));
 
         return paperIndexUnit;
     }

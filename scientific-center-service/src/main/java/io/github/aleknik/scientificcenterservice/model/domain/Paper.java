@@ -2,7 +2,6 @@ package io.github.aleknik.scientificcenterservice.model.domain;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,7 +21,7 @@ public class Paper extends BaseModel {
     private Set<UnregisteredAuthor> coauthors = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
-    private Set<Editor> reviewers = new HashSet<>();
+    private Set<Reviewer> reviewers = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Journal journal;
@@ -69,11 +68,11 @@ public class Paper extends BaseModel {
         this.coauthors = coauthors;
     }
 
-    public Set<Editor> getReviewers() {
+    public Set<Reviewer> getReviewers() {
         return reviewers;
     }
 
-    public void setReviewers(Set<Editor> reviewers) {
+    public void setReviewers(Set<Reviewer> reviewers) {
         this.reviewers = reviewers;
     }
 

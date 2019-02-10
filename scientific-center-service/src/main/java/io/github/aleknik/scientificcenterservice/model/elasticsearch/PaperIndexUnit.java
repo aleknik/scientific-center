@@ -39,7 +39,7 @@ public class PaperIndexUnit {
     private List<Author> coauthors;
 
     @Field(type = FieldType.Nested, store = true)
-    private List<Reviewer> reviewers;
+    private List<ReviewerIndexUnit> reviewers;
 
     @Field(type = FieldType.Text, store = true)
     private String content;
@@ -121,11 +121,11 @@ public class PaperIndexUnit {
         this.coauthors = coauthors;
     }
 
-    public List<Reviewer> getReviewers() {
+    public List<ReviewerIndexUnit> getReviewers() {
         return reviewers;
     }
 
-    public void setReviewers(List<Reviewer> reviewers) {
+    public void setReviewers(List<ReviewerIndexUnit> reviewers) {
         this.reviewers = reviewers;
     }
 
