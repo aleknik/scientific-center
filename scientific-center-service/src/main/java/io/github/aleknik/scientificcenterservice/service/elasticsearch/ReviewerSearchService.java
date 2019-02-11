@@ -59,7 +59,7 @@ public class ReviewerSearchService {
 
     public List<ReviewerSearchDto> searchByJournalAndLikePaper(long journalId, String text) {
 
-        final MoreLikeThisQueryBuilder moreLikeThisQuery = moreLikeThisQuery(new String[]{"content"}, new String[]{"text"}, null);
+        final MoreLikeThisQueryBuilder moreLikeThisQuery = moreLikeThisQuery(new String[]{"content"}, new String[]{text}, null).analyzer("serbian");
         moreLikeThisQuery.minDocFreq(1);
         moreLikeThisQuery.minTermFreq(1);
 

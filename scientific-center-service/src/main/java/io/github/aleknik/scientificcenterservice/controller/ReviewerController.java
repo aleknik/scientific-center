@@ -44,7 +44,7 @@ public class ReviewerController {
             final HashSet<ReviewerSearchDto> moreLikeThisRes = new HashSet<>(reviewerSearchService.searchByJournalAndLikePaper(paper.getJournal().getId(), content));
 
             if (results != null) {
-                results.removeAll(moreLikeThisRes);
+                results.retainAll(moreLikeThisRes);
             } else {
                 results = moreLikeThisRes;
             }
@@ -53,7 +53,7 @@ public class ReviewerController {
             final HashSet<ReviewerSearchDto> distanceRes = new HashSet<>(reviewerSearchService.searchByJournalAndDistance(paper, 100));
 
             if (results != null) {
-                results.removeAll(distanceRes);
+                results.retainAll(distanceRes);
             } else {
                 results = distanceRes;
             }

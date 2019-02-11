@@ -26,7 +26,7 @@ export class PaperDetailsComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.paperId = params['id'];
       this.getPaper();
-      this.getStatus();
+      // this.getStatus();
     });
   }
 

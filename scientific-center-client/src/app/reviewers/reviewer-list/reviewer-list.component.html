@@ -1,0 +1,48 @@
+<div class="row">
+  <div class="col-md-2"></div>
+  <div class="col-md-8">
+    <form (ngSubmit)="search()" #searchForm="ngForm">
+      <div class="row">
+        <label class="form-check-label col" for="gridCheck1">
+          Filter by science field
+        </label>
+        <input class="form-check-input col" type="checkbox" id="gridCheck1" [(ngModel)]="query.includeScienceField"
+          name="includeScienceField">
+      </div>
+      <div class="row">
+        <label class="form-check-label col" for="gridCheck2">
+          Filter by paper content
+        </label>
+        <input class="form-check-input col" type="checkbox" id="gridCheck2" [(ngModel)]="query.includeMoreLikeThis"
+          name="includeMoreLikeThis">
+      </div>
+      <div class="row">
+        <label class="form-check-label col" for="gridCheck3">
+          Filter by geo distance
+        </label>
+        <input class="form-check-input col" type="checkbox" id="gridCheck3" [(ngModel)]="query.includeDistance"
+          name="includeDistance">
+      </div>
+      <button [disabled]="searchForm.form.invalid" class="btn btn-lg btn-primary btn-block col-md-4"
+        type="submit">Filter</button>
+    </form>
+    <div class="row">
+      <h2>Reviewers</h2>
+      <table class="table">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">First name</th>
+            <th scope="col">Last name</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let reviewer of reviewers">
+            <td scope="row">{{reviewer.firstName}}</td>
+            <td scope="row">{{reviewer.lastName}}</td>
+            <td><button class="btn btn-primary btn-block">Details</button></td>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
