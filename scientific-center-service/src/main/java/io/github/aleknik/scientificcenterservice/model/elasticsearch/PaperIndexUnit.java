@@ -3,11 +3,13 @@ package io.github.aleknik.scientificcenterservice.model.elasticsearch;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
+import org.springframework.data.elasticsearch.annotations.Setting;
 
 import javax.persistence.Id;
 import java.util.List;
 
 @Document(indexName = PaperIndexUnit.INDEX_NAME, type = PaperIndexUnit.TYPE_NAME, shards = 1, replicas = 0)
+@Setting(settingPath = "/settings/settings.json")
 public class PaperIndexUnit {
 
     public static final String INDEX_NAME = "papers";
@@ -29,20 +31,23 @@ public class PaperIndexUnit {
     @Field(type = FieldType.Text, store = true)
     private List<String> keywords;
 
+    @Field(type = FieldType.Text, store = true)
+    private List<String> authorNames;
+
     @Field(type = FieldType.Boolean, store = true)
     private boolean openAccess;
 
-    @Field(type = FieldType.Object, store = true)
-    private Author author;
-
     @Field(type = FieldType.Nested, store = true)
-    private List<Author> coauthors;
+    private List<Author> authors;
 
     @Field(type = FieldType.Nested, store = true)
     private List<ReviewerIndexUnit> reviewers;
 
     @Field(type = FieldType.Text, store = true)
     private String content;
+
+    @Field(type = FieldType.Text, store = true)
+    private String scienceField;
 
     private String highlight;
 
@@ -105,22 +110,6 @@ public class PaperIndexUnit {
         this.openAccess = openAccess;
     }
 
-    public Author getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(Author author) {
-        this.author = author;
-    }
-
-    public List<Author> getCoauthors() {
-        return coauthors;
-    }
-
-    public void setCoauthors(List<Author> coauthors) {
-        this.coauthors = coauthors;
-    }
-
     public List<ReviewerIndexUnit> getReviewers() {
         return reviewers;
     }
@@ -135,5 +124,29 @@ public class PaperIndexUnit {
 
     public void setHighlight(String highlight) {
         this.highlight = highlight;
+    }
+
+    public String getScienceField() {
+        return scienceField;
+    }
+
+    public void setScienceField(String scienceField) {
+        this.scienceField = scienceField;
+    }
+
+    public List<Author> getAuthors() {
+        return authors;
+    }
+
+    public void setAuthors(List<Author> authors) {
+        this.authors = authors;
+    }
+
+    public List<String> getAuthorNames() {
+        return authorNames;
+    }
+
+    public void setAuthorNames(List<String> authorNames) {
+        this.authorNames = authorNames;
     }
 }

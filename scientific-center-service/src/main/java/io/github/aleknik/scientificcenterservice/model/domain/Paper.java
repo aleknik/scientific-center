@@ -33,6 +33,9 @@ public class Paper extends BaseModel {
 
     private String paperAbstract;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    private ScienceField scienceField;
+
     public Paper() {
     }
 
@@ -106,5 +109,13 @@ public class Paper extends BaseModel {
 
     public void setIssue(Issue issue) {
         this.issue = issue;
+    }
+
+    public ScienceField getScienceField() {
+        return scienceField;
+    }
+
+    public void setScienceField(ScienceField scienceField) {
+        this.scienceField = scienceField;
     }
 }

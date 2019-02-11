@@ -1,5 +1,7 @@
 package io.github.aleknik.scientificcenterservice.model.dto.elasticsearch;
 
+import java.util.Objects;
+
 public class ReviewerSearchDto {
 
     private long id;
@@ -39,5 +41,18 @@ public class ReviewerSearchDto {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ReviewerSearchDto that = (ReviewerSearchDto) o;
+        return id == that.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

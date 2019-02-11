@@ -6,7 +6,7 @@ import io.github.aleknik.scientificcenterservice.model.dto.CreatePaperRequestDto
 import io.github.aleknik.scientificcenterservice.model.dto.JournalDto;
 import io.github.aleknik.scientificcenterservice.model.dto.PaperDto;
 import io.github.aleknik.scientificcenterservice.model.dto.elasticsearch.PaperSearchDto;
-import io.github.aleknik.scientificcenterservice.model.dto.elasticsearch.QueryDto;
+import io.github.aleknik.scientificcenterservice.model.dto.elasticsearch.PaperQueryDto;
 import io.github.aleknik.scientificcenterservice.model.dto.payment.PaymentStatus;
 import io.github.aleknik.scientificcenterservice.security.RoleConstants;
 import io.github.aleknik.scientificcenterservice.service.PaperService;
@@ -59,13 +59,12 @@ public class PaperController {
     }
 
     @PostMapping("/search")
-    public ResponseEntity query(@RequestBody List<QueryDto> query) {
+    public ResponseEntity query(@RequestBody List<PaperQueryDto> query) {
 
-        List<String> highlights = Arrays.asList("content");
+        List<String> highlights = Arrays.asList("content", "paperAbstract");
         final List<PaperSearchDto> result = paperSearchService.search(query, highlights);
 
         return ResponseEntity.ok(result);
-
     }
 
     @GetMapping("/{id}")
@@ -125,6 +124,7 @@ public class PaperController {
         paper.setAuthor(author);
         paper.setPaperAbstract(createPaperRequestDto.getPaperAbstract());
         paper.setTitle(createPaperRequestDto.getTitle());
+        paper.setScienceField(createPaperRequestDto.getScienceField());
         paper.setKeywords(createPaperRequestDto.getKeywords().stream()
                 .map(Keyword::new).collect(Collectors.toSet()));
         paper.setCoauthors(createPaperRequestDto.getCoauthors().stream()

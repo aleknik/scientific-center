@@ -6,6 +6,7 @@ import io.github.aleknik.scientificcenterservice.model.domain.*;
 import io.github.aleknik.scientificcenterservice.repository.IssueRepository;
 import io.github.aleknik.scientificcenterservice.repository.JournalRepository;
 import io.github.aleknik.scientificcenterservice.repository.PaperRepository;
+import io.github.aleknik.scientificcenterservice.repository.ScienceFieldRepository;
 import io.github.aleknik.scientificcenterservice.service.elasticsearch.PaperSearchService;
 import io.github.aleknik.scientificcenterservice.service.util.GeocodingService;
 import io.github.aleknik.scientificcenterservice.service.util.StorageService;
@@ -22,6 +23,7 @@ public class PaperService {
     private final JournalRepository journalRepository;
     private final PaperSearchService paperSearchService;
     private final IssueRepository issueRepository;
+    private final ScienceFieldRepository scienceFieldRepository;
 
     private final StorageService storageService;
     private final GeocodingService geocodingService;
@@ -30,17 +32,20 @@ public class PaperService {
     public PaperService(PaperRepository paperRepository,
                         JournalRepository journalRepository,
                         PaperSearchService paperSearchService,
-                        IssueRepository issueRepository, StorageService storageService,
+                        IssueRepository issueRepository, ScienceFieldRepository scienceFieldRepository, StorageService storageService,
                         GeocodingService geocodingService) {
         this.paperRepository = paperRepository;
         this.journalRepository = journalRepository;
         this.paperSearchService = paperSearchService;
         this.issueRepository = issueRepository;
+        this.scienceFieldRepository = scienceFieldRepository;
         this.storageService = storageService;
         this.geocodingService = geocodingService;
     }
 
     public Paper createPaper(Paper paper, MultipartFile file) {
+        final ScienceField field = scienceFieldRepository.findById(paper.getScienceField().getId()).orElseThrow(() -> new NotFoundException("Field not found"));
+        paper.setScienceField(field);
         for (UnregisteredAuthor coauthor : paper.getCoauthors()) {
             final Address address = geocodingService.getAddress(coauthor.getAddress().getCity(), coauthor.getAddress().getCountry());
             coauthor.setAddress(address);

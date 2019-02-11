@@ -57,6 +57,9 @@ public class DataLoader implements ApplicationRunner {
         addEditor("editor2@editor", "editor2", "pass", "Aleksandar", "Nkolic", AddressConstants.NOVI_SAD, "dipl. inz.", journal2);
 
         addAuthor("author@author", "author", "pass", "Luka", "Maletin", AddressConstants.NOVI_SAD);
+        addReviewer("author2@author2", "author2", "pass", "Milijana", "Smiljanic", AddressConstants.BERLIN, "dipl. inz.",
+                Arrays.asList(journal1, journal2), Arrays.asList(field1, field2));
+
 
         addReviewer("reviewer@reviewer", "reviewer", "pass", "Luka", "Maletin", AddressConstants.NOVI_SAD, "dipl. inz.",
                 Arrays.asList(journal1, journal2), Arrays.asList(field1, field2));

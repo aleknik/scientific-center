@@ -1,6 +1,6 @@
 package io.github.aleknik.scientificcenterservice.model.dto.elasticsearch;
 
-public class QueryDto {
+public class PaperQueryDto {
 
     private String query;
 
@@ -10,7 +10,7 @@ public class QueryDto {
 
     private String field;
 
-    public QueryDto() {
+    public PaperQueryDto() {
     }
 
     public String getQuery() {

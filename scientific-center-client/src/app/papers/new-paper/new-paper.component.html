@@ -8,17 +8,18 @@
     <label>Abstract</label>
     <textarea class="form-control" [(ngModel)]="paper.paperAbstract" name="abstract" required></textarea>
     <label>Keywords</label>
-    <tag-input [(ngModel)]="paper.keywords" modelAsStrings="true" placeholder="+keyword" secondaryPlaceholder="Enter keywords"
-      name="keywords" required></tag-input>
+    <tag-input [(ngModel)]="paper.keywords" modelAsStrings="true" placeholder="+keyword"
+      secondaryPlaceholder="Enter keywords" name="keywords" required></tag-input>
     <label>Science field</label>
     <select name="scienceField" class="form-control" [(ngModel)]="paper.scienceField" required>
-      <option *ngFor="let field of scienceFields">{{field}}</option>
+      <option *ngFor="let field of scienceFields" [ngValue]="field">{{field.name}}</option>
     </select>
     <label>Upload pdf</label>
     <input type="file" class="form-control-file" (change)="fileChange($event)" accept=".pdf">
     <input type="hidden" [(ngModel)]="file" name="file" required>
     <br />
-    <button [disabled]="paperForm.form.invalid" class="btn btn-lg btn-primary btn-block" type="submit">Submit paper</button>
+    <button [disabled]="paperForm.form.invalid" class="btn btn-lg btn-primary btn-block" type="submit">Submit
+      paper</button>
   </form>
   <div class="col-md-4">
     <form class="form" (ngSubmit)="AddCoauthor()" #coauthorForm="ngForm">
@@ -41,8 +42,8 @@
     <br>
     <ul class="list-group">
       <li *ngFor="let coauthor of paper.coauthors" class="list-group-item">
-        <p>Name: {{coauthor.firstName}} {{coauthor.lastName}} <span class="float-right fa fa-trash fa-2x icon-pad pointer"
-            (click)="removeCoauthor(coauthor)">
+        <p>Name: {{coauthor.firstName}} {{coauthor.lastName}} <span
+            class="float-right fa fa-trash fa-2x icon-pad pointer" (click)="removeCoauthor(coauthor)">
           </span></p>
         <p>
           City: {{coauthor.city}}

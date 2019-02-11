@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { Paper } from 'src/app/shared/model/paper.model';
 import { catchError } from 'rxjs/operators';
 import { PaperSearchResult } from 'src/app/shared/model/paper-search-result.model';
+import { PaperQuery } from 'src/app/shared/model/paper-query.model';
 
 @Injectable({
   providedIn: 'root'
@@ -25,8 +26,8 @@ export class PaperService extends RestService {
       .pipe(catchError(this.handleError<Paper>()));
   }
 
-  searchPapers(): Observable<PaperSearchResult[]> {
-    return this.http.post<PaperSearchResult[]>(`${this.baseUrl}/search`, {})
+  searchPapers(queries: PaperQuery[]): Observable<PaperSearchResult[]> {
+    return this.http.post<PaperSearchResult[]>(`${this.baseUrl}/search`, queries)
       .pipe(catchError(this.handleError<PaperSearchResult[]>()));
   }
 

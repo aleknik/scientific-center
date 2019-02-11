@@ -1,6 +1,6 @@
 package io.github.aleknik.scientificcenterservice.service.elasticsearch;
 
-import io.github.aleknik.scientificcenterservice.model.dto.elasticsearch.QueryDto;
+import io.github.aleknik.scientificcenterservice.model.dto.elasticsearch.PaperQueryDto;
 import io.github.aleknik.scientificcenterservice.model.dto.elasticsearch.QueryOperator;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
@@ -15,16 +15,16 @@ import static org.elasticsearch.index.query.QueryBuilders.termQuery;
 @Service
 public class QueryBuilderService {
 
-    public QueryBuilder build(List<QueryDto> query) {
+    public QueryBuilder build(List<PaperQueryDto> query) {
         final List<List<QueryBuilder>> ors = new ArrayList<>();
         List<QueryBuilder> ands = new ArrayList<>();
 
-        for (QueryDto queryDto : query) {
-            if (queryDto.getOperator() == QueryOperator.OR) {
+        for (PaperQueryDto paperQueryDto : query) {
+            if (paperQueryDto.getOperator() == QueryOperator.OR) {
                 ors.add(ands);
                 ands = new ArrayList<>();
             }
-            ands.add(build(queryDto));
+            ands.add(build(paperQueryDto));
         }
         ors.add(ands);
 
@@ -46,17 +46,16 @@ public class QueryBuilderService {
         for (QueryBuilder or : orBuilders) {
             builder.should(or);
         }
-
         return builder;
     }
 
-    private QueryBuilder build(QueryDto query) {
+    private QueryBuilder build(PaperQueryDto query) {
 
         QueryBuilder retVal = null;
         if (query.isPhrase()) {
-            retVal = QueryBuilders.matchPhraseQuery(query.getField(), query.getQuery());
+            retVal = QueryBuilders.matchPhraseQuery(query.getField(), query.getQuery()).analyzer("serbian");
         } else {
-            retVal = termQuery(query.getField(), query.getQuery());
+            retVal = QueryBuilders.matchQuery(query.getField(), query.getQuery()).analyzer("serbian");
         }
 
         return retVal;

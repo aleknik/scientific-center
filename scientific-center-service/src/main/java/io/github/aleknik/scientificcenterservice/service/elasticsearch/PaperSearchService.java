@@ -5,7 +5,7 @@ import io.github.aleknik.scientificcenterservice.handler.PDFHandler;
 import io.github.aleknik.scientificcenterservice.model.domain.Keyword;
 import io.github.aleknik.scientificcenterservice.model.domain.Paper;
 import io.github.aleknik.scientificcenterservice.model.dto.elasticsearch.PaperSearchDto;
-import io.github.aleknik.scientificcenterservice.model.dto.elasticsearch.QueryDto;
+import io.github.aleknik.scientificcenterservice.model.dto.elasticsearch.PaperQueryDto;
 import io.github.aleknik.scientificcenterservice.model.elasticsearch.Author;
 import io.github.aleknik.scientificcenterservice.model.elasticsearch.PaperIndexUnit;
 import io.github.aleknik.scientificcenterservice.model.elasticsearch.ReviewerIndexUnit;
@@ -56,10 +56,15 @@ public class PaperSearchService {
         this.elasticsearchTemplate = elasticsearchTemplate;
     }
 
+    public String getContent(long id) {
+        final byte[] data = storageService.load(String.valueOf(id));
+        return pdfHandler.getText(data);
+
+    }
+
     public void indexPaper(long id) {
         final Paper paper = paperRepository.findById(id).orElseThrow(() -> new BadRequestException("Paper not found"));
-        final byte[] data = storageService.load(String.valueOf(id));
-        final String text = pdfHandler.getText(data);
+        final String text = getContent(id);
 
 
         esPaperRepository.index(convertPaperToIndexUnit(paper, text));
@@ -74,28 +79,34 @@ public class PaperSearchService {
         paperIndexUnit.setExternalId(String.valueOf(paper.getId()));
         paperIndexUnit.setTitle(paper.getTitle());
         paperIndexUnit.setJournal(paper.getJournal().getName());
-
+        paperIndexUnit.setScienceField(paper.getScienceField().getName());
+        List<Author> authors = new ArrayList<>();
         final Author author = new Author(String.valueOf(paper.getAuthor().getId()),
                 paper.getAuthor().getFirstName(),
                 paper.getAuthor().getLastName(),
                 paper.getAuthor().getAddress().getLatitude(),
                 paper.getAuthor().getAddress().getLongitude());
 
-        paperIndexUnit.setAuthor(author);
+        authors.add(author);
 
-        paperIndexUnit.setCoauthors(paper.getCoauthors().stream()
+        paperIndexUnit.setAuthorNames(authors.stream()
+                .map(a -> a.getFirstName() + " " + a.getLastName()).collect(Collectors.toList()));
+
+        authors.addAll(paper.getCoauthors().stream()
                 .map(ca -> new Author(null, ca.getFirstName(),
                         ca.getLastName(),
                         ca.getAddress().getLatitude(),
                         ca.getAddress().getLongitude()))
                 .collect(Collectors.toList()));
+
+        paperIndexUnit.setAuthors(authors);
         paperIndexUnit.setContent(text);
         paperIndexUnit.setReviewers(paper.getReviewers().stream().map(ReviewerIndexUnit::new).collect(Collectors.toList()));
 
         return paperIndexUnit;
     }
 
-    public List<PaperSearchDto> search(List<QueryDto> query, List<String> highlightFields) {
+    public List<PaperSearchDto> search(List<PaperQueryDto> query, List<String> highlightFields) {
         final QueryBuilder builder = queryBuilderService.build(query);
 
         SearchQuery searchQuery = new NativeSearchQueryBuilder()

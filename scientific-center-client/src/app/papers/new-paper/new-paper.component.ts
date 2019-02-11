@@ -4,6 +4,8 @@ import { PaperService } from 'src/app/core/http/paper.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { Author } from 'src/app/shared/model/author.model';
+import { ScienceFieldService } from 'src/app/core/http/science-field.service';
+import { ScienceField } from 'src/app/shared/model/science-field.model';
 
 @Component({
   selector: 'app-new-paper',
@@ -14,19 +16,27 @@ export class NewPaperComponent implements OnInit {
 
   paper: Paper = new Paper()
   file: File;
-  scienceFields = ['Field1', 'Field2', 'Field3'];
+  scienceFields = new Array<ScienceField>();
   coauthor = new Author();
 
   constructor(private paperService: PaperService,
+    private scienceFieldService: ScienceFieldService,
     private toastr: ToastrService,
     private router: Router) { }
 
   ngOnInit() {
     this.paper.coauthors = new Array<Author>()
+    this.getScienceFields();
+  }
+
+  getScienceFields() {
+    this.scienceFieldService.findAll().subscribe(res => {
+      this.scienceFields = res;
+    });
   }
 
   fileChange(event) {
-    this.file = event.target.files[0]
+    this.file = event.target.files[0];
   }
 
 

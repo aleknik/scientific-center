@@ -1,5 +1,7 @@
 package io.github.aleknik.scientificcenterservice.model.dto;
 
+import io.github.aleknik.scientificcenterservice.model.domain.ScienceField;
+
 import java.util.List;
 
 public class CreatePaperRequestDto {
@@ -10,7 +12,7 @@ public class CreatePaperRequestDto {
 
     private String paperAbstract;
 
-    private String scienceField;
+    private ScienceField scienceField;
 
     private List<AuthorDto> coauthors;
 
@@ -41,11 +43,11 @@ public class CreatePaperRequestDto {
         this.paperAbstract = paperAbstract;
     }
 
-    public String getScienceField() {
+    public ScienceField getScienceField() {
         return scienceField;
     }
 
-    public void setScienceField(String scienceField) {
+    public void setScienceField(ScienceField scienceField) {
         this.scienceField = scienceField;
     }
 

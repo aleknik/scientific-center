@@ -1,24 +1,67 @@
 <div class="row">
   <div class="col-md-2"></div>
   <div class="col-md-8">
-    <h2>Papers</h2>
-    <table class="table">
-      <thead class="thead-dark">
-        <tr>
-          <th scope="col">Title</th>
-          <th scope="col">Highlight</th>
-          <th scope="col"></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let paper of papers">
-          <td scope="row">{{paper.title}}</td>
-          <td>{{paper.highlight}}</td>
-          <td *ngIf="paper.openAccess"><button class="btn btn-primary btn-block">Download</button></td>
-          <td *ngIf="!paper.openAccess"><button class="btn btn-success btn-block"
-              [routerLink]="['/papers', paper.id]">Buy</button></td>
-        </tr>
-      </tbody>
-    </table>
+    <form (ngSubmit)="search()" #paperSearchForm="ngForm">
+      <div class="row" *ngFor="let query of queries; index as i">
+        <div class="col-md-2">
+          <select name="operator" *ngIf="i !== 0" class="form-control" [(ngModel)]="query.operator" required>
+            <option *ngFor="let operator of operators">{{operator}}</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <select name="field" class="form-control" [(ngModel)]="query.field" required>
+            <option *ngFor="let field of fields">{{field}}</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <input type="text" class="form-control" [(ngModel)]="query.query" name="query" required>
+        </div>
+        <div class="col-md-2">
+          <div class="row">
+            <label class="form-check-label col" for="gridCheck1">
+              Phrase
+            </label>
+            <input class="form-check-input col" type="checkbox" id="gridCheck1" [(ngModel)]="query.phrase" name="phase">
+          </div>
+
+        </div>
+        <div class="col-md-2">
+          <span *ngIf="queries.length > 1" class="float-left fa fa-trash fa-2x icon-pad pointer"
+            (click)="removeQuery(query)">
+          </span>
+          <span *ngIf="i === queries.length - 1" class="float-right fa fa-plus fa-2x icon-pad pointer"
+            (click)="addQuery()"></span>
+        </div>
+      </div>
+      <br />
+      <div class="row">
+        <button [disabled]="paperSearchForm.form.invalid" class="btn btn-lg btn-primary btn-block col-md-4"
+          type="submit">Search</button>
+      </div>
+    </form>
+    <div class="row">
+      <h2>Papers</h2>
+      <table class="table">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Title</th>
+            <th scope="col">Highlight</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let paper of papers">
+            <td scope="row">{{paper.title}}</td>
+            <td>
+              <div [innerHTML]="paper.highlight">
+              </div>
+            </td>
+            <td *ngIf="paper.openAccess"><button class="btn btn-primary btn-block">Download</button></td>
+            <td *ngIf="!paper.openAccess"><button class="btn btn-success btn-block"
+                [routerLink]="['/papers', paper.id]">Buy</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>

@@ -2,16 +2,14 @@ package io.github.aleknik.scientificcenterservice.model.elasticsearch;
 
 import io.github.aleknik.scientificcenterservice.model.domain.Reviewer;
 import org.elasticsearch.common.geo.GeoPoint;
-import org.springframework.data.elasticsearch.annotations.Document;
-import org.springframework.data.elasticsearch.annotations.Field;
-import org.springframework.data.elasticsearch.annotations.FieldType;
-import org.springframework.data.elasticsearch.annotations.GeoPointField;
+import org.springframework.data.elasticsearch.annotations.*;
 
 import javax.persistence.Id;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Document(indexName = ReviewerIndexUnit.INDEX_NAME, type = ReviewerIndexUnit.TYPE_NAME, shards = 1, replicas = 0)
+@Setting(settingPath = "/settings/settings.json")
 public class ReviewerIndexUnit {
 
     public static final String INDEX_NAME = "reviewers";
