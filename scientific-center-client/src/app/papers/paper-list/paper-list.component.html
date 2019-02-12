@@ -4,26 +4,26 @@
     <form (ngSubmit)="search()" #paperSearchForm="ngForm">
       <div class="row" *ngFor="let query of queries; index as i">
         <div class="col-md-2">
-          <select name="operator" *ngIf="i !== 0" class="form-control" [(ngModel)]="query.operator" required>
+          <select *ngIf="i !== 0" class="form-control" [(ngModel)]="query.operator" name="{{'operator' + i}}" required>
             <option *ngFor="let operator of operators">{{operator}}</option>
           </select>
         </div>
         <div class="col-md-2">
-          <select name="field" class="form-control" [(ngModel)]="query.field" required>
+          <select class="form-control" [(ngModel)]="query.field" name="{{'field' + i}}" required>
             <option *ngFor="let field of fields">{{field}}</option>
           </select>
         </div>
         <div class="col-md-4">
-          <input type="text" class="form-control" [(ngModel)]="query.query" name="query" required>
+          <input type="text" class="form-control" [(ngModel)]="query.query" name="{{'query' + i}}" required>
         </div>
         <div class="col-md-2">
           <div class="row">
-            <label class="form-check-label col" for="gridCheck1">
+            <label class="form-check-label col">
               Phrase
             </label>
-            <input class="form-check-input col" type="checkbox" id="gridCheck1" [(ngModel)]="query.phrase" name="phase">
+            <input class="form-check-input col" type="checkbox" id="gridCheck1" [(ngModel)]="query.phrase"
+              name="{{'checkbox' + i}}">
           </div>
-
         </div>
         <div class="col-md-2">
           <span *ngIf="queries.length > 1" class="float-left fa fa-trash fa-2x icon-pad pointer"

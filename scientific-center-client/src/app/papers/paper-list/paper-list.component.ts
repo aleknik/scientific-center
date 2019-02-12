@@ -21,7 +21,7 @@ export class PaperListComponent implements OnInit {
   constructor(private paperService: PaperService, private toastService: ToastrService) { }
 
   ngOnInit() {
-    this.queries.push(new PaperQuery("", false, "AND", null))
+    this.queries.push(new PaperQuery("", false, "AND", ""))
     // this.getPapers();
   }
 
@@ -33,7 +33,7 @@ export class PaperListComponent implements OnInit {
   }
 
   addQuery() {
-    this.queries.push(new PaperQuery("", false, "AND", null))
+    this.queries.push(new PaperQuery("", false, "AND", ""))
   }
 
   removeQuery(query: PaperQuery) {
