@@ -1,11 +1,24 @@
 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
   <a class="navbar-brand" href="#">Scientific Center</a>
-  <button (click)="isCollapsed = !isCollapsed" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
-    aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+  <button (click)="isCollapsed = !isCollapsed" class="navbar-toggler" type="button" data-toggle="collapse"
+    data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" [collapse]="isCollapsed">
     <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown" dropdown>
+        <a class="nav-link dropdown-toggle" href dropdownToggle (click)="false" id="navbarDropdownMenuLink"
+          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Papers
+        </a>
+        <div *dropdownMenu class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" routerLink="/papers">Search papers</a>
+          <a class="dropdown-item" routerLink="/papers/new">Publish paper</a>
+        </div>
+      </li>
+      <li class="nav-item">
+          <a class="nav-link" routerLink="/journals">Journals</a>
+        </li>
       <li class="nav-item" *ngIf="isAuthenticated()">
         <a class="nav-link" routerLink="/payments/register">Payment methods</a>
       </li>

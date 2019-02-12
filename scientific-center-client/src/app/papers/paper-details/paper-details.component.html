@@ -7,5 +7,7 @@
     <button *ngIf="showProcessing()" class="btn btn-primary btn-block" disabled="true">Validating
       payment...</button>
     <button *ngIf="showDownload()" class="btn btn-success btn-block" (click)="download()">Dwwnload</button>
+    <br />
+    <button class="btn btn-primary btn-block" [routerLink]="['/papers', paperId, 'reviewers']">Buy</button>
   </div>
 </div>
