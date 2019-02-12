@@ -55,7 +55,7 @@ public class PaperService {
                 reviewerRepository.findById(r.getId()).orElseThrow(() -> new NotFoundException("Reviewer not found")))
                 .collect(Collectors.toSet()));
 
-        final Journal journal = journalRepository.findAll().stream().findFirst().orElseThrow(BadRequestException::new);
+        final Journal journal = journalRepository.findById(paper.getJournal().getId()).orElseThrow(BadRequestException::new);
 
         paper.setJournal(journal);
         final Paper savedPaper = paperRepository.save(paper);

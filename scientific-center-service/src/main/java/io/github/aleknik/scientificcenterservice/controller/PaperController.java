@@ -5,10 +5,11 @@ import io.github.aleknik.scientificcenterservice.model.domain.*;
 import io.github.aleknik.scientificcenterservice.model.dto.CreatePaperRequestDto;
 import io.github.aleknik.scientificcenterservice.model.dto.JournalDto;
 import io.github.aleknik.scientificcenterservice.model.dto.PaperDto;
-import io.github.aleknik.scientificcenterservice.model.dto.elasticsearch.PaperSearchDto;
 import io.github.aleknik.scientificcenterservice.model.dto.elasticsearch.PaperQueryDto;
+import io.github.aleknik.scientificcenterservice.model.dto.elasticsearch.PaperSearchDto;
 import io.github.aleknik.scientificcenterservice.model.dto.payment.PaymentStatus;
 import io.github.aleknik.scientificcenterservice.security.RoleConstants;
+import io.github.aleknik.scientificcenterservice.service.JournalService;
 import io.github.aleknik.scientificcenterservice.service.PaperService;
 import io.github.aleknik.scientificcenterservice.service.UserService;
 import io.github.aleknik.scientificcenterservice.service.elasticsearch.PaperSearchService;
@@ -24,10 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -38,12 +36,18 @@ public class PaperController {
     private final UserService userService;
     private final PaperSearchService paperSearchService;
     private final PaymentService paymentService;
+    private final JournalService journalService;
 
-    public PaperController(PaperService paperService, UserService userService, PaperSearchService paperSearchService, PaymentService paymentService) {
+    public PaperController(PaperService paperService,
+                           UserService userService,
+                           PaperSearchService paperSearchService,
+                           PaymentService paymentService,
+                           JournalService journalService) {
         this.paperService = paperService;
         this.userService = userService;
         this.paperSearchService = paperSearchService;
         this.paymentService = paymentService;
+        this.journalService = journalService;
     }
 
     @PostMapping
@@ -120,7 +124,12 @@ public class PaperController {
 
     private Paper convertToPaper(CreatePaperRequestDto createPaperRequestDto, Author author) {
 
+        Random rand = new Random();
+        final List<Journal> journals = journalService.findAll();
+        final Journal journal = journals.get(rand.nextInt(journals.size()));
+
         final Paper paper = new Paper();
+        paper.setJournal(journal);
 
         paper.setAuthor(author);
         paper.setPaperAbstract(createPaperRequestDto.getPaperAbstract());

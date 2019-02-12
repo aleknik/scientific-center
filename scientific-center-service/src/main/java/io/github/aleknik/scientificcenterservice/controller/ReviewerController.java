@@ -37,7 +37,9 @@ public class ReviewerController {
 
     @GetMapping
     public ResponseEntity findAll() {
-        final List<ReviewerSearchDto> result = reviewerService.findAll().stream().map(r -> new ReviewerSearchDto(r.getId(), r.getFirstName(), r.getLastName())).collect(Collectors.toList());
+        final List<ReviewerSearchDto> result = reviewerService.findAll()
+                .stream().map(r -> new ReviewerSearchDto(r.getId(), r.getFirstName(), r.getLastName()))
+                .collect(Collectors.toList());
 
         return ResponseEntity.ok(result);
     }

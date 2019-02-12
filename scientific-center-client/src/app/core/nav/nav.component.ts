@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../http/auth.service';
+import { AUTHOR, EDITOR } from '../util/constants';
 
 @Component({
   selector: 'app-nav',
@@ -21,6 +22,15 @@ export class NavComponent implements OnInit {
   isAuthenticated(): boolean {
     return this.authService.isAuthenticated();
   }
+
+  isAuthor(): boolean {
+    return this.authService.checkPermission(AUTHOR);
+  }
+
+  isEditor(): boolean {
+    return this.authService.checkPermission(EDITOR);
+  }
+
 
 
   signout() {

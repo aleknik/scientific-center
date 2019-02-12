@@ -1,5 +1,5 @@
 export class PaperSearchResult {
-    id: Number;
+    id: number;
     title: string;
     highlight: string;
     openAccess: boolean;

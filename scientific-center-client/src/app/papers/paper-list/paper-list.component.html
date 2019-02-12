@@ -47,6 +47,7 @@
             <th scope="col">Title</th>
             <th scope="col">Highlight</th>
             <th scope="col"></th>
+            <th scope="col"></th>
           </tr>
         </thead>
         <tbody>
@@ -56,9 +57,9 @@
               <div [innerHTML]="paper.highlight">
               </div>
             </td>
-            <td *ngIf="paper.openAccess"><button class="btn btn-primary btn-block">Download</button></td>
-            <td *ngIf="!paper.openAccess"><button class="btn btn-success btn-block"
-                [routerLink]="['/papers', paper.id]">Buy</button></td>
+            <td *ngIf="paper.openAccess"><button class="btn btn-primary btn-block"
+                (click)="download(paper)">Download</button></td>
+            <td><button class="btn btn-success btn-block" [routerLink]="['/papers', paper.id]">Details</button></td>
           </tr>
         </tbody>
       </table>

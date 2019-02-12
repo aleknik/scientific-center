@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { PaperSearchResult } from 'src/app/shared/model/paper-search-result.model';
 import { PaperService } from 'src/app/core/http/paper.service';
-import { PapersModule } from '../papers.module';
 import { PaperQuery } from 'src/app/shared/model/paper-query.model';
-import { query } from '@angular/animations';
 import { ToastrService } from 'ngx-toastr';
+import * as FileSaver from "file-saver"
 
 @Component({
   selector: 'app-paper-list',
@@ -42,6 +41,15 @@ export class PaperListComponent implements OnInit {
     if (index !== -1) {
       this.queries.splice(index, 1);
     }
+  }
+
+  download(paper: PaperSearchResult) {
+    this.paperService.downloadPaper(paper.id).subscribe(res => this.downloadFile(res, paper));
+  }
+
+  downloadFile(data, paper: PaperSearchResult) {
+    const blob = new Blob([data], { type: 'application/octet-stream' });
+    FileSaver.saveAs(blob, `${paper.title}.pdf`);
   }
 
 }

@@ -1,5 +1,6 @@
 package io.github.aleknik.scientificcenterservice.service.util;
 
+import io.github.aleknik.scientificcenterservice.controller.exception.NotFoundException;
 import io.github.aleknik.scientificcenterservice.model.domain.Address;
 import io.github.aleknik.scientificcenterservice.model.dto.LocationDto;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,9 +36,7 @@ public class GeocodingService {
         try {
             response = restTemplate.getForObject(builder.build().encode().toUri(), LocationDto[].class)[0];
         } catch (RestClientException e) {
-            response = new LocationDto();
-            response.setLat("45.2551338");
-            response.setLon("19.8451756");
+            throw new NotFoundException("Adress not found");
         }
 
 

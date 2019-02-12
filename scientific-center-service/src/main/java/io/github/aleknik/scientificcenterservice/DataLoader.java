@@ -51,8 +51,10 @@ public class DataLoader implements ApplicationRunner {
 
         final ScienceField field1 = new ScienceField("field1");
         final ScienceField field2 = new ScienceField("field2");
+        final ScienceField field3 = new ScienceField("field3");
         scienceFieldRepository.save(field1);
         scienceFieldRepository.save(field2);
+        scienceFieldRepository.save(field3);
 
 
         final Journal journal1 = addJournal("Journal 1", BigDecimal.valueOf(1), BigDecimal.valueOf(5), false);
@@ -61,12 +63,16 @@ public class DataLoader implements ApplicationRunner {
         addEditor("editor2@editor", "editor2", "pass", "Monika", "Erdeg", AddressConstants.NOVI_SAD, "dipl. inz.", journal2);
 
         addAuthor("author@author", "author", "pass", "Luka", "Maletin", AddressConstants.NOVI_SAD);
-        addReviewer("author2@author2", "author2", "pass", "Milijana", "Smiljanic", AddressConstants.BERLIN, "dipl. inz.",
-                Arrays.asList(journal1, journal2), Arrays.asList(field1, field2));
+
+        addReviewer("reviewer@reviewer", "reviewer", "pass", "Milijana", "Smiljanic", AddressConstants.BERLIN, "dipl. inz.",
+                Arrays.asList(journal1, journal2), Arrays.asList(field1));
 
 
-        addReviewer("reviewer@reviewer", "reviewer", "pass", "Helena", "Zecevic", AddressConstants.NOVI_SAD, "dipl. inz.",
+        addReviewer("reviewer1@reviewer1", "reviewer1", "pass", "Helena", "Zecevic", AddressConstants.BELGRADE, "dipl. inz.",
                 Arrays.asList(journal1, journal2), Arrays.asList(field1, field2));
+
+        addReviewer("reviewer2@reviewer2", "reviewer2", "pass", "Sara", "Peric", AddressConstants.NOVI_SAD, "dipl. inz.",
+                Arrays.asList(journal1, journal2), Arrays.asList(field1, field2, field3));
     }
 
     private Journal addJournal(String name, BigDecimal paperPrice, BigDecimal subscriptionPrice, boolean openAccess) {

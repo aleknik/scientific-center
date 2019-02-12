@@ -13,13 +13,13 @@
         </a>
         <div *dropdownMenu class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
           <a class="dropdown-item" routerLink="/papers">Search papers</a>
-          <a class="dropdown-item" routerLink="/papers/new">Publish paper</a>
+          <a class="dropdown-item" *ngIf="isAuthor()" routerLink="/papers/new">Publish paper</a>
         </div>
       </li>
       <li class="nav-item">
-          <a class="nav-link" routerLink="/journals">Journals</a>
-        </li>
-      <li class="nav-item" *ngIf="isAuthenticated()">
+        <a class="nav-link" routerLink="/journals">Journals</a>
+      </li>
+      <li class="nav-item" *ngIf="isEditor()">
         <a class="nav-link" routerLink="/payments/register">Payment methods</a>
       </li>
     </ul>

@@ -7,6 +7,7 @@ import { Author } from 'src/app/shared/model/author.model';
 import { ScienceFieldService } from 'src/app/core/http/science-field.service';
 import { ScienceField } from 'src/app/shared/model/science-field.model';
 import { ReviewerService } from 'src/app/core/http/reviewer.service';
+import { Reviewer } from 'src/app/shared/model/reviewer.model';
 
 @Component({
   selector: 'app-new-paper',
@@ -63,6 +64,13 @@ export class NewPaperComponent implements OnInit {
     const index: number = this.paper.coauthors.indexOf(coauthor);
     if (index !== -1) {
       this.paper.coauthors.splice(index, 1);
+    }
+  }
+
+  removeReviewer(reviewer: Reviewer) {
+    const index: number = this.paper.reviewers.indexOf(reviewer);
+    if (index !== -1) {
+      this.paper.reviewers.splice(index, 1);
     }
   }
 
