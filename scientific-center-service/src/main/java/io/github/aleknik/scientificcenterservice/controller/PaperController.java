@@ -25,6 +25,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -132,7 +133,7 @@ public class PaperController {
                 c.getLastName(),
                 new Address(c.getCity(), c.getCountry()),
                 c.getEmail())).collect(Collectors.toSet()));
-
+        paper.setReviewers(new HashSet<>(createPaperRequestDto.getReviewers()));
 
         return paper;
     }

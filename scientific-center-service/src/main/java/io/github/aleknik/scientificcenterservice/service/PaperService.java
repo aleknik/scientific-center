@@ -3,10 +3,7 @@ package io.github.aleknik.scientificcenterservice.service;
 import io.github.aleknik.scientificcenterservice.controller.exception.BadRequestException;
 import io.github.aleknik.scientificcenterservice.controller.exception.NotFoundException;
 import io.github.aleknik.scientificcenterservice.model.domain.*;
-import io.github.aleknik.scientificcenterservice.repository.IssueRepository;
-import io.github.aleknik.scientificcenterservice.repository.JournalRepository;
-import io.github.aleknik.scientificcenterservice.repository.PaperRepository;
-import io.github.aleknik.scientificcenterservice.repository.ScienceFieldRepository;
+import io.github.aleknik.scientificcenterservice.repository.*;
 import io.github.aleknik.scientificcenterservice.service.elasticsearch.PaperSearchService;
 import io.github.aleknik.scientificcenterservice.service.util.GeocodingService;
 import io.github.aleknik.scientificcenterservice.service.util.StorageService;
@@ -15,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.stream.Collectors;
 
 @Service
 public class PaperService {
@@ -24,6 +22,7 @@ public class PaperService {
     private final PaperSearchService paperSearchService;
     private final IssueRepository issueRepository;
     private final ScienceFieldRepository scienceFieldRepository;
+    private final ReviewerRepository reviewerRepository;
 
     private final StorageService storageService;
     private final GeocodingService geocodingService;
@@ -32,13 +31,14 @@ public class PaperService {
     public PaperService(PaperRepository paperRepository,
                         JournalRepository journalRepository,
                         PaperSearchService paperSearchService,
-                        IssueRepository issueRepository, ScienceFieldRepository scienceFieldRepository, StorageService storageService,
+                        IssueRepository issueRepository, ScienceFieldRepository scienceFieldRepository, ReviewerRepository reviewerRepository, StorageService storageService,
                         GeocodingService geocodingService) {
         this.paperRepository = paperRepository;
         this.journalRepository = journalRepository;
         this.paperSearchService = paperSearchService;
         this.issueRepository = issueRepository;
         this.scienceFieldRepository = scienceFieldRepository;
+        this.reviewerRepository = reviewerRepository;
         this.storageService = storageService;
         this.geocodingService = geocodingService;
     }
@@ -50,6 +50,10 @@ public class PaperService {
             final Address address = geocodingService.getAddress(coauthor.getAddress().getCity(), coauthor.getAddress().getCountry());
             coauthor.setAddress(address);
         }
+
+        paper.setReviewers(paper.getReviewers().stream().map(r ->
+                reviewerRepository.findById(r.getId()).orElseThrow(() -> new NotFoundException("Reviewer not found")))
+                .collect(Collectors.toSet()));
 
         final Journal journal = journalRepository.findAll().stream().findFirst().orElseThrow(BadRequestException::new);
 

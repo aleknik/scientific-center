@@ -45,6 +45,10 @@ public class DataLoader implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
+        if (!userRepository.findAll().isEmpty()) {
+            return;
+        }
+
         final ScienceField field1 = new ScienceField("field1");
         final ScienceField field2 = new ScienceField("field2");
         scienceFieldRepository.save(field1);
@@ -54,14 +58,14 @@ public class DataLoader implements ApplicationRunner {
         final Journal journal1 = addJournal("Journal 1", BigDecimal.valueOf(1), BigDecimal.valueOf(5), false);
         final Journal journal2 = addJournal("Journal 2", BigDecimal.valueOf(1), BigDecimal.valueOf(5), true);
         addEditor("editor@editor", "editor", "pass", "Aleksandar", "Nkolic", AddressConstants.NOVI_SAD, "dipl. inz.", journal1);
-        addEditor("editor2@editor", "editor2", "pass", "Aleksandar", "Nkolic", AddressConstants.NOVI_SAD, "dipl. inz.", journal2);
+        addEditor("editor2@editor", "editor2", "pass", "Monika", "Erdeg", AddressConstants.NOVI_SAD, "dipl. inz.", journal2);
 
         addAuthor("author@author", "author", "pass", "Luka", "Maletin", AddressConstants.NOVI_SAD);
         addReviewer("author2@author2", "author2", "pass", "Milijana", "Smiljanic", AddressConstants.BERLIN, "dipl. inz.",
                 Arrays.asList(journal1, journal2), Arrays.asList(field1, field2));
 
 
-        addReviewer("reviewer@reviewer", "reviewer", "pass", "Luka", "Maletin", AddressConstants.NOVI_SAD, "dipl. inz.",
+        addReviewer("reviewer@reviewer", "reviewer", "pass", "Helena", "Zecevic", AddressConstants.NOVI_SAD, "dipl. inz.",
                 Arrays.asList(journal1, journal2), Arrays.asList(field1, field2));
     }
 

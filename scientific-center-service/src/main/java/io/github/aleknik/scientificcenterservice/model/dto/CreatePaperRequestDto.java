@@ -1,5 +1,6 @@
 package io.github.aleknik.scientificcenterservice.model.dto;
 
+import io.github.aleknik.scientificcenterservice.model.domain.Reviewer;
 import io.github.aleknik.scientificcenterservice.model.domain.ScienceField;
 
 import java.util.List;
@@ -15,6 +16,8 @@ public class CreatePaperRequestDto {
     private ScienceField scienceField;
 
     private List<AuthorDto> coauthors;
+
+    private List<Reviewer> reviewers;
 
     public CreatePaperRequestDto() {
     }
@@ -57,5 +60,13 @@ public class CreatePaperRequestDto {
 
     public void setCoauthors(List<AuthorDto> coauthors) {
         this.coauthors = coauthors;
+    }
+
+    public List<Reviewer> getReviewers() {
+        return reviewers;
+    }
+
+    public void setReviewers(List<Reviewer> reviewers) {
+        this.reviewers = reviewers;
     }
 }

@@ -17,5 +17,5 @@ npm run-script build --prefix "..\scientific-center-client"
 
 # Start server:
 Start-Process -FilePath "..\scientific-center-service\mvnw.cmd" `
-              -ArgumentList "clean install spring-boot:run" `
+              -ArgumentList "clean install spring-boot:run -Dspring.profiles.active=production" `
               -WorkingDirectory "..\scientific-center-service"

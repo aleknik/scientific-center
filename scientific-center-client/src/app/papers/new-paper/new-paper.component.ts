@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { Author } from 'src/app/shared/model/author.model';
 import { ScienceFieldService } from 'src/app/core/http/science-field.service';
 import { ScienceField } from 'src/app/shared/model/science-field.model';
+import { ReviewerService } from 'src/app/core/http/reviewer.service';
 
 @Component({
   selector: 'app-new-paper',
@@ -21,12 +22,20 @@ export class NewPaperComponent implements OnInit {
 
   constructor(private paperService: PaperService,
     private scienceFieldService: ScienceFieldService,
+    private reviewerService: ReviewerService,
     private toastr: ToastrService,
     private router: Router) { }
 
   ngOnInit() {
     this.paper.coauthors = new Array<Author>()
     this.getScienceFields();
+    this.getReviewers();
+  }
+
+  getReviewers() {
+    this.reviewerService.findAll().subscribe(res => {
+      this.paper.reviewers = res;
+    });
   }
 
   getScienceFields() {

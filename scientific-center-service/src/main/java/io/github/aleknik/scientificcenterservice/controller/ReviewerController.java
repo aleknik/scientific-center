@@ -4,6 +4,7 @@ import io.github.aleknik.scientificcenterservice.model.domain.Paper;
 import io.github.aleknik.scientificcenterservice.model.dto.elasticsearch.ReviewerQueryDto;
 import io.github.aleknik.scientificcenterservice.model.dto.elasticsearch.ReviewerSearchDto;
 import io.github.aleknik.scientificcenterservice.service.PaperService;
+import io.github.aleknik.scientificcenterservice.service.ReviewerService;
 import io.github.aleknik.scientificcenterservice.service.elasticsearch.PaperSearchService;
 import io.github.aleknik.scientificcenterservice.service.elasticsearch.ReviewerSearchService;
 import io.github.aleknik.scientificcenterservice.service.util.StorageService;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/reviewers")
@@ -23,11 +25,21 @@ public class ReviewerController {
     private final PaperSearchService paperSearchService;
     private final StorageService storageService;
 
-    public ReviewerController(ReviewerSearchService reviewerSearchService, PaperService paperService, PaperSearchService paperSearchService, StorageService storageService) {
+    private final ReviewerService reviewerService;
+
+    public ReviewerController(ReviewerSearchService reviewerSearchService, PaperService paperService, PaperSearchService paperSearchService, StorageService storageService, ReviewerService reviewerService) {
         this.reviewerSearchService = reviewerSearchService;
         this.paperService = paperService;
         this.paperSearchService = paperSearchService;
         this.storageService = storageService;
+        this.reviewerService = reviewerService;
+    }
+
+    @GetMapping
+    public ResponseEntity findAll() {
+        final List<ReviewerSearchDto> result = reviewerService.findAll().stream().map(r -> new ReviewerSearchDto(r.getId(), r.getFirstName(), r.getLastName())).collect(Collectors.toList());
+
+        return ResponseEntity.ok(result);
     }
 
     @PostMapping("/search")
