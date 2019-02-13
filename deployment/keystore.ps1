@@ -1,0 +1,1 @@
+keytool -import -trustcacerts -file "D:\dev\master\SEP\coin10\setup\ssl\merchant.pem" -alias sccert -keystore "C:\Program Files\Java\jdk1.8.0_191\jre\lib\security\cacerts" -storepass changeit

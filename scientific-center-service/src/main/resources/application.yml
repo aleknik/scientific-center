@@ -42,6 +42,8 @@ camunda.bpm:
 
 camunda.bpm.webapp.index-redirect-enabled: false
 
+camunda-rest-base-path: https://localhost:8085/rest/engine/default
+
 elasticsearch.clustername: science-center-app
 elasticsearch.host: localhost
 elasticsearch.port: 9300

@@ -1,18 +1,18 @@
 package io.github.aleknik.scientificcenterservice.model.dto;
 
-import org.camunda.bpm.engine.form.FormField;
+import org.camunda.bpm.engine.rest.dto.VariableValueDto;
 
-import java.util.List;
+import java.util.Map;
 
 public class TaskFormDataDto {
     private String taskId;
 
-    private List<FormField> formFields;
+    private Map<String, VariableValueDto> formFields;
 
     public TaskFormDataDto() {
     }
 
-    public TaskFormDataDto(String taskId, List<FormField> formFields) {
+    public TaskFormDataDto(String taskId, Map<String, VariableValueDto> formFields) {
         this.taskId = taskId;
         this.formFields = formFields;
     }
@@ -25,11 +25,11 @@ public class TaskFormDataDto {
         this.taskId = taskId;
     }
 
-    public List<FormField> getFormFields() {
+    public Map<String, VariableValueDto> getFormFields() {
         return formFields;
     }
 
-    public void setFormFields(List<FormField> formFields) {
+    public void setFormFields(Map<String, VariableValueDto> formFields) {
         this.formFields = formFields;
     }
 }

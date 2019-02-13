@@ -1,14 +1,14 @@
 package io.github.aleknik.scientificcenterservice.controller;
 
-import io.github.aleknik.scientificcenterservice.model.dto.FormFieldDto;
 import io.github.aleknik.scientificcenterservice.model.dto.TaskFormDataDto;
 import io.github.aleknik.scientificcenterservice.service.process.ProcessService;
-import org.camunda.bpm.engine.form.TaskFormData;
-import org.camunda.bpm.engine.task.Task;
+import org.camunda.bpm.engine.rest.dto.VariableValueDto;
+import org.camunda.bpm.engine.rest.dto.task.TaskDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/authors")
@@ -21,8 +21,8 @@ public class AuthorController {
     }
 
     @PostMapping("{taskId}")
-    public ResponseEntity register(@PathVariable String taskId, @RequestBody List<FormFieldDto> formFieldDtos) {
-        processService.submmitTaskForm(taskId, formFieldDtos);
+    public ResponseEntity register(@PathVariable String taskId, @RequestBody Map<String, VariableValueDto> formInputs) {
+        processService.submitTaskForm(taskId, formInputs);
 
         return ResponseEntity.ok().build();
     }
@@ -31,11 +31,11 @@ public class AuthorController {
     public ResponseEntity getRegisterForm() {
         final String processId = processService.startProcess("registration");
 
-        final List<Task> processTasks = processService.getProcessTasks(processId);
-        final Task task = processTasks.stream().findFirst().get();
-        final TaskFormData taskFormData = processService.getTaskFormData(task.getId());
+        final List<TaskDto> processTasks = processService.getProcessTasks(processId);
+        final TaskDto task = processTasks.stream().findFirst().get();
+        final TaskFormDataDto taskFormData = processService.getTaskFormData(task.getId());
 
-        return ResponseEntity.ok(new TaskFormDataDto(task.getId(), taskFormData.getFormFields()));
+        return ResponseEntity.ok(taskFormData);
 
     }
 }
