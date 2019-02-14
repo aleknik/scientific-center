@@ -9,7 +9,6 @@ import io.github.aleknik.scientificcenterservice.service.UserService;
 import io.github.aleknik.scientificcenterservice.service.elasticsearch.ReviewerSearchService;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -23,7 +22,6 @@ public class DataLoader implements ApplicationRunner {
 
     private final UserRepository userRepository;
     private final JournalRepository journalRepository;
-    private final PasswordEncoder passwordEncoder;
     private final ScienceFieldRepository scienceFieldRepository;
 
     private final ReviewerSearchService reviewerSearchService;
@@ -31,12 +29,10 @@ public class DataLoader implements ApplicationRunner {
 
     public DataLoader(UserRepository userRepository,
                       JournalRepository journalRepository,
-                      PasswordEncoder passwordEncoder,
                       ScienceFieldRepository scienceFieldRepository,
                       ReviewerSearchService reviewerSearchService, UserService userService) {
         this.userRepository = userRepository;
         this.journalRepository = journalRepository;
-        this.passwordEncoder = passwordEncoder;
         this.scienceFieldRepository = scienceFieldRepository;
         this.reviewerSearchService = reviewerSearchService;
         this.userService = userService;
@@ -86,7 +82,7 @@ public class DataLoader implements ApplicationRunner {
     }
 
     private Editor addEditor(String email, String username, String password, String firstName, String lastName, Address address, String title, Journal journal) {
-        final Editor editor = new Editor(email, username, passwordEncoder.encode(password), firstName, lastName, address);
+        final Editor editor = new Editor(email, username, password, firstName, lastName, address);
         editor.setTitle(title);
         editor.setJournal(journal);
         journal.setEditor(editor);
@@ -101,7 +97,7 @@ public class DataLoader implements ApplicationRunner {
 
     private Reviewer addReviewer(String email, String username, String password, String firstName, String lastName, Address address, String title,
                                  List<Journal> journals, List<ScienceField> fields) {
-        final Reviewer reviewer = new Reviewer(email, username, passwordEncoder.encode(password), firstName, lastName, address);
+        final Reviewer reviewer = new Reviewer(email, username, password, firstName, lastName, address);
         reviewer.setTitle(title);
         reviewer.setJournals(new HashSet<>(journals));
         reviewer.setScienceFields(new HashSet<>(fields));
@@ -118,7 +114,7 @@ public class DataLoader implements ApplicationRunner {
     }
 
     private Author addAuthor(String email, String username, String password, String firstName, String lastName, Address address) {
-        final Author author = new Author(email, username, passwordEncoder.encode(password), firstName, lastName, address);
+        final Author author = new Author(email, username, password, firstName, lastName, address);
 
         final List<Role> roles = new ArrayList<>();
         final Role role = new Role(RoleConstants.AUTHOR);

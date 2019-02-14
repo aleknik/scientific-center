@@ -16,7 +16,7 @@
     <bpmn:userTask id="Task_1oedcoy" name="Submit user info">
       <bpmn:extensionElements>
         <camunda:formData>
-          <camunda:formField id="username" label="Email" type="string">
+          <camunda:formField id="username" label="Username" type="string">
             <camunda:validation>
               <camunda:constraint name="required" />
             </camunda:validation>
@@ -46,6 +46,7 @@
               <camunda:constraint name="required" />
             </camunda:validation>
           </camunda:formField>
+          <camunda:formField id="email" label="Email" type="string" />
         </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_1pfpl95</bpmn:incoming>

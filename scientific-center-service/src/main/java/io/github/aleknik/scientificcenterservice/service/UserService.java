@@ -1,5 +1,6 @@
 package io.github.aleknik.scientificcenterservice.service;
 
+import io.github.aleknik.scientificcenterservice.controller.exception.BadRequestException;
 import io.github.aleknik.scientificcenterservice.controller.exception.ForbiddenException;
 import io.github.aleknik.scientificcenterservice.controller.exception.NotFoundException;
 import io.github.aleknik.scientificcenterservice.model.domain.User;
@@ -8,6 +9,7 @@ import io.github.aleknik.scientificcenterservice.service.payment.PaymentService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,10 +17,12 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PaymentService paymentService;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, PaymentService paymentService) {
+    public UserService(UserRepository userRepository, PaymentService paymentService, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.paymentService = paymentService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public User findByUsername(String username) {
@@ -36,6 +40,10 @@ public class UserService {
     }
 
     public User createUser(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
+            throw new BadRequestException("Username taken");
+        }
         user = userRepository.save(user);
         try {
             return paymentService.register(user);

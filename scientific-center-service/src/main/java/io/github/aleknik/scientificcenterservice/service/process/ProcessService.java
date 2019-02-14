@@ -1,18 +1,17 @@
 package io.github.aleknik.scientificcenterservice.service.process;
 
 
-import io.github.aleknik.scientificcenterservice.model.dto.FormFieldDto;
 import io.github.aleknik.scientificcenterservice.model.dto.TaskFormDataDto;
 import io.github.aleknik.scientificcenterservice.util.CamundaConstants;
 import org.camunda.bpm.engine.FormService;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.rest.dto.VariableValueDto;
+import org.camunda.bpm.engine.rest.dto.identity.UserDto;
 import org.camunda.bpm.engine.rest.dto.runtime.ProcessInstanceDto;
 import org.camunda.bpm.engine.rest.dto.runtime.StartProcessInstanceDto;
 import org.camunda.bpm.engine.rest.dto.task.CompleteTaskDto;
 import org.camunda.bpm.engine.rest.dto.task.TaskDto;
-import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -22,7 +21,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class ProcessService {
@@ -61,10 +59,6 @@ public class ProcessService {
         return res;
     }
 
-    public Task getTask(String taskId) {
-        return taskService.createTaskQuery().taskId(taskId).singleResult();
-    }
-
     public TaskFormDataDto getTaskFormData(String taskId) {
 
         String url = String.format(basePath + CamundaConstants.FORM_VARIABLES, taskId);
@@ -84,7 +78,8 @@ public class ProcessService {
         restTemplate.postForLocation(url, completeTaskDto);
     }
 
-    private Map<String, Object> convertInputListToMap(List<FormFieldDto> formInputs) {
-        return formInputs.stream().collect(Collectors.toMap(FormFieldDto::getFieldId, FormFieldDto::getValue));
+    public void createUser(UserDto userDto) {
+
+        restTemplate.postForLocation(basePath + CamundaConstants.CREATE_USER, userDto);
     }
 }
