@@ -2,6 +2,7 @@ package io.github.aleknik.scientificcenterservice.service.process;
 
 
 import io.github.aleknik.scientificcenterservice.model.dto.TaskFormDataDto;
+import io.github.aleknik.scientificcenterservice.model.dto.TaskFormFieldDto;
 import io.github.aleknik.scientificcenterservice.util.CamundaConstants;
 import org.camunda.bpm.engine.FormService;
 import org.camunda.bpm.engine.RuntimeService;
@@ -21,6 +22,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class ProcessService {
@@ -43,8 +45,10 @@ public class ProcessService {
         this.restTemplate = restTemplate;
     }
 
-    public String startProcess(String key) {
+    public String startProcess(String key, Map<String, VariableValueDto> variables) {
         final StartProcessInstanceDto startProcessInstanceDto = new StartProcessInstanceDto();
+        startProcessInstanceDto.setVariables(variables);
+
         final ProcessInstanceDto response = restTemplate.postForObject(String.format(basePath + CamundaConstants.START_PROCESS, key), startProcessInstanceDto, ProcessInstanceDto.class);
         return response.getId();
     }
@@ -66,14 +70,16 @@ public class ProcessService {
         ParameterizedTypeReference<Map<String, VariableValueDto>> returnType = new ParameterizedTypeReference<Map<String, VariableValueDto>>() {
         };
         final Map<String, VariableValueDto> res = restTemplate.exchange(url, HttpMethod.GET, null, returnType).getBody();
-        return new TaskFormDataDto(taskId, res);
+
+        final List<TaskFormFieldDto> fieldDtos = res.entrySet().stream().map(el -> new TaskFormFieldDto(el.getKey(), el.getValue())).collect(Collectors.toList());
+        return new TaskFormDataDto(taskId, fieldDtos);
     }
 
-    public void submitTaskForm(String taskId, Map<String, VariableValueDto> formInputs) {
+    public void submitTaskForm(String taskId, List<TaskFormFieldDto> formFieldDtos) {
         String url = String.format(basePath + CamundaConstants.SUBMIT_FORM, taskId);
 
         final CompleteTaskDto completeTaskDto = new CompleteTaskDto();
-        completeTaskDto.setVariables(formInputs);
+        completeTaskDto.setVariables(formFieldDtos.stream().collect(Collectors.toMap(TaskFormFieldDto::getName, TaskFormFieldDto::getValue)));
 
         restTemplate.postForLocation(url, completeTaskDto);
     }

@@ -3,8 +3,11 @@ package io.github.aleknik.scientificcenterservice.controller;
 import io.github.aleknik.scientificcenterservice.model.domain.Journal;
 import io.github.aleknik.scientificcenterservice.model.dto.IssueDto;
 import io.github.aleknik.scientificcenterservice.model.dto.JournalDto;
+import io.github.aleknik.scientificcenterservice.security.RoleConstants;
 import io.github.aleknik.scientificcenterservice.service.JournalService;
+import io.github.aleknik.scientificcenterservice.service.UserService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,9 +21,11 @@ import java.util.stream.Collectors;
 public class JournalController {
 
     private final JournalService journalService;
+    private final UserService userService;
 
-    public JournalController(JournalService journalService) {
+    public JournalController(JournalService journalService, UserService userService) {
         this.journalService = journalService;
+        this.userService = userService;
     }
 
     @GetMapping
@@ -49,5 +54,11 @@ public class JournalController {
                 .collect(Collectors.toList()));
 
         return ResponseEntity.ok(journalDto);
+    }
+
+    @GetMapping("/chose-journal/form")
+    @PreAuthorize("hasAuthority('" + RoleConstants.AUTHOR + "')")
+    public ResponseEntity getChoseJournalForm() {
+        return null;
     }
 }

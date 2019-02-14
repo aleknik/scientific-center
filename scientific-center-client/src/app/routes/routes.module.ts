@@ -10,11 +10,14 @@ import { JournalListComponent } from '../journals/journal-list/journal-list.comp
 import { JournalDetailsComponent } from '../journals/journal-details/journal-details.component';
 import { IssueDetailsComponent } from '../journals/issue-details/issue-details.component';
 import { ReviewerListComponent } from '../reviewers/reviewer-list/reviewer-list.component';
+import { SignupComponent } from '../auth/signup/signup.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/papers', pathMatch: 'full' },
 
   { path: 'signin', component: SigninComponent },
+
+  { path: 'signup', component: SignupComponent },
 
   { path: 'papers', component: PaperListComponent },
   { path: 'papers/new', component: NewPaperComponent },
