@@ -53,9 +53,16 @@ public class ProcessService {
         return response.getId();
     }
 
-    public List<TaskDto> getProcessTasks(String processId) {
-        final UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(basePath + CamundaConstants.TASK)
-                .queryParam("processInstanceId", processId);
+    public List<TaskDto> getTasks(String processId, String assignee) {
+        final UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(basePath + CamundaConstants.TASK);
+
+        if (processId != null) {
+            builder.queryParam("processInstanceId", processId);
+        }
+
+        if (assignee != null) {
+            builder.queryParam("assignee", assignee);
+        }
 
         ParameterizedTypeReference<List<TaskDto>> returnType = new ParameterizedTypeReference<List<TaskDto>>() {
         };

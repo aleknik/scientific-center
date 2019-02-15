@@ -22,8 +22,10 @@
       <li class="nav-item" *ngIf="isEditor()">
         <a class="nav-link" routerLink="/payments/register">Payment methods</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/tasks">Tasks</a>
+      </li>
     </ul>
-
     <ul class="navbar-nav ml-auto">
       <li class="nav-item" *ngIf="!isAuthenticated()">
         <a class="nav-link" routerLink="/signin">Signin</a>

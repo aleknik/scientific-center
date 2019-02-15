@@ -5,6 +5,7 @@ import io.github.aleknik.scientificcenterservice.model.domain.*;
 import io.github.aleknik.scientificcenterservice.model.dto.CreatePaperRequestDto;
 import io.github.aleknik.scientificcenterservice.model.dto.JournalDto;
 import io.github.aleknik.scientificcenterservice.model.dto.PaperDto;
+import io.github.aleknik.scientificcenterservice.model.dto.TaskFormFieldDto;
 import io.github.aleknik.scientificcenterservice.model.dto.elasticsearch.PaperQueryDto;
 import io.github.aleknik.scientificcenterservice.model.dto.elasticsearch.PaperSearchDto;
 import io.github.aleknik.scientificcenterservice.model.dto.payment.PaymentStatus;
@@ -14,6 +15,7 @@ import io.github.aleknik.scientificcenterservice.service.PaperService;
 import io.github.aleknik.scientificcenterservice.service.UserService;
 import io.github.aleknik.scientificcenterservice.service.elasticsearch.PaperSearchService;
 import io.github.aleknik.scientificcenterservice.service.payment.PaymentService;
+import io.github.aleknik.scientificcenterservice.service.process.ProcessService;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -37,28 +39,34 @@ public class PaperController {
     private final PaperSearchService paperSearchService;
     private final PaymentService paymentService;
     private final JournalService journalService;
+    private final ProcessService processService;
 
     public PaperController(PaperService paperService,
                            UserService userService,
                            PaperSearchService paperSearchService,
                            PaymentService paymentService,
-                           JournalService journalService) {
+                           JournalService journalService, ProcessService processService) {
         this.paperService = paperService;
         this.userService = userService;
         this.paperSearchService = paperSearchService;
         this.paymentService = paymentService;
         this.journalService = journalService;
+        this.processService = processService;
     }
 
-    @PostMapping
+    @PostMapping("{taskId}")
     @PreAuthorize("hasAuthority('" + RoleConstants.AUTHOR + "')")
     public ResponseEntity createPaper(@RequestPart("data") @Valid CreatePaperRequestDto createPaperRequestDto,
-                                      @RequestPart("file") @Valid @NotNull @NotBlank MultipartFile file) {
+                                      @RequestPart("file") @Valid @NotNull @NotBlank MultipartFile file, @PathVariable String taskId) {
 
         final Author author = (Author) userService.findCurrentUser();
 
         final Paper paper = paperService.createPaper(convertToPaper(createPaperRequestDto, author), file);
-        paperService.publishPaper(paper.getId());
+//        paperService.publishPaper(paper.getId());
+
+        final ArrayList<TaskFormFieldDto> taskFormFieldDtos = new ArrayList<>();
+        taskFormFieldDtos.add(new TaskFormFieldDto("paperId", String.valueOf(paper.getId())));
+        processService.submitTaskForm(taskId, taskFormFieldDtos);
 
         return ResponseEntity.ok(paper.getId());
     }

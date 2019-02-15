@@ -23,4 +23,6 @@ public class JournalService {
     public Journal findById(long id) {
         return journalRepository.findById(id).orElseThrow(() -> new NotFoundException("Journal not found"));
     }
+
+
 }

@@ -2,6 +2,7 @@ package io.github.aleknik.scientificcenterservice.service.task;
 
 import io.github.aleknik.scientificcenterservice.model.domain.Address;
 import io.github.aleknik.scientificcenterservice.model.domain.Author;
+import io.github.aleknik.scientificcenterservice.security.RoleConstants;
 import io.github.aleknik.scientificcenterservice.service.UserService;
 import io.github.aleknik.scientificcenterservice.service.process.ProcessService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
@@ -37,7 +38,7 @@ public class RegisterAuthorTask implements JavaDelegate {
         userDto.setProfile(userProfileDto);
         userDto.setCredentials(userCredentialsDto);
 
-        userService.createUser(author);
+        userService.createUser(author, RoleConstants.AUTHOR);
         processService.createUser(userDto);
     }
 

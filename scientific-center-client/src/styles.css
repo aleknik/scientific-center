@@ -6,6 +6,10 @@ body {
   a {
       cursor: pointer;
   }
+
+  .pointer {
+    cursor: pointer;
+    }
   
   .scroller {
       height: 94vh;

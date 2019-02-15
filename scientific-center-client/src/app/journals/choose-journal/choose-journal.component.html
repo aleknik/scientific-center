@@ -1,0 +1,12 @@
+<div class="row">
+  <div class="col-md-4"></div>
+  <form class="col-md-4 form" (ngSubmit)="choose()" #journalForm="ngForm">
+    <h2 class="form-heading">Choose journal</h2>
+    <select name="journal" class="form-control" [(ngModel)]="journal" required>
+      <option *ngFor="let journal of journals" [ngValue]="journal">{{journal.name}}</option>
+    </select>
+    <br>
+    <button id="signinButton" [disabled]="journalForm.form.invalid" class="btn btn-lg btn-primary btn-block"
+      type="submit">Choose journal</button>
+  </form>
+</div>

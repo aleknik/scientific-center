@@ -11,6 +11,8 @@ import { JournalDetailsComponent } from '../journals/journal-details/journal-det
 import { IssueDetailsComponent } from '../journals/issue-details/issue-details.component';
 import { ReviewerListComponent } from '../reviewers/reviewer-list/reviewer-list.component';
 import { SignupComponent } from '../auth/signup/signup.component';
+import { ChooseJournalComponent } from '../journals/choose-journal/choose-journal.component';
+import { TaskListComponent } from '../tasks/task-list/task-list.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/papers', pathMatch: 'full' },
@@ -20,7 +22,7 @@ const routes: Routes = [
   { path: 'signup', component: SignupComponent },
 
   { path: 'papers', component: PaperListComponent },
-  { path: 'papers/new', component: NewPaperComponent },
+  { path: 'papers/new/:taskId', component: NewPaperComponent },
   { path: 'papers/:id', component: PaperDetailsComponent },
 
   { path: 'papers/:id/reviewers', component: ReviewerListComponent },
@@ -29,8 +31,11 @@ const routes: Routes = [
   { path: 'payments/callback/:status', component: CallbackComponent },
 
   { path: 'journals', component: JournalListComponent },
+  { path: 'journals/choose', component: ChooseJournalComponent },
   { path: 'journals/:id', component: JournalDetailsComponent },
   { path: 'journals/:journalId/issues/:issueId', component: IssueDetailsComponent },
+
+  { path: 'tasks', component: TaskListComponent },
 ];
 
 @NgModule({

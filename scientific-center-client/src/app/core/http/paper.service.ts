@@ -17,12 +17,12 @@ export class PaperService extends RestService {
     super(http, '/api/papers', toastr);
   }
 
-  createPaper(paper: Paper, file: File): Observable<Paper> {
+  createPaper(taskId: string, paper: Paper, file: File): Observable<Paper> {
     let formData = new FormData();
     formData.append('file', file);
     formData.append('data', new Blob([JSON.stringify(paper)], { type: 'application/json' }));
 
-    return this.http.post<Paper>(this.baseUrl, formData)
+    return this.http.post<Paper>(`${this.baseUrl}/${taskId}`, formData)
       .pipe(catchError(this.handleError<Paper>()));
   }
 

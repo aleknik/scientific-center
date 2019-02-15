@@ -9,6 +9,7 @@ import { PapersModule } from './papers/papers.module';
 import { PaymentsModule } from './payments/payments.module';
 import { JournalsModule } from './journals/journals.module';
 import { ReviewersModule } from './reviewers/reviewers.module';
+import { TasksModule } from './tasks/tasks.module';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { ReviewersModule } from './reviewers/reviewers.module';
     PapersModule,
     PaymentsModule,
     JournalsModule,
-    ReviewersModule
+    ReviewersModule,
+    TasksModule
   ],
   providers: [],
   bootstrap: [AppComponent]

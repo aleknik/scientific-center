@@ -11,6 +11,13 @@ public class TaskFormFieldDto {
     public TaskFormFieldDto() {
     }
 
+    public TaskFormFieldDto(String name, Object value) {
+        this.name = name;
+        final VariableValueDto variableValueDto = new VariableValueDto();
+        variableValueDto.setValue(value);
+        this.value = variableValueDto;
+    }
+
     public TaskFormFieldDto(String name, VariableValueDto value) {
         this.name = name;
         this.value = value;

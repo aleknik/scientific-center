@@ -30,7 +30,7 @@ public class AuthorController {
     public ResponseEntity getRegisterForm() {
         final String processId = processService.startProcess("registration", null);
 
-        final List<TaskDto> processTasks = processService.getProcessTasks(processId);
+        final List<TaskDto> processTasks = processService.getTasks(processId, null);
         final TaskDto task = processTasks.stream().findFirst().get();
         final TaskFormDataDto taskFormData = processService.getTaskFormData(task.getId());
 

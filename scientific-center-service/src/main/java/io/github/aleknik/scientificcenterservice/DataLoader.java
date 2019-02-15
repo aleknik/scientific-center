@@ -2,6 +2,7 @@ package io.github.aleknik.scientificcenterservice;
 
 import io.github.aleknik.scientificcenterservice.model.domain.*;
 import io.github.aleknik.scientificcenterservice.repository.JournalRepository;
+import io.github.aleknik.scientificcenterservice.repository.RoleRepository;
 import io.github.aleknik.scientificcenterservice.repository.ScienceFieldRepository;
 import io.github.aleknik.scientificcenterservice.repository.UserRepository;
 import io.github.aleknik.scientificcenterservice.security.RoleConstants;
@@ -12,7 +13,6 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -23,6 +23,7 @@ public class DataLoader implements ApplicationRunner {
     private final UserRepository userRepository;
     private final JournalRepository journalRepository;
     private final ScienceFieldRepository scienceFieldRepository;
+    private final RoleRepository roleRepository;
 
     private final ReviewerSearchService reviewerSearchService;
     private final UserService userService;
@@ -30,10 +31,11 @@ public class DataLoader implements ApplicationRunner {
     public DataLoader(UserRepository userRepository,
                       JournalRepository journalRepository,
                       ScienceFieldRepository scienceFieldRepository,
-                      ReviewerSearchService reviewerSearchService, UserService userService) {
+                      RoleRepository roleRepository, ReviewerSearchService reviewerSearchService, UserService userService) {
         this.userRepository = userRepository;
         this.journalRepository = journalRepository;
         this.scienceFieldRepository = scienceFieldRepository;
+        this.roleRepository = roleRepository;
         this.reviewerSearchService = reviewerSearchService;
         this.userService = userService;
     }
@@ -44,6 +46,8 @@ public class DataLoader implements ApplicationRunner {
         if (!userRepository.findAll().isEmpty()) {
             return;
         }
+
+        addRoles();
 
         final ScienceField field1 = new ScienceField("field1");
         final ScienceField field2 = new ScienceField("field2");
@@ -87,12 +91,7 @@ public class DataLoader implements ApplicationRunner {
         editor.setJournal(journal);
         journal.setEditor(editor);
 
-        final List<Role> roles = new ArrayList<>();
-        final Role role = new Role(RoleConstants.EDITOR);
-        roles.add(role);
-        editor.setRoles(roles);
-
-        return (Editor) userService.createUser(editor);
+        return (Editor) userService.createUser(editor, RoleConstants.EDITOR);
     }
 
     private Reviewer addReviewer(String email, String username, String password, String firstName, String lastName, Address address, String title,
@@ -102,12 +101,7 @@ public class DataLoader implements ApplicationRunner {
         reviewer.setJournals(new HashSet<>(journals));
         reviewer.setScienceFields(new HashSet<>(fields));
 
-        final List<Role> roles = new ArrayList<>();
-        final Role role = new Role(RoleConstants.REVIEWER);
-        roles.add(role);
-        reviewer.setRoles(roles);
-
-        final Reviewer user = (Reviewer) userService.createUser(reviewer);
+        final Reviewer user = (Reviewer) userService.createUser(reviewer, RoleConstants.REVIEWER);
         reviewerSearchService.IndexReviewer(user.getId());
 
         return user;
@@ -116,11 +110,18 @@ public class DataLoader implements ApplicationRunner {
     private Author addAuthor(String email, String username, String password, String firstName, String lastName, Address address) {
         final Author author = new Author(email, username, password, firstName, lastName, address);
 
-        final List<Role> roles = new ArrayList<>();
-        final Role role = new Role(RoleConstants.AUTHOR);
-        roles.add(role);
-        author.setRoles(roles);
+        return (Author) userService.createUser(author, RoleConstants.AUTHOR);
+    }
 
-        return (Author) userService.createUser(author);
+
+    private void addRoles() {
+        final Role author = new Role(RoleConstants.AUTHOR);
+        roleRepository.save(author);
+
+        final Role editor = new Role(RoleConstants.EDITOR);
+        roleRepository.save(editor);
+
+        final Role reviewer = new Role(RoleConstants.REVIEWER);
+        roleRepository.save(reviewer);
     }
 }
