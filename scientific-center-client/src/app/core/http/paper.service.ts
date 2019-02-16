@@ -36,6 +36,10 @@ export class PaperService extends RestService {
       .pipe(catchError(this.handleError<any>()));
   }
 
+  startPaperProcess() {
+    return this.http.post(`${this.baseUrl}/start-paper-process`, {})
+      .pipe(catchError(this.handleError<any>()));
+  }
 
   searchPapers(queries: PaperQuery[]): Observable<PaperSearchResult[]> {
     return this.http.post<PaperSearchResult[]>(`${this.baseUrl}/search`, queries)

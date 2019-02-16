@@ -5,9 +5,10 @@ import { SharedModule } from '../shared/shared.module';
 import { JournalDetailsComponent } from './journal-details/journal-details.component';
 import { IssueDetailsComponent } from './issue-details/issue-details.component';
 import { ChooseJournalComponent } from './choose-journal/choose-journal.component';
+import { SubscribeComponent } from './subscribe/subscribe.component';
 
 @NgModule({
-  declarations: [JournalListComponent, JournalDetailsComponent, IssueDetailsComponent, ChooseJournalComponent],
+  declarations: [JournalListComponent, JournalDetailsComponent, IssueDetailsComponent, ChooseJournalComponent, SubscribeComponent],
   imports: [
     CommonModule,
     SharedModule

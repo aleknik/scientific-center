@@ -20,6 +20,9 @@ public class Journal extends BaseModel {
     @OneToOne(fetch = FetchType.EAGER, mappedBy = "journal")
     private Editor editor;
 
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE, mappedBy = "journal")
+    private Set<JournalEditor> journalEditors = new HashSet<>();
+
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "journal")
     private Set<Issue> issues;
 
@@ -83,5 +86,13 @@ public class Journal extends BaseModel {
 
     public void setReviewers(Set<Reviewer> reviewers) {
         this.reviewers = reviewers;
+    }
+
+    public Set<JournalEditor> getJournalEditors() {
+        return journalEditors;
+    }
+
+    public void setJournalEditors(Set<JournalEditor> journalEditors) {
+        this.journalEditors = journalEditors;
     }
 }

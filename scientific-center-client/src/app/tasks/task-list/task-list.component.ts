@@ -56,9 +56,18 @@ export class TaskListComponent implements OnInit {
         break;
       }
       case "SubmitFormatedPaper": {
-        this.router.navigate(['/editor-revision-review', task.id]);
+        this.router.navigate(['/format', task.id]);
         break;
       }
+      case "ChooseJournal": {
+        this.router.navigate(['journals/choose', task.id]);
+        break;
+      }
+      case "SubscribeJournal": {
+        this.router.navigate(['journal-subscribe', task.id]);
+        break;
+      }
+
       default: {
         console.log("Invalid choice");
         break;

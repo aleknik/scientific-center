@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../http/auth.service';
 import { AUTHOR, EDITOR } from '../util/constants';
+import { PaperService } from '../http/paper.service';
 
 @Component({
   selector: 'app-nav',
@@ -13,7 +14,8 @@ export class NavComponent implements OnInit {
   isCollapsed = true;
 
   constructor(private authService: AuthService,
-    private router: Router) { }
+    private router: Router,
+    private paperService: PaperService) { }
 
 
   ngOnInit() {
@@ -31,7 +33,11 @@ export class NavComponent implements OnInit {
     return this.authService.checkPermission(EDITOR);
   }
 
-
+  submitPaper() {
+    this.paperService.startPaperProcess().subscribe(res => {
+      this.router.navigate(['tasks']);
+    });
+  }
 
   signout() {
     this.authService.signout();

@@ -3,11 +3,12 @@ package io.github.aleknik.scientificcenterservice.model.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-public class Reviewer extends User {
+public class Reviewer extends User implements Serializable {
 
     private String title;
 
@@ -21,11 +22,10 @@ public class Reviewer extends User {
     private Set<ScienceField> scienceFields = new HashSet<>();
 
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER, cascade = {
             CascadeType.MERGE
     })
-
-    @JsonIgnore
     @JoinTable(name = "reviewer_journal",
             joinColumns = @JoinColumn(name = "reviewer_id"),
             inverseJoinColumns = @JoinColumn(name = "journal_id")

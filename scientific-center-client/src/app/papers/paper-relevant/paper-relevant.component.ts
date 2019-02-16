@@ -12,8 +12,8 @@ import { VariableValue } from 'src/app/shared/model/variable-value.model';
 export class PaperRelevantComponent implements OnInit {
 
   taskId: string;
-  isRelevant: boolean;
-  isFormated: boolean;
+  isRelevant = false;
+  isFormated = false;
   message: string;
 
   constructor(private paperService: PaperService,

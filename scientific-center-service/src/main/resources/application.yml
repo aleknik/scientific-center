@@ -16,6 +16,15 @@ spring:
       ddl-auto: create
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: code10.xml@gmail.com
+    password: ${COIN10_EMAIL_PASS}
+    properties:
+      mail:
+        smtp:
+          starttls.enable: true
 
 server:
   port: 8085
@@ -54,7 +63,7 @@ geocoding:
   url: https://eu1.locationiq.com/v1/search.php
   key: ${GEOCODING_ACCESS_KEY}
 
-payment-service-url: https://192.168.43.63:8080/api
+payment-service-url: https://localhost:8080/api
 
 token:
   header: X-Auth-Token

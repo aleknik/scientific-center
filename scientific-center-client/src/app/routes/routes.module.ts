@@ -18,6 +18,8 @@ import { ReviewPaperComponent } from '../reviewers/review-paper/review-paper.com
 import { EditorReviewComponent } from '../reviewers/editor-review/editor-review.component';
 import { RevisionComponent } from '../papers/revision/revision.component';
 import { EditorRevisionReviewComponent } from '../reviewers/editor-revision-review/editor-revision-review.component';
+import { FormatComponent } from '../papers/format/format.component';
+import { SubscribeComponent } from '../journals/subscribe/subscribe.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/papers', pathMatch: 'full' },
@@ -29,8 +31,9 @@ const routes: Routes = [
   { path: 'papers', component: PaperListComponent },
   { path: 'papers/new/:taskId', component: NewPaperComponent },
   { path: 'papers/:id', component: PaperDetailsComponent },
-  { path: 'paper-revision/:taskId', component: RevisionComponent },
+  { path: 'format/:taskId', component: FormatComponent },
 
+  { path: 'paper-revision/:taskId', component: RevisionComponent },
   { path: 'reviewers/:taskId', component: ReviewerListComponent },
   { path: 'review-paper/:taskId', component: ReviewPaperComponent },
   { path: 'editor-review/:taskId', component: EditorReviewComponent },
@@ -39,8 +42,9 @@ const routes: Routes = [
   { path: 'payments/register', component: RegisterPaymentComponent },
   { path: 'payments/callback/:status', component: CallbackComponent },
 
+  { path: 'journal-subscribe/:taskId', component: SubscribeComponent },
   { path: 'journals', component: JournalListComponent },
-  { path: 'journals/choose', component: ChooseJournalComponent },
+  { path: 'journals/choose/:taskId', component: ChooseJournalComponent },
   { path: 'journals/:id', component: JournalDetailsComponent },
   { path: 'journals/:journalId/issues/:issueId', component: IssueDetailsComponent },
 

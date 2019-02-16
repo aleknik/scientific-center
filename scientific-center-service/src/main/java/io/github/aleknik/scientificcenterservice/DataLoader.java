@@ -57,21 +57,27 @@ public class DataLoader implements ApplicationRunner {
         scienceFieldRepository.save(field3);
 
 
-        final Journal journal1 = addJournal("Journal 1", BigDecimal.valueOf(1), BigDecimal.valueOf(5), false);
-        final Journal journal2 = addJournal("Journal 2", BigDecimal.valueOf(1), BigDecimal.valueOf(5), true);
-        addEditor("editor@editor", "editor", "pass", "Aleksandar", "Nkolic", AddressConstants.NOVI_SAD, "dipl. inz.", journal1);
-        addEditor("editor2@editor", "editor2", "pass", "Monika", "Erdeg", AddressConstants.NOVI_SAD, "dipl. inz.", journal2);
+        Journal journal1 = addJournal("Journal 1", BigDecimal.valueOf(1), BigDecimal.valueOf(5), false);
+        Journal journal2 = addJournal("Journal 2", BigDecimal.valueOf(1), BigDecimal.valueOf(5), true);
+        addEditor("nikolic95@gmail.com", "editor", "pass", "Aleksandar", "Nkolic", AddressConstants.NOVI_SAD, "dipl. inz.", journal1);
+        addEditor("nikolic95@gmail.com", "editor2", "pass", "Monika", "Erdeg", AddressConstants.NOVI_SAD, "dipl. inz.", journal2);
 
-        addAuthor("author@author", "author", "pass", "Luka", "Maletin", AddressConstants.NOVI_SAD);
+        final Editor editor3 = addEditor("editor3@editor", "editor3", "pass", "Bojan", "Nikolic", AddressConstants.NOVI_SAD, "dipl. inz.", journal2);
 
-        addReviewer("reviewer@reviewer", "reviewer", "pass", "Milijana", "Smiljanic", AddressConstants.BERLIN, "dipl. inz.",
+        journal2 = journalRepository.findById(journal2.getId()).get();
+        journal2.getJournalEditors().add(new JournalEditor(journal2, editor3, field1));
+        journal2 = journalRepository.save(journal2);
+
+        addAuthor("nikolic95@gmail.com", "author", "pass", "Luka", "Maletin", AddressConstants.NOVI_SAD);
+
+        addReviewer("nikolic95@gmail.com", "reviewer", "pass", "Milijana", "Smiljanic", AddressConstants.BERLIN, "dipl. inz.",
                 Arrays.asList(journal1, journal2), Arrays.asList(field1));
 
 
-        addReviewer("reviewer1@reviewer1", "reviewer1", "pass", "Helena", "Zecevic", AddressConstants.BELGRADE, "dipl. inz.",
+        addReviewer("nikolic95@gmail.com", "reviewer1", "pass", "Helena", "Zecevic", AddressConstants.BELGRADE, "dipl. inz.",
                 Arrays.asList(journal1, journal2), Arrays.asList(field1, field2));
 
-        addReviewer("reviewer2@reviewer2", "reviewer2", "pass", "Sara", "Peric", AddressConstants.NOVI_SAD, "dipl. inz.",
+        addReviewer("nikolic95@gmail.com", "reviewer2", "pass", "Sara", "Peric", AddressConstants.NOVI_SAD, "dipl. inz.",
                 Arrays.asList(journal1, journal2), Arrays.asList(field1, field2, field3));
     }
 

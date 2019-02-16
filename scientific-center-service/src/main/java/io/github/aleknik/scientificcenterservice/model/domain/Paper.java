@@ -36,6 +36,9 @@ public class Paper extends BaseModel {
     @ManyToOne(fetch = FetchType.EAGER)
     private ScienceField scienceField;
 
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<PaperReview> reviews = new HashSet<>();
+
     public Paper() {
     }
 
@@ -117,5 +120,13 @@ public class Paper extends BaseModel {
 
     public void setScienceField(ScienceField scienceField) {
         this.scienceField = scienceField;
+    }
+
+    public Set<PaperReview> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(Set<PaperReview> reviews) {
+        this.reviews = reviews;
     }
 }

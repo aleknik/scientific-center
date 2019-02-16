@@ -10,6 +10,7 @@ import io.github.aleknik.scientificcenterservice.model.dto.elasticsearch.PaperQu
 import io.github.aleknik.scientificcenterservice.model.dto.elasticsearch.PaperSearchDto;
 import io.github.aleknik.scientificcenterservice.model.dto.elasticsearch.ReviewerSearchDto;
 import io.github.aleknik.scientificcenterservice.model.dto.payment.PaymentStatus;
+import io.github.aleknik.scientificcenterservice.model.dto.payment.UserDto;
 import io.github.aleknik.scientificcenterservice.security.RoleConstants;
 import io.github.aleknik.scientificcenterservice.service.JournalService;
 import io.github.aleknik.scientificcenterservice.service.PaperService;
@@ -17,6 +18,7 @@ import io.github.aleknik.scientificcenterservice.service.UserService;
 import io.github.aleknik.scientificcenterservice.service.elasticsearch.PaperSearchService;
 import io.github.aleknik.scientificcenterservice.service.payment.PaymentService;
 import io.github.aleknik.scientificcenterservice.service.process.ProcessService;
+import org.camunda.bpm.engine.rest.dto.VariableValueDto;
 import org.camunda.bpm.engine.rest.dto.task.TaskDto;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
@@ -71,6 +73,18 @@ public class PaperController {
         processService.submitTaskForm(taskId, taskFormFieldDtos);
 
         return ResponseEntity.ok(paper.getId());
+    }
+
+    @PostMapping("/start-paper-process")
+    public ResponseEntity startPaperSubmissionProcess() {
+        final User currentUser = userService.findCurrentUser();
+        Map<String, VariableValueDto> variables = new HashMap<>();
+        final VariableValueDto variableValueDto = new VariableValueDto();
+        variableValueDto.setValue(currentUser.getUsername());
+        variables.put("authorId", variableValueDto);
+        final String processId = processService.startProcess("PaperSubmission", variables);
+
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/resubmit/{taskId}")
@@ -175,7 +189,9 @@ public class PaperController {
         }).collect(Collectors.toList()));
 
         final ArrayList<TaskFormFieldDto> taskFormFieldDtos = new ArrayList<>();
-        taskFormFieldDtos.add(new TaskFormFieldDto("reviewers", new ArrayList<>(paper.getReviewers())));
+        taskFormFieldDtos.add(new TaskFormFieldDto("reviewers", new ArrayList<>(paper.getReviewers()
+                .stream()
+                .map(r -> new UserDto(r.getId(), r.getUsername())).collect(Collectors.toList()))));
         processService.submitTaskForm(taskId, taskFormFieldDtos);
 
         return ResponseEntity.noContent().build();

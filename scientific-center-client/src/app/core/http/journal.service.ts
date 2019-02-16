@@ -28,8 +28,18 @@ export class JournalService extends RestService {
       .pipe(catchError(this.handleError<Journal>()));
   }
 
-  chooseJournal(journal: Journal) {
-    return this.http.post<Journal>(`${this.baseUrl}/choose-journal`, journal)
+  findByTaskId(id: string): Observable<Journal> {
+    return this.http.get<Journal>(`${this.baseUrl}/task/${id}`)
       .pipe(catchError(this.handleError<Journal>()));
+  }
+
+  chooseJournal(taskId: string, journal: Journal) {
+    return this.http.post<Journal>(`${this.baseUrl}/choose-journal/${taskId}`, journal)
+      .pipe(catchError(this.handleError<Journal>()));
+  }
+
+  subscribe(taskId: string) {
+    return this.http.post(`${this.baseUrl}/subscribe/${taskId}`, {})
+      .pipe(catchError(this.handleError<any>()));
   }
 }
