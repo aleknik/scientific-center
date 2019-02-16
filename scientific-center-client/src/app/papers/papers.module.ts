@@ -5,9 +5,11 @@ import { NewPaperComponent } from './new-paper/new-paper.component';
 import { SharedModule } from '../shared/shared.module';
 import { PaperDetailsComponent } from './paper-details/paper-details.component';
 import { PaperRelevantComponent } from './paper-relevant/paper-relevant.component';
+import { RevisionComponent } from './revision/revision.component';
+import { FormatComponent } from './format/format.component';
 
 @NgModule({
-  declarations: [PaperListComponent, NewPaperComponent, PaperDetailsComponent, PaperRelevantComponent],
+  declarations: [PaperListComponent, NewPaperComponent, PaperDetailsComponent, PaperRelevantComponent, RevisionComponent, FormatComponent],
   imports: [
     CommonModule,
     SharedModule

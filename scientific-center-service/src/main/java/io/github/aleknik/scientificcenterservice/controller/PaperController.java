@@ -73,6 +73,22 @@ public class PaperController {
         return ResponseEntity.ok(paper.getId());
     }
 
+    @PostMapping("/resubmit/{taskId}")
+    @PreAuthorize("hasAuthority('" + RoleConstants.AUTHOR + "')")
+    public ResponseEntity revisePaper(@RequestPart("file") @Valid @NotNull @NotBlank MultipartFile file, @PathVariable String taskId) {
+
+        final TaskDto task = processService.getTask(taskId);
+        final String paperId = (String) processService.getVariable(task.getProcessInstanceId(), "paperId");
+
+        paperService.submitRevision(Long.parseLong(paperId), file);
+
+        final ArrayList<TaskFormFieldDto> taskFormFieldDtos = new ArrayList<>();
+        processService.submitTaskForm(taskId, taskFormFieldDtos);
+
+        return ResponseEntity.noContent().build();
+    }
+
+
     @PostMapping("/search")
     public ResponseEntity query(@RequestBody List<PaperQueryDto> query) {
 

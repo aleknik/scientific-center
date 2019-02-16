@@ -1,12 +1,14 @@
 package io.github.aleknik.scientificcenterservice.controller;
 
 import io.github.aleknik.scientificcenterservice.model.domain.Paper;
+import io.github.aleknik.scientificcenterservice.model.dto.TaskFormFieldDto;
 import io.github.aleknik.scientificcenterservice.model.dto.elasticsearch.ReviewerQueryDto;
 import io.github.aleknik.scientificcenterservice.model.dto.elasticsearch.ReviewerSearchDto;
 import io.github.aleknik.scientificcenterservice.service.PaperService;
 import io.github.aleknik.scientificcenterservice.service.ReviewerService;
 import io.github.aleknik.scientificcenterservice.service.elasticsearch.PaperSearchService;
 import io.github.aleknik.scientificcenterservice.service.elasticsearch.ReviewerSearchService;
+import io.github.aleknik.scientificcenterservice.service.process.ProcessService;
 import io.github.aleknik.scientificcenterservice.service.util.StorageService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,14 +26,16 @@ public class ReviewerController {
     private final PaperService paperService;
     private final PaperSearchService paperSearchService;
     private final StorageService storageService;
+    private final ProcessService processService;
 
     private final ReviewerService reviewerService;
 
-    public ReviewerController(ReviewerSearchService reviewerSearchService, PaperService paperService, PaperSearchService paperSearchService, StorageService storageService, ReviewerService reviewerService) {
+    public ReviewerController(ReviewerSearchService reviewerSearchService, PaperService paperService, PaperSearchService paperSearchService, StorageService storageService, ProcessService processService, ReviewerService reviewerService) {
         this.reviewerSearchService = reviewerSearchService;
         this.paperService = paperService;
         this.paperSearchService = paperSearchService;
         this.storageService = storageService;
+        this.processService = processService;
         this.reviewerService = reviewerService;
     }
 
@@ -43,6 +47,28 @@ public class ReviewerController {
 
         return ResponseEntity.ok(result);
     }
+
+    @PostMapping("/review-paper/{taskId}")
+    public ResponseEntity reviewPaper(@PathVariable String taskId, @RequestBody List<TaskFormFieldDto> formFieldDtos) {
+        processService.submitTaskForm(taskId, formFieldDtos);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/editor-review/{taskId}")
+    public ResponseEntity editorReviewPaper(@PathVariable String taskId, @RequestBody List<TaskFormFieldDto> formFieldDtos) {
+        processService.submitTaskForm(taskId, formFieldDtos);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/editor-revision-review/{taskId}")
+    public ResponseEntity editorRevisionReviewPaper(@PathVariable String taskId, @RequestBody List<TaskFormFieldDto> formFieldDtos) {
+        processService.submitTaskForm(taskId, formFieldDtos);
+
+        return ResponseEntity.noContent().build();
+    }
+
 
     @PostMapping("/search")
     public ResponseEntity query(@RequestBody ReviewerQueryDto queryDto) {

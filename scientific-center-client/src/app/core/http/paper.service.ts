@@ -29,6 +29,14 @@ export class PaperService extends RestService {
       .pipe(catchError(this.handleError<Paper>()));
   }
 
+  resubmit(taskId: string, file: File) {
+    let formData = new FormData();
+    formData.append('file', file);
+    return this.http.post(`${this.baseUrl}/resubmit/${taskId}`, formData)
+      .pipe(catchError(this.handleError<any>()));
+  }
+
+
   searchPapers(queries: PaperQuery[]): Observable<PaperSearchResult[]> {
     return this.http.post<PaperSearchResult[]>(`${this.baseUrl}/search`, queries)
       .pipe(catchError(this.handleError<PaperSearchResult[]>()));

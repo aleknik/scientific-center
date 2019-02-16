@@ -14,6 +14,10 @@ import { SignupComponent } from '../auth/signup/signup.component';
 import { ChooseJournalComponent } from '../journals/choose-journal/choose-journal.component';
 import { TaskListComponent } from '../tasks/task-list/task-list.component';
 import { PaperRelevantComponent } from '../papers/paper-relevant/paper-relevant.component';
+import { ReviewPaperComponent } from '../reviewers/review-paper/review-paper.component';
+import { EditorReviewComponent } from '../reviewers/editor-review/editor-review.component';
+import { RevisionComponent } from '../papers/revision/revision.component';
+import { EditorRevisionReviewComponent } from '../reviewers/editor-revision-review/editor-revision-review.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/papers', pathMatch: 'full' },
@@ -25,8 +29,12 @@ const routes: Routes = [
   { path: 'papers', component: PaperListComponent },
   { path: 'papers/new/:taskId', component: NewPaperComponent },
   { path: 'papers/:id', component: PaperDetailsComponent },
+  { path: 'paper-revision/:taskId', component: RevisionComponent },
 
   { path: 'reviewers/:taskId', component: ReviewerListComponent },
+  { path: 'review-paper/:taskId', component: ReviewPaperComponent },
+  { path: 'editor-review/:taskId', component: EditorReviewComponent },
+  { path: 'editor-revision-review/:taskId', component: EditorRevisionReviewComponent },
 
   { path: 'payments/register', component: RegisterPaymentComponent },
   { path: 'payments/callback/:status', component: CallbackComponent },

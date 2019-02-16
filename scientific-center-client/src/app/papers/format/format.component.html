@@ -1,0 +1,12 @@
+<div class="row">
+  <div class="col-md-2"></div>
+  <form class="col-md-8 form" (ngSubmit)="submit()" #paperForm="ngForm">
+    <h2 class="form-heading">Submit formated paper</h2>
+    <label>Upload pdf</label>
+    <input type="file" class="form-control-file" (change)="fileChange($event)" accept=".pdf">
+    <input type="hidden" [(ngModel)]="file" name="file" required>
+    <br />
+    <button [disabled]="paperForm.form.invalid" class="btn btn-lg btn-primary btn-block" type="submit">Submit
+      revision</button>
+  </form>
+</div>

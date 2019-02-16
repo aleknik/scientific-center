@@ -39,6 +39,26 @@ export class TaskListComponent implements OnInit {
         this.router.navigate(['/reviewers', task.id]);
         break;
       }
+      case "ReviewPaper": {
+        this.router.navigate(['/review-paper', task.id]);
+        break;
+      }
+      case "EditorReview": {
+        this.router.navigate(['/editor-review', task.id]);
+        break;
+      }
+      case "PaperRevision": {
+        this.router.navigate(['/paper-revision', task.id]);
+        break;
+      }
+      case "EditorRevisionReview": {
+        this.router.navigate(['/editor-revision-review', task.id]);
+        break;
+      }
+      case "SubmitFormatedPaper": {
+        this.router.navigate(['/editor-revision-review', task.id]);
+        break;
+      }
       default: {
         console.log("Invalid choice");
         break;

@@ -1,0 +1,17 @@
+<div class="row">
+  <div class="col-md-4"></div>
+  <form class="col-md-4 form" (ngSubmit)="submit()" #myForm="ngForm">
+    <h2 class="form-heading">Paper review</h2>
+    <label>Comments</label>
+    <input type="text" class="form-control" [(ngModel)]="comments" name="comments">
+    <label>Suggestion</label>
+    <select name="scienceField" class="form-control" [(ngModel)]="suggestion" required>
+      <option *ngFor="let suggestion of suggestions" [ngValue]="suggestion">{{suggestion}}</option>
+    </select>
+    <label>Comments for editor</label>
+    <input type="text" class="form-control" [(ngModel)]="staffComments" name="staffComments">
+
+    <button id="signinButton" [disabled]="myForm.form.invalid" class="btn btn-lg btn-primary btn-block"
+      type="submit">Submit</button>
+  </form>
+</div>

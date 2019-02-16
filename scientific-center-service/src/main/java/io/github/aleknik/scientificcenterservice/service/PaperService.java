@@ -45,6 +45,10 @@ public class PaperService {
         this.geocodingService = geocodingService;
     }
 
+    public void submitRevision(long paperId, MultipartFile file) {
+        storageService.store(file, String.valueOf(paperId));
+    }
+
     public Paper createPaper(Paper paper, MultipartFile file) {
         final ScienceField field = scienceFieldRepository.findById(paper.getScienceField().getId()).orElseThrow(() -> new NotFoundException("Field not found"));
         paper.setScienceField(field);
