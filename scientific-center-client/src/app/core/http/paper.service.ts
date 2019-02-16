@@ -7,6 +7,9 @@ import { Paper } from 'src/app/shared/model/paper.model';
 import { catchError } from 'rxjs/operators';
 import { PaperSearchResult } from 'src/app/shared/model/paper-search-result.model';
 import { PaperQuery } from 'src/app/shared/model/paper-query.model';
+import { TaskForm } from 'src/app/shared/model/task-form.model';
+import { FormField } from 'src/app/shared/model/form-field.model';
+import { ReviewerSearchResult } from 'src/app/shared/model/reviewer-search-result.model';
 
 @Injectable({
   providedIn: 'root'
@@ -39,5 +42,25 @@ export class PaperService extends RestService {
   downloadPaper(id: number) {
     return this.http.get(`${this.baseUrl}/download/${id}`, { responseType: 'blob' })
       .pipe(catchError(this.handleError<any>()));
+  }
+
+  getRelevantForm(taskId: string) {
+    return this.http.get<TaskForm>(`${this.baseUrl}/relevant/${taskId}/form`)
+      .pipe(catchError(this.handleError<TaskForm>()));
+  }
+
+  postRelevant(taskId: string, fields: FormField[]) {
+    return this.http.post<FormField[]>(`${this.baseUrl}/relevant/${taskId}`, fields)
+      .pipe(catchError(this.handleError<FormField[]>()));
+  }
+
+  findByTaskId(taskId: string): Observable<Paper> {
+    return this.http.get<Paper>(`${this.baseUrl}/task/${taskId}`)
+      .pipe(catchError(this.handleError<Paper>()));
+  }
+
+  addReviewers(taskId: string, reviewers: ReviewerSearchResult[]) {
+    return this.http.post<ReviewerSearchResult[]>(`${this.baseUrl}/reviewers/${taskId}`, reviewers)
+      .pipe(catchError(this.handleError<ReviewerSearchResult[]>()));
   }
 }

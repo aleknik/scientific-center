@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { ReviewerQuery } from 'src/app/shared/model/reviewer-query.model';
 import { Observable } from 'rxjs';
-import { ReviewerSearchResult } from 'src/app/shared/model/reviewer-search-resutl.model';
+import { ReviewerSearchResult } from 'src/app/shared/model/reviewer-search-result.model';
 import { catchError } from 'rxjs/operators';
 import { Reviewer } from 'src/app/shared/model/reviewer.model';
 

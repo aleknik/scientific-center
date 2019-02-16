@@ -12,6 +12,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -87,5 +89,16 @@ public class PaperService {
         paperRepository.save(paper);
 
         paperSearchService.indexPaper(id);
+    }
+
+    public Paper setReviewers(long paperId, List<Reviewer> reviewers) {
+        final Paper paper = findById(paperId);
+        final Set<Reviewer> foundReviewers = reviewers.stream()
+                .map(r -> reviewerRepository.findById(r.getId()).orElseThrow(() -> new BadRequestException("Reviewer not found")))
+                .collect(Collectors.toSet());
+
+        paper.setReviewers(foundReviewers);
+
+        return paperRepository.save(paper);
     }
 }

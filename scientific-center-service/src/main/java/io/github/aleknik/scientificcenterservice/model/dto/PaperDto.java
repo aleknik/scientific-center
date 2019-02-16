@@ -1,5 +1,7 @@
 package io.github.aleknik.scientificcenterservice.model.dto;
 
+import io.github.aleknik.scientificcenterservice.model.domain.Paper;
+
 import java.math.BigDecimal;
 
 public class PaperDto {
@@ -20,6 +22,10 @@ public class PaperDto {
     public PaperDto(long id, String title) {
         this.id = id;
         this.title = title;
+    }
+
+    public PaperDto(Paper paper) {
+        this.id = paper.getId();
     }
 
     public String getTitle() {

@@ -13,6 +13,7 @@ import { ReviewerListComponent } from '../reviewers/reviewer-list/reviewer-list.
 import { SignupComponent } from '../auth/signup/signup.component';
 import { ChooseJournalComponent } from '../journals/choose-journal/choose-journal.component';
 import { TaskListComponent } from '../tasks/task-list/task-list.component';
+import { PaperRelevantComponent } from '../papers/paper-relevant/paper-relevant.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/papers', pathMatch: 'full' },
@@ -25,7 +26,7 @@ const routes: Routes = [
   { path: 'papers/new/:taskId', component: NewPaperComponent },
   { path: 'papers/:id', component: PaperDetailsComponent },
 
-  { path: 'papers/:id/reviewers', component: ReviewerListComponent },
+  { path: 'reviewers/:taskId', component: ReviewerListComponent },
 
   { path: 'payments/register', component: RegisterPaymentComponent },
   { path: 'payments/callback/:status', component: CallbackComponent },
@@ -36,6 +37,8 @@ const routes: Routes = [
   { path: 'journals/:journalId/issues/:issueId', component: IssueDetailsComponent },
 
   { path: 'tasks', component: TaskListComponent },
+
+  { path: 'paper-relevant/:taskId', component: PaperRelevantComponent },
 ];
 
 @NgModule({

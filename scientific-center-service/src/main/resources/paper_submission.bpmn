@@ -46,13 +46,12 @@
     <bpmn:sequenceFlow id="SequenceFlow_0qc1vq9" sourceRef="ExclusiveGateway_0jed9jt" targetRef="SubmitPaper" />
     <bpmn:sequenceFlow id="SequenceFlow_147nai9" sourceRef="ExclusiveGateway_0klg0a7" targetRef="ExclusiveGateway_0jed9jt" />
     <bpmn:sequenceFlow id="SequenceFlow_09ei7x4" sourceRef="SubmitPaper" targetRef="Task_1ynvnaq" />
-    <bpmn:serviceTask id="Task_1ynvnaq" name="Chose chief editor and send notifications" camunda:class="io.github.aleknik.scientificcenterservice.service.task.ChoseChiefEditor">
+    <bpmn:serviceTask id="Task_1ynvnaq" name="Chose chief editor and send notifications" camunda:class="io.github.aleknik.scientificcenterservice.service.task.ChooseChiefEditor">
       <bpmn:incoming>SequenceFlow_09ei7x4</bpmn:incoming>
-      <bpmn:incoming>SequenceFlow_1d7lxo6</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0kadtfq</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="SequenceFlow_0kadtfq" sourceRef="Task_1ynvnaq" targetRef="Task_192jcla" />
-    <bpmn:userTask id="Task_192jcla" name="Check if paper relevant and formated" camunda:assignee="${chiefEditorId}">
+    <bpmn:sequenceFlow id="SequenceFlow_0kadtfq" sourceRef="Task_1ynvnaq" targetRef="PaperRelevant" />
+    <bpmn:userTask id="PaperRelevant" name="Check if paper relevant and formated" camunda:assignee="${chiefEditorId}">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="paperRelevant" label="Paper relevant" type="boolean">
@@ -60,11 +59,12 @@
               <camunda:constraint name="required" />
             </camunda:validation>
           </camunda:formField>
-          <camunda:formField id="properlyFormatted" label="Properly formated" type="string" />
+          <camunda:formField id="properlyFormatted" label="Properly formated" type="boolean" />
           <camunda:formField id="message" label="Message" type="string" />
         </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_0kadtfq</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_1d7lxo6</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_00t7n6h</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:exclusiveGateway id="ExclusiveGateway_1xojylg" name="Is paper relevant?">
@@ -72,7 +72,7 @@
       <bpmn:outgoing>SequenceFlow_0vstiwu</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_12ym771</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="SequenceFlow_00t7n6h" sourceRef="Task_192jcla" targetRef="ExclusiveGateway_1xojylg" />
+    <bpmn:sequenceFlow id="SequenceFlow_00t7n6h" sourceRef="PaperRelevant" targetRef="ExclusiveGateway_1xojylg" />
     <bpmn:sequenceFlow id="SequenceFlow_0vstiwu" name="Yes" sourceRef="ExclusiveGateway_1xojylg" targetRef="ExclusiveGateway_15f3m8v">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${paperRelevant == true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
@@ -87,7 +87,7 @@
     <bpmn:sequenceFlow id="SequenceFlow_08noqhn" name="Yes" sourceRef="ExclusiveGateway_15f3m8v" targetRef="Task_1rb5z9o">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${properlyFormatted == true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:serviceTask id="Task_1rb5z9o" name="Choose editor by field" camunda:class="io.github.aleknik.scientificcenterservice.service.task.TempTask">
+    <bpmn:serviceTask id="Task_1rb5z9o" name="Choose editor by field" camunda:class="io.github.aleknik.scientificcenterservice.service.task.ChooseEditorByField">
       <bpmn:incoming>SequenceFlow_08noqhn</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1vofq7j</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -98,28 +98,22 @@
       <bpmn:incoming>SequenceFlow_1hwtsiy</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1d7lxo6</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:sequenceFlow id="SequenceFlow_1d7lxo6" sourceRef="Task_1n5k1zn" targetRef="Task_1ynvnaq" />
+    <bpmn:sequenceFlow id="SequenceFlow_1d7lxo6" sourceRef="Task_1n5k1zn" targetRef="PaperRelevant" />
     <bpmn:boundaryEvent id="BoundaryEvent_02yep6c" attachedToRef="Task_1n5k1zn">
       <bpmn:outgoing>SequenceFlow_1ybc0pg</bpmn:outgoing>
       <bpmn:timerEventDefinition>
         <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P10D</bpmn:timeDuration>
       </bpmn:timerEventDefinition>
     </bpmn:boundaryEvent>
-    <bpmn:sequenceFlow id="SequenceFlow_1vofq7j" sourceRef="Task_1rb5z9o" targetRef="Task_0h8xntu" />
-    <bpmn:userTask id="Task_0h8xntu" name="Chose reviewers" camunda:assignee="${chosenEditor}">
-      <bpmn:extensionElements>
-        <camunda:formData>
-          <camunda:formField id="reviewers" type="string" />
-          <camunda:formField id="duration" type="string" />
-        </camunda:formData>
-      </bpmn:extensionElements>
+    <bpmn:sequenceFlow id="SequenceFlow_1vofq7j" sourceRef="Task_1rb5z9o" targetRef="ChooseReviewers" />
+    <bpmn:userTask id="ChooseReviewers" name="Choose reviewers" camunda:assignee="${chosenEditor}">
       <bpmn:incoming>SequenceFlow_1ye2irj</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_0mjbqlb</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_1vofq7j</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1o3v9nz</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:sequenceFlow id="SequenceFlow_1o3v9nz" sourceRef="Task_0h8xntu" targetRef="Task_0s4dlj5" />
-    <bpmn:userTask id="Task_0s4dlj5" name="Review paper">
+    <bpmn:sequenceFlow id="SequenceFlow_1o3v9nz" sourceRef="ChooseReviewers" targetRef="ReviewPaper" />
+    <bpmn:userTask id="ReviewPaper" name="Review paper" camunda:assignee="${reviewer.username}">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="comments" label="Comments" type="string" />
@@ -129,7 +123,7 @@
             <camunda:value id="accept" name="accept" />
             <camunda:value id="reject" name="reject" />
           </camunda:formField>
-          <camunda:formField id="staffComents" type="string" />
+          <camunda:formField id="staffComments" type="string" />
         </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_1o3v9nz</bpmn:incoming>
@@ -137,17 +131,17 @@
       <bpmn:outgoing>SequenceFlow_1t2t1fg</bpmn:outgoing>
       <bpmn:multiInstanceLoopCharacteristics camunda:collection="${reviewers}" camunda:elementVariable="reviewer" />
     </bpmn:userTask>
-    <bpmn:sequenceFlow id="SequenceFlow_1t2t1fg" sourceRef="Task_0s4dlj5" targetRef="Task_1x2vac9" />
+    <bpmn:sequenceFlow id="SequenceFlow_1t2t1fg" sourceRef="ReviewPaper" targetRef="EditorReview" />
     <bpmn:sequenceFlow id="SequenceFlow_0sb5dnp" name="Yes" sourceRef="ExclusiveGateway_0klg0a7" targetRef="Task_02jgury">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${journalOpenAccess == false}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:boundaryEvent id="BoundaryEvent_0z5gbet" attachedToRef="Task_0s4dlj5">
+    <bpmn:boundaryEvent id="BoundaryEvent_0z5gbet" attachedToRef="ReviewPaper">
       <bpmn:outgoing>SequenceFlow_1u2t3pn</bpmn:outgoing>
       <bpmn:timerEventDefinition>
-        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">${duration}</bpmn:timeDuration>
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P10D</bpmn:timeDuration>
       </bpmn:timerEventDefinition>
     </bpmn:boundaryEvent>
-    <bpmn:userTask id="Task_1x2vac9" name="Editor review" camunda:assignee="${chosenEditor}">
+    <bpmn:userTask id="EditorReview" name="Editor review" camunda:assignee="${chosenEditor}">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="decision" type="enum">
@@ -168,8 +162,8 @@
       <bpmn:outgoing>SequenceFlow_1ye2irj</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_09d4dtt</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="SequenceFlow_1f5ylb3" sourceRef="Task_1x2vac9" targetRef="ExclusiveGateway_0mlmfb2" />
-    <bpmn:sequenceFlow id="SequenceFlow_1ye2irj" name="Yes" sourceRef="ExclusiveGateway_0mlmfb2" targetRef="Task_0h8xntu">
+    <bpmn:sequenceFlow id="SequenceFlow_1f5ylb3" sourceRef="EditorReview" targetRef="ExclusiveGateway_0mlmfb2" />
+    <bpmn:sequenceFlow id="SequenceFlow_1ye2irj" name="Yes" sourceRef="ExclusiveGateway_0mlmfb2" targetRef="ChooseReviewers">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${needNewReviewers == true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:exclusiveGateway id="ExclusiveGateway_1sva3zy" name="Is accepted?">
@@ -188,27 +182,27 @@
       <bpmn:incoming>SequenceFlow_0z6u5v0</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="SequenceFlow_0z6u5v0" sourceRef="Task_06vtw8l" targetRef="EndEvent_1fm2apr" />
-    <bpmn:sequenceFlow id="SequenceFlow_17w483w" name="Yes with changes" sourceRef="ExclusiveGateway_1sva3zy" targetRef="Task_1hikgqn">
+    <bpmn:sequenceFlow id="SequenceFlow_17w483w" name="Yes with changes" sourceRef="ExclusiveGateway_1sva3zy" targetRef="PaperRevision">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${decision== "minorFixes" || decision== "largerFixes"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:userTask id="Task_1hikgqn" name="Paper revision" camunda:assignee="${authorId}">
+    <bpmn:userTask id="PaperRevision" name="Paper revision" camunda:assignee="${authorId}">
       <bpmn:incoming>SequenceFlow_17w483w</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_1bzwx44</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1pse125</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:boundaryEvent id="BoundaryEvent_1vkjkcy" attachedToRef="Task_1hikgqn">
+    <bpmn:boundaryEvent id="BoundaryEvent_1vkjkcy" attachedToRef="PaperRevision">
       <bpmn:outgoing>SequenceFlow_18kcoxp</bpmn:outgoing>
       <bpmn:timerEventDefinition>
         <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P10D</bpmn:timeDuration>
       </bpmn:timerEventDefinition>
     </bpmn:boundaryEvent>
-    <bpmn:sequenceFlow id="SequenceFlow_1pse125" sourceRef="Task_1hikgqn" targetRef="ExclusiveGateway_1w2lhn9" />
+    <bpmn:sequenceFlow id="SequenceFlow_1pse125" sourceRef="PaperRevision" targetRef="ExclusiveGateway_1w2lhn9" />
     <bpmn:exclusiveGateway id="ExclusiveGateway_1w2lhn9" name="Small changes?">
       <bpmn:incoming>SequenceFlow_1pse125</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_062z0h5</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_0nz6r7f</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="SequenceFlow_062z0h5" name="Yes" sourceRef="ExclusiveGateway_1w2lhn9" targetRef="Task_1kzc8lm">
+    <bpmn:sequenceFlow id="SequenceFlow_062z0h5" name="Yes" sourceRef="ExclusiveGateway_1w2lhn9" targetRef="EditorRevisionReview">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${smallChanges== true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:exclusiveGateway id="ExclusiveGateway_0nw2cr0" name="Changes corect?">
@@ -219,10 +213,10 @@
     <bpmn:sequenceFlow id="SequenceFlow_0w9tz5z" name="Yes" sourceRef="ExclusiveGateway_0nw2cr0" targetRef="Task_06vtw8l">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${changesCorrect == true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="SequenceFlow_1bzwx44" name="No" sourceRef="ExclusiveGateway_0nw2cr0" targetRef="Task_1hikgqn">
+    <bpmn:sequenceFlow id="SequenceFlow_1bzwx44" name="No" sourceRef="ExclusiveGateway_0nw2cr0" targetRef="PaperRevision">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${changesCorrect == false}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="SequenceFlow_0nz6r7f" name="No" sourceRef="ExclusiveGateway_1w2lhn9" targetRef="Task_0s4dlj5">
+    <bpmn:sequenceFlow id="SequenceFlow_0nz6r7f" name="No" sourceRef="ExclusiveGateway_1w2lhn9" targetRef="ReviewPaper">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${smallChanges== false}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_0867qkh" sourceRef="Task_0tlcw99" targetRef="ExclusiveGateway_0klg0a7" />
@@ -239,7 +233,7 @@
       <bpmn:incoming>SequenceFlow_12ym771</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_03sgzgl</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="SequenceFlow_0mjbqlb" sourceRef="Task_1fcuacq" targetRef="Task_0h8xntu" />
+    <bpmn:sequenceFlow id="SequenceFlow_0mjbqlb" sourceRef="Task_1fcuacq" targetRef="ChooseReviewers" />
     <bpmn:serviceTask id="Task_1fcuacq" name="Notify editor" camunda:class="io.github.aleknik.scientificcenterservice.service.task.TempTask">
       <bpmn:incoming>SequenceFlow_1u2t3pn</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0mjbqlb</bpmn:outgoing>
@@ -249,8 +243,8 @@
       <bpmn:incoming>SequenceFlow_0w9tz5z</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0z6u5v0</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="SequenceFlow_0asgcd1" sourceRef="Task_1kzc8lm" targetRef="ExclusiveGateway_0nw2cr0" />
-    <bpmn:userTask id="Task_1kzc8lm" name="Editor review">
+    <bpmn:sequenceFlow id="SequenceFlow_0asgcd1" sourceRef="EditorRevisionReview" targetRef="ExclusiveGateway_0nw2cr0" />
+    <bpmn:userTask id="EditorRevisionReview" name="Editor revision review">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="changesCorrect" type="string" />
@@ -345,7 +339,7 @@
         <di:waypoint x="980" y="81" />
         <di:waypoint x="1052" y="81" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="UserTask_0eafwcx_di" bpmnElement="Task_192jcla">
+      <bpmndi:BPMNShape id="UserTask_0eafwcx_di" bpmnElement="PaperRelevant">
         <dc:Bounds x="1052" y="41" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ExclusiveGateway_1xojylg_di" bpmnElement="ExclusiveGateway_1xojylg" isMarkerVisible="true">
@@ -400,8 +394,8 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_1d7lxo6_di" bpmnElement="SequenceFlow_1d7lxo6">
         <di:waypoint x="1199" y="-367" />
-        <di:waypoint x="930" y="-367" />
-        <di:waypoint x="930" y="41" />
+        <di:waypoint x="1102" y="-367" />
+        <di:waypoint x="1102" y="41" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="BoundaryEvent_0s7fp3q_di" bpmnElement="BoundaryEvent_02yep6c">
         <dc:Bounds x="1231" y="-425" width="36" height="36" />
@@ -410,14 +404,14 @@
         <di:waypoint x="1808" y="81" />
         <di:waypoint x="1908" y="81" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="UserTask_0pahv8n_di" bpmnElement="Task_0h8xntu">
+      <bpmndi:BPMNShape id="UserTask_0pahv8n_di" bpmnElement="ChooseReviewers">
         <dc:Bounds x="1908" y="41" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_1o3v9nz_di" bpmnElement="SequenceFlow_1o3v9nz">
         <di:waypoint x="2008" y="81" />
         <di:waypoint x="2126" y="81" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="UserTask_1dp5so3_di" bpmnElement="Task_0s4dlj5">
+      <bpmndi:BPMNShape id="UserTask_1dp5so3_di" bpmnElement="ReviewPaper">
         <dc:Bounds x="2126" y="41" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_1t2t1fg_di" bpmnElement="SequenceFlow_1t2t1fg">
@@ -435,7 +429,7 @@
       <bpmndi:BPMNShape id="BoundaryEvent_0z2o1j6_di" bpmnElement="BoundaryEvent_0z5gbet">
         <dc:Bounds x="2186" y="103" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="UserTask_19mszdl_di" bpmnElement="Task_1x2vac9">
+      <bpmndi:BPMNShape id="UserTask_19mszdl_di" bpmnElement="EditorReview">
         <dc:Bounds x="2298" y="41" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_1u2t3pn_di" bpmnElement="SequenceFlow_1u2t3pn">
@@ -496,7 +490,7 @@
           <dc:Bounds x="2630" y="16" width="85" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="UserTask_035vdb8_di" bpmnElement="Task_1hikgqn">
+      <bpmndi:BPMNShape id="UserTask_035vdb8_di" bpmnElement="PaperRevision">
         <dc:Bounds x="2573" y="-152" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BoundaryEvent_1pjd9ij_di" bpmnElement="BoundaryEvent_1vkjkcy">
@@ -582,7 +576,7 @@
         <di:waypoint x="2962" y="-72" />
         <di:waypoint x="2962" y="-47" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="UserTask_02zdvp3_di" bpmnElement="Task_1kzc8lm">
+      <bpmndi:BPMNShape id="UserTask_02zdvp3_di" bpmnElement="EditorRevisionReview">
         <dc:Bounds x="2912" y="-152" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_1ybc0pg_di" bpmnElement="SequenceFlow_1ybc0pg">

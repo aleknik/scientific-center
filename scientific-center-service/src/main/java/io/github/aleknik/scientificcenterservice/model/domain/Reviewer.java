@@ -1,5 +1,7 @@
 package io.github.aleknik.scientificcenterservice.model.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -22,6 +24,8 @@ public class Reviewer extends User {
     @ManyToMany(fetch = FetchType.EAGER, cascade = {
             CascadeType.MERGE
     })
+
+    @JsonIgnore
     @JoinTable(name = "reviewer_journal",
             joinColumns = @JoinColumn(name = "reviewer_id"),
             inverseJoinColumns = @JoinColumn(name = "journal_id")

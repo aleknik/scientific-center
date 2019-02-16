@@ -95,4 +95,16 @@ public class ProcessService {
 
         restTemplate.postForLocation(basePath + CamundaConstants.CREATE_USER, userDto);
     }
+
+    public TaskDto getTask(String taskId) {
+        String url = String.format(basePath + CamundaConstants.GET_TASK, taskId);
+
+        return restTemplate.getForObject(url, TaskDto.class);
+    }
+
+    public Object getVariable(String processId, String key) {
+        String url = String.format(basePath + CamundaConstants.GET_VARIABLE, processId, key);
+
+        return restTemplate.getForObject(url, VariableValueDto.class).getValue();
+    }
 }

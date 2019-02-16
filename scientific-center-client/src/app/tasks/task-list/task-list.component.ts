@@ -31,6 +31,14 @@ export class TaskListComponent implements OnInit {
         this.router.navigate(['/papers/new', task.id]);
         break;
       }
+      case "PaperRelevant": {
+        this.router.navigate(['/paper-relevant', task.id]);
+        break;
+      }
+      case "ChooseReviewers": {
+        this.router.navigate(['/reviewers', task.id]);
+        break;
+      }
       default: {
         console.log("Invalid choice");
         break;

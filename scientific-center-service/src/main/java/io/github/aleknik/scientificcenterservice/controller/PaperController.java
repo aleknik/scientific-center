@@ -8,6 +8,7 @@ import io.github.aleknik.scientificcenterservice.model.dto.PaperDto;
 import io.github.aleknik.scientificcenterservice.model.dto.TaskFormFieldDto;
 import io.github.aleknik.scientificcenterservice.model.dto.elasticsearch.PaperQueryDto;
 import io.github.aleknik.scientificcenterservice.model.dto.elasticsearch.PaperSearchDto;
+import io.github.aleknik.scientificcenterservice.model.dto.elasticsearch.ReviewerSearchDto;
 import io.github.aleknik.scientificcenterservice.model.dto.payment.PaymentStatus;
 import io.github.aleknik.scientificcenterservice.security.RoleConstants;
 import io.github.aleknik.scientificcenterservice.service.JournalService;
@@ -16,6 +17,7 @@ import io.github.aleknik.scientificcenterservice.service.UserService;
 import io.github.aleknik.scientificcenterservice.service.elasticsearch.PaperSearchService;
 import io.github.aleknik.scientificcenterservice.service.payment.PaymentService;
 import io.github.aleknik.scientificcenterservice.service.process.ProcessService;
+import org.camunda.bpm.engine.rest.dto.task.TaskDto;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -130,6 +132,39 @@ public class PaperController {
 
     }
 
+    @GetMapping("/task/{taskId}")
+    public ResponseEntity getPaperByTaskId(@PathVariable String taskId) {
+        final TaskDto task = processService.getTask(taskId);
+        final String paperId = (String) processService.getVariable(task.getProcessInstanceId(), "paperId");
+
+        return ResponseEntity.ok(new PaperDto(paperService.findById(Long.parseLong(paperId))));
+    }
+
+    @PostMapping("/relevant/{taskId}")
+    public ResponseEntity paperRelevant(@PathVariable String taskId, @RequestBody List<TaskFormFieldDto> formFieldDtos) {
+        processService.submitTaskForm(taskId, formFieldDtos);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/reviewers/{taskId}")
+    public ResponseEntity chooseReviewers(@PathVariable String taskId, @RequestBody List<ReviewerSearchDto> reviewerDtos) {
+        final TaskDto task = processService.getTask(taskId);
+        final String paperId = (String) processService.getVariable(task.getProcessInstanceId(), "paperId");
+
+        final Paper paper = paperService.setReviewers(Long.parseLong(paperId), reviewerDtos.stream().map(dto -> {
+            final Reviewer reviewer = new Reviewer();
+            reviewer.setId(dto.getId());
+            return reviewer;
+        }).collect(Collectors.toList()));
+
+        final ArrayList<TaskFormFieldDto> taskFormFieldDtos = new ArrayList<>();
+        taskFormFieldDtos.add(new TaskFormFieldDto("reviewers", new ArrayList<>(paper.getReviewers())));
+        processService.submitTaskForm(taskId, taskFormFieldDtos);
+
+        return ResponseEntity.noContent().build();
+    }
+
     private Paper convertToPaper(CreatePaperRequestDto createPaperRequestDto, Author author) {
 
         Random rand = new Random();
@@ -154,4 +189,6 @@ public class PaperController {
 
         return paper;
     }
+
+
 }

@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-md-2"></div>
-  <div class="col-md-8">
+  <div class="col-md-4">
     <form (ngSubmit)="search()" #searchForm="ngForm">
       <div class="row">
         <label class="form-check-label col" for="gridCheck1">
@@ -40,9 +40,21 @@
           <tr *ngFor="let reviewer of reviewers">
             <td scope="row">{{reviewer.firstName}}</td>
             <td scope="row">{{reviewer.lastName}}</td>
-            <td><button class="btn btn-primary btn-block">Details</button></td>
+            <td><button class="btn btn-primary btn-block" (click)="addReviewer(reviewer)">Add</button></td>
         </tbody>
       </table>
     </div>
+  </div>
+  <div class="col-md-4">
+    <h2>Reviewers</h2>
+    <ul class="list-group">
+      <li *ngFor="let reviewer of choosenReviewers" class="list-group-item">
+        <p>Name: {{reviewer.firstName}} {{reviewer.lastName}} <span
+            class="float-right fa fa-trash fa-2x icon-pad pointer" (click)="removeReviewer(reviewer)">
+          </span></p>
+      </li>
+      <button [disabled]="choosenReviewers.length < 1" class="btn btn-lg btn-primary btn-block"
+        (click)="submitReviewers()">Submit</button>
+    </ul>
   </div>
 </div>
