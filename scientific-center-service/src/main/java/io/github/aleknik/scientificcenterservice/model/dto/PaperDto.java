@@ -17,7 +17,7 @@ public class PaperDto {
 
     private BigDecimal price;
 
-    private JournalDto journalDto;
+    private JournalDto journal;
 
     private List<String> keywords;
 
@@ -62,12 +62,12 @@ public class PaperDto {
         this.price = price;
     }
 
-    public JournalDto getJournalDto() {
-        return journalDto;
+    public JournalDto getJournal() {
+        return journal;
     }
 
-    public void setJournalDto(JournalDto journalDto) {
-        this.journalDto = journalDto;
+    public void setJournal(JournalDto journal) {
+        this.journal = journal;
     }
 
     public long getId() {

@@ -68,7 +68,7 @@ public class DataLoader implements ApplicationRunner {
         journal2.getJournalEditors().add(new JournalEditor(journal2, editor3, field1));
         journal2 = journalRepository.save(journal2);
 
-        addAuthor("nikolic95@gmail.com", "author", "pass", "Luka", "Maletin", AddressConstants.NOVI_SAD);
+        addAuthor("nikolic95@gmail.com", "author", "pass", "Luka", "Maletin", AddressConstants.BELGRADE);
 
         addReviewer("nikolic95@gmail.com", "reviewer", "pass", "Milijana", "Smiljanic", AddressConstants.BERLIN, "dipl. inz.",
                 Arrays.asList(journal1, journal2), Arrays.asList(field1));
@@ -78,6 +78,9 @@ public class DataLoader implements ApplicationRunner {
                 Arrays.asList(journal1, journal2), Arrays.asList(field1, field2));
 
         addReviewer("nikolic95@gmail.com", "reviewer2", "pass", "Sara", "Peric", AddressConstants.NOVI_SAD, "dipl. inz.",
+                Arrays.asList(journal1, journal2), Arrays.asList(field1, field2, field3));
+
+        addReviewer("nikolic95@gmail.com", "reviewer3", "pass", "Katarina", "Cukurov", AddressConstants.NOVI_SAD, "dipl. inz.",
                 Arrays.asList(journal1, journal2), Arrays.asList(field1, field2, field3));
     }
 

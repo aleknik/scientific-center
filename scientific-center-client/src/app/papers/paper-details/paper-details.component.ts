@@ -52,7 +52,7 @@ export class PaperDetailsComponent implements OnInit {
   }
 
   showBuy(): boolean {
-    return this.status == null || this.status == "CANCELED";
+    return !this.status || this.status == "CANCELED";
   }
   showProcessing(): boolean {
     return this.status == "PROCESSING" || this.status == "NEW";

@@ -125,7 +125,7 @@ public class PaperController {
         final JournalDto journalDto = new JournalDto();
         journalDto.setOpenAccess(paper.getJournal().isOpenAccess());
         journalDto.setName(paper.getJournal().getName());
-        paperDto.setJournalDto(journalDto);
+        paperDto.setJournal(journalDto);
 
         return ResponseEntity.ok(paperDto);
 

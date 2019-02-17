@@ -9,7 +9,7 @@
       <select name="scienceField" class="form-control" [(ngModel)]="decision" required>
         <option *ngFor="let suggestion of suggestions" [ngValue]="suggestion">{{suggestion}}</option>
       </select>
-
+      <br>
       <button id="signinButton" [disabled]="myForm.form.invalid" class="btn btn-lg btn-primary btn-block"
         type="submit">Submit</button>
     </form>

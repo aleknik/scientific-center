@@ -4,10 +4,13 @@
     <h2 class="form-heading">Sign up</h2>
     <div *ngFor="let field of formFields">
       <label>{{field.name}}</label>
-      <input type="text" class="form-control" [(ngModel)]="field.value.value" name="{{field.name}}">
+      <input type="text" *ngIf="field.name !== 'password'" class="form-control" [(ngModel)]="field.value.value"
+        name="{{field.name}}">
+      <input type="password" *ngIf="field.name === 'password'" class="form-control" [(ngModel)]="field.value.value"
+        name="{{field.name}}">
     </div>
+    <br>
     <button id="signinButton" [disabled]="signupForm.form.invalid" class="btn btn-lg btn-primary btn-block"
-      type="submit">Sign
-      in</button>
+      type="submit">Sign up</button>
   </form>
 </div>
