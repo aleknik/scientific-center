@@ -16,6 +16,8 @@ public class PaperReview extends BaseModel {
 
     private String privateComment;
 
+    private String authorMessage;
+
     public PaperReview() {
     }
 
@@ -56,5 +58,13 @@ public class PaperReview extends BaseModel {
 
     public void setPrivateComment(String privateComment) {
         this.privateComment = privateComment;
+    }
+
+    public String getAuthorMessage() {
+        return authorMessage;
+    }
+
+    public void setAuthorMessage(String authorMessage) {
+        this.authorMessage = authorMessage;
     }
 }

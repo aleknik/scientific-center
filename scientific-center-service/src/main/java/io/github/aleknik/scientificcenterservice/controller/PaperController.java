@@ -86,11 +86,13 @@ public class PaperController {
 
     @PostMapping("/resubmit/{taskId}")
     @PreAuthorize("hasAuthority('" + RoleConstants.AUTHOR + "')")
-    public ResponseEntity revisePaper(@RequestPart("file") @Valid @NotNull @NotBlank MultipartFile file, @PathVariable String taskId) {
+    public ResponseEntity revisePaper(@RequestPart("data") @Valid List<ReviewDto> reviewDtos,
+                                      @RequestPart("file") @Valid @NotNull @NotBlank MultipartFile file, @PathVariable String taskId) {
 
         final TaskDto task = processService.getTask(taskId);
         final String paperId = (String) processService.getVariable(task.getProcessInstanceId(), "paperId");
 
+        paperService.setReviewMessages(reviewDtos);
         paperService.submitRevision(Long.parseLong(paperId), file);
 
         final ArrayList<TaskFormFieldDto> taskFormFieldDtos = new ArrayList<>();

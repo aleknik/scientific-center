@@ -17,17 +17,19 @@
     <button class="btn btn-success btn-block" (click)="download()">Download</button>
   </div>
 
-  <h2>Reviewer comments</h2>
-  <div class="col-md-2">
-    <ul class="list-group">
-      <li class="list-group-item" *ngFor="let review of reviews">
-        <h3>Comments</h3>
-        <p>{{review.comment}}</p>
-        <h3>Suggestion</h3>
-        <p>{{review.suggestion}}</p>
-        <h3>Private comment</h3>
-        <p>{{review.privateComment}}</p>
-      </li>
-    </ul>
+  <div class="col-md-4">
+    <h2>Reviewer comments</h2>
+    <div>
+      <ul class="list-group">
+        <li class="list-group-item" *ngFor="let review of reviews">
+          <h3>Comments</h3>
+          <p>{{review.comment}}</p>
+          <h3>Suggestion</h3>
+          <p>{{review.suggestion}}</p>
+          <h3>Private comment</h3>
+          <p>{{review.privateComment}}</p>
+        </li>
+      </ul>
+    </div>
   </div>
 </div>

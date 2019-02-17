@@ -14,6 +14,7 @@ export class RevisionComponent implements OnInit {
   file: File;
   taskId: string;
   reviews = new Array<Review>();
+  message: string;
 
   constructor(private paperService: PaperService,
     private toastr: ToastrService,
@@ -32,7 +33,7 @@ export class RevisionComponent implements OnInit {
   }
 
   submit() {
-    this.paperService.resubmit(this.taskId, this.file).subscribe(result => {
+    this.paperService.resubmit(this.taskId, this.file, this.reviews).subscribe(result => {
       this.toastr.success('Revision submitted');
       this.router.navigate(['tasks']);
     });

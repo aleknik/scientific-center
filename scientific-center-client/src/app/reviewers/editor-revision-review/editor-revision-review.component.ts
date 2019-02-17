@@ -6,6 +6,7 @@ import { VariableValue } from 'src/app/shared/model/variable-value.model';
 import { PaperService } from 'src/app/core/http/paper.service';
 import * as FileSaver from "file-saver"
 import { ToastrService } from 'ngx-toastr';
+import { Review } from 'src/app/shared/model/review.model';
 
 @Component({
   selector: 'app-editor-revision-review',
@@ -16,6 +17,7 @@ export class EditorRevisionReviewComponent implements OnInit {
 
   taskId: string;
   changesCorrect = false;
+  reviews = new Array<Review>();
 
   suggestions = ['minorFixes', 'largerFixes', 'accept', 'reject']
 
@@ -28,7 +30,13 @@ export class EditorRevisionReviewComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.taskId = params['taskId'];
+      this.getReviews();
     });
+  }
+  getReviews(): any {
+    this.paperService.getReviews(this.taskId).subscribe(res => {
+      this.reviews = res;
+    })
   }
 
   submit() {

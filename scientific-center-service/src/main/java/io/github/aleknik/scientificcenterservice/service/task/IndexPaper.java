@@ -40,6 +40,6 @@ public class IndexPaper implements JavaDelegate {
         final String authorId = (String) delegateExecution.getVariable("authorId");
         final User author = userService.findByUsername(authorId);
 
-        mailService.sendMail(author.getEmail(), "Paper accepted", String.format("Dear %s, your paper has been accepted.", author.getUsername()));
+        mailService.sendMail(author.getEmail(), "Paper accepted", String.format("Dear %s, your paper '%s' has been accepted.", author.getUsername(), paper.getTitle()));
     }
 }

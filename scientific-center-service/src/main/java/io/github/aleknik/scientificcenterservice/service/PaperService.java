@@ -3,6 +3,7 @@ package io.github.aleknik.scientificcenterservice.service;
 import io.github.aleknik.scientificcenterservice.controller.exception.BadRequestException;
 import io.github.aleknik.scientificcenterservice.controller.exception.NotFoundException;
 import io.github.aleknik.scientificcenterservice.model.domain.*;
+import io.github.aleknik.scientificcenterservice.model.dto.ReviewDto;
 import io.github.aleknik.scientificcenterservice.repository.*;
 import io.github.aleknik.scientificcenterservice.service.elasticsearch.PaperSearchService;
 import io.github.aleknik.scientificcenterservice.service.util.GeocodingService;
@@ -25,6 +26,7 @@ public class PaperService {
     private final IssueRepository issueRepository;
     private final ScienceFieldRepository scienceFieldRepository;
     private final ReviewerRepository reviewerRepository;
+    private final PaperReviewRepository paperReviewRepository;
 
     private final StorageService storageService;
     private final GeocodingService geocodingService;
@@ -33,7 +35,11 @@ public class PaperService {
     public PaperService(PaperRepository paperRepository,
                         JournalRepository journalRepository,
                         PaperSearchService paperSearchService,
-                        IssueRepository issueRepository, ScienceFieldRepository scienceFieldRepository, ReviewerRepository reviewerRepository, StorageService storageService,
+                        IssueRepository issueRepository,
+                        ScienceFieldRepository scienceFieldRepository,
+                        ReviewerRepository reviewerRepository,
+                        PaperReviewRepository paperReviewRepository,
+                        StorageService storageService,
                         GeocodingService geocodingService) {
         this.paperRepository = paperRepository;
         this.journalRepository = journalRepository;
@@ -41,6 +47,7 @@ public class PaperService {
         this.issueRepository = issueRepository;
         this.scienceFieldRepository = scienceFieldRepository;
         this.reviewerRepository = reviewerRepository;
+        this.paperReviewRepository = paperReviewRepository;
         this.storageService = storageService;
         this.geocodingService = geocodingService;
     }
@@ -114,5 +121,14 @@ public class PaperService {
         paper.getReviewers().add(foundReviewer);
 
         return paperRepository.save(paper);
+    }
+
+    public void setReviewMessages(List<ReviewDto> reviewDtos) {
+        for (ReviewDto reviewDto : reviewDtos) {
+            final PaperReview review = paperReviewRepository.findById(reviewDto.getId())
+                    .orElseThrow(() -> new NotFoundException("Review not found"));
+            review.setAuthorMessage(reviewDto.getAuthorMessage());
+            paperReviewRepository.save(review);
+        }
     }
 }

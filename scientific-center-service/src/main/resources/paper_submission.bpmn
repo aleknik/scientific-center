@@ -108,6 +108,11 @@
         <bpmn:incoming>SequenceFlow_0z6u5v0</bpmn:incoming>
       </bpmn:endEvent>
       <bpmn:userTask id="PaperRevision" name="Paper revision" camunda:assignee="${authorId}">
+        <bpmn:extensionElements>
+          <camunda:formData>
+            <camunda:formField id="authorMessage" type="string" />
+          </camunda:formData>
+        </bpmn:extensionElements>
         <bpmn:incoming>SequenceFlow_17w483w</bpmn:incoming>
         <bpmn:incoming>SequenceFlow_1bzwx44</bpmn:incoming>
         <bpmn:outgoing>SequenceFlow_1pse125</bpmn:outgoing>

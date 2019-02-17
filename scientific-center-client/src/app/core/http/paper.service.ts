@@ -31,9 +31,10 @@ export class PaperService extends RestService {
       .pipe(catchError(this.handleError<Paper>()));
   }
 
-  resubmit(taskId: string, file: File) {
+  resubmit(taskId: string, file: File, reviews: Review[]) {
     let formData = new FormData();
     formData.append('file', file);
+    formData.append('data', new Blob([JSON.stringify(reviews)], { type: 'application/json' }));
     return this.http.post(`${this.baseUrl}/resubmit/${taskId}`, formData)
       .pipe(catchError(this.handleError<any>()));
   }
