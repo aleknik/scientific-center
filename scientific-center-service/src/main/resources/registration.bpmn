@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_0kzvlyk" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="2.0.3">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_0kzvlyk" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="2.0.3">
   <bpmn:process id="registration" isExecutable="true">
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>SequenceFlow_1pfpl95</bpmn:outgoing>
@@ -49,6 +49,16 @@
       <bpmn:outgoing>SequenceFlow_0h421us</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:sequenceFlow id="SequenceFlow_0h421us" sourceRef="Task_1oedcoy" targetRef="Task_0yk4dfp" />
+    <bpmn:boundaryEvent id="BoundaryEvent_1yh9avf" attachedToRef="Task_1oedcoy">
+      <bpmn:outgoing>SequenceFlow_0djiv53</bpmn:outgoing>
+      <bpmn:timerEventDefinition>
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P1D</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
+    </bpmn:boundaryEvent>
+    <bpmn:endEvent id="EndEvent_0dx6fjy">
+      <bpmn:incoming>SequenceFlow_0djiv53</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_0djiv53" sourceRef="BoundaryEvent_1yh9avf" targetRef="EndEvent_0dx6fjy" />
   </bpmn:process>
   <bpmn:error id="Error_0dxrjhq" />
   <bpmn:error id="Error_0dkzjsb" />
@@ -78,6 +88,17 @@
       <bpmndi:BPMNEdge id="SequenceFlow_0h421us_di" bpmnElement="SequenceFlow_0h421us">
         <di:waypoint x="393" y="120" />
         <di:waypoint x="535" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="BoundaryEvent_0l9sipn_di" bpmnElement="BoundaryEvent_1yh9avf">
+        <dc:Bounds x="324" y="142" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_0dx6fjy_di" bpmnElement="EndEvent_0dx6fjy">
+        <dc:Bounds x="410" y="222" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0djiv53_di" bpmnElement="SequenceFlow_0djiv53">
+        <di:waypoint x="342" y="178" />
+        <di:waypoint x="342" y="240" />
+        <di:waypoint x="410" y="240" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
