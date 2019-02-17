@@ -4,7 +4,9 @@ import io.github.aleknik.scientificcenterservice.model.domain.Paper;
 import io.github.aleknik.scientificcenterservice.repository.PaperRepository;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
+import org.springframework.stereotype.Service;
 
+@Service
 public class RejectPaper implements JavaDelegate {
 
     private final PaperRepository paperRepository;

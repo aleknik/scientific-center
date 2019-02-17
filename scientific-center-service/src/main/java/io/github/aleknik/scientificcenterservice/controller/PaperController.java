@@ -130,6 +130,16 @@ public class PaperController {
 
     }
 
+    @GetMapping("/download/task/{taskId}")
+    public ResponseEntity downloadByTask(@PathVariable String taskId) {
+
+        final TaskDto task = processService.getTask(taskId);
+        final String paperId = (String) processService.getVariable(task.getProcessInstanceId(), "paperId");
+
+        return downloadPdf(Long.parseLong(paperId));
+
+    }
+
     @GetMapping("/download/{id}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity download(@PathVariable long id) {
@@ -147,6 +157,11 @@ public class PaperController {
             }
         }
 
+        return downloadPdf(id);
+
+    }
+
+    private ResponseEntity downloadPdf(long id) {
         final byte[] data = paperService.getPaperPdf(id);
         ByteArrayResource resource = new ByteArrayResource(data);
 
@@ -159,7 +174,6 @@ public class PaperController {
                 .contentLength(data.length)
                 .contentType(MediaType.parseMediaType("application/octet-stream"))
                 .body(resource);
-
     }
 
     @GetMapping("/task/{taskId}")
@@ -220,6 +234,14 @@ public class PaperController {
         paper.setReviewers(new HashSet<>(createPaperRequestDto.getReviewers()));
 
         return paper;
+    }
+
+    @GetMapping("/format-data/{taskId}")
+    public ResponseEntity getPaperMessage(@PathVariable String taskId) {
+
+        // TODO
+
+        return null;
     }
 
 

@@ -56,6 +56,11 @@ export class PaperService extends RestService {
       .pipe(catchError(this.handleError<any>()));
   }
 
+  downloadPaperByTask(taskId: string) {
+    return this.http.get(`${this.baseUrl}/download/tasl/${taskId}`, { responseType: 'blob' })
+      .pipe(catchError(this.handleError<any>()));
+  }
+
   getRelevantForm(taskId: string) {
     return this.http.get<TaskForm>(`${this.baseUrl}/relevant/${taskId}/form`)
       .pipe(catchError(this.handleError<TaskForm>()));

@@ -1,8 +1,11 @@
 package io.github.aleknik.scientificcenterservice.model.dto;
 
+import io.github.aleknik.scientificcenterservice.model.domain.Keyword;
 import io.github.aleknik.scientificcenterservice.model.domain.Paper;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class PaperDto {
 
@@ -16,6 +19,8 @@ public class PaperDto {
 
     private JournalDto journalDto;
 
+    private List<String> keywords;
+
     public PaperDto() {
     }
 
@@ -26,6 +31,9 @@ public class PaperDto {
 
     public PaperDto(Paper paper) {
         this.id = paper.getId();
+        this.title = paper.getTitle();
+        this.paperAbstract = paper.getPaperAbstract();
+        this.keywords = paper.getKeywords().stream().map(Keyword::getName).collect(Collectors.toList());
     }
 
     public String getTitle() {
@@ -66,5 +74,13 @@ public class PaperDto {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public List<String> getKeywords() {
+        return keywords;
+    }
+
+    public void setKeywords(List<String> keywords) {
+        this.keywords = keywords;
     }
 }

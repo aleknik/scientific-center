@@ -5,6 +5,7 @@ import io.github.aleknik.scientificcenterservice.model.domain.Journal;
 import io.github.aleknik.scientificcenterservice.model.domain.JournalEditor;
 import io.github.aleknik.scientificcenterservice.model.domain.Paper;
 import io.github.aleknik.scientificcenterservice.service.JournalService;
+import io.github.aleknik.scientificcenterservice.service.MailService;
 import io.github.aleknik.scientificcenterservice.service.PaperService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
@@ -17,10 +18,12 @@ public class ChooseEditorByField implements JavaDelegate {
 
     private final JournalService journalService;
     private final PaperService paperService;
+    private final MailService mailService;
 
-    public ChooseEditorByField(JournalService journalService, PaperService paperService) {
+    public ChooseEditorByField(JournalService journalService, PaperService paperService, MailService mailService) {
         this.journalService = journalService;
         this.paperService = paperService;
+        this.mailService = mailService;
     }
 
     @Override
@@ -43,6 +46,8 @@ public class ChooseEditorByField implements JavaDelegate {
         }
 
         delegateExecution.setVariable("chosenEditor", editor.getUsername());
+
+        mailService.sendMail(editor.getEmail(), "Paper assigned", String.format("You have been assigned a paper '%s'", paper.getTitle()));
 
     }
 }
