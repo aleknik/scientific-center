@@ -5,6 +5,7 @@ import { FormField } from 'src/app/shared/model/form-field.model';
 import { VariableValue } from 'src/app/shared/model/variable-value.model';
 import { PaperService } from 'src/app/core/http/paper.service';
 import * as FileSaver from "file-saver"
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-editor-revision-review',
@@ -21,7 +22,8 @@ export class EditorRevisionReviewComponent implements OnInit {
   constructor(private reviewerService: ReviewerService,
     private route: ActivatedRoute,
     private router: Router,
-    private paperService: PaperService) { }
+    private paperService: PaperService,
+    private toastr: ToastrService) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -32,7 +34,10 @@ export class EditorRevisionReviewComponent implements OnInit {
   submit() {
     const formfields = new Array<FormField>();
     formfields.push(this.createFormField('changesCorrect', this.changesCorrect));
-    this.reviewerService.editorRevisionReview(this.taskId, formfields).subscribe(res => { });
+    this.reviewerService.editorRevisionReview(this.taskId, formfields).subscribe(res => {
+      this.toastr.success('Revision submitted');
+      this.router.navigate(['tasks']);
+    });
   }
 
   createFormField(key: string, value: any): FormField {

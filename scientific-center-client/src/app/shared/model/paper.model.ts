@@ -14,4 +14,5 @@ export class Paper {
     price: number;
     author: Author;
     journal: Journal;
+    doi: string;
 }

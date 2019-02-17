@@ -220,7 +220,7 @@ public class PaperController {
         reviewer.setId(reviewerDto.getId());
         paperService.setReviewer(Long.parseLong(paperId), reviewer);
 
-        final User user = userService.findById(Long.parseLong(paperId));
+        final User user = userService.findById(reviewerDto.getId());
         final ArrayList<TaskFormFieldDto> taskFormFieldDtos = new ArrayList<>();
         taskFormFieldDtos.add(new TaskFormFieldDto("reviewer", new UserDto(user.getId(), user.getUsername())));
         taskFormFieldDtos.add(new TaskFormFieldDto("reviewDate", date));
