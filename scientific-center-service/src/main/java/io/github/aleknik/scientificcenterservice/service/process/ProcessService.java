@@ -4,9 +4,6 @@ package io.github.aleknik.scientificcenterservice.service.process;
 import io.github.aleknik.scientificcenterservice.model.dto.TaskFormDataDto;
 import io.github.aleknik.scientificcenterservice.model.dto.TaskFormFieldDto;
 import io.github.aleknik.scientificcenterservice.util.CamundaConstants;
-import org.camunda.bpm.engine.FormService;
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.rest.dto.VariableValueDto;
 import org.camunda.bpm.engine.rest.dto.identity.UserDto;
 import org.camunda.bpm.engine.rest.dto.runtime.ProcessInstanceDto;
@@ -30,18 +27,9 @@ public class ProcessService {
     @Value("${camunda-rest-base-path}")
     private String basePath;
 
-    private final RuntimeService runtimeService;
-
-    private final TaskService taskService;
-
-    private final FormService formService;
-
     private final RestTemplate restTemplate;
 
-    public ProcessService(RuntimeService runtimeService, TaskService taskService, FormService formService, RestTemplate restTemplate) {
-        this.runtimeService = runtimeService;
-        this.taskService = taskService;
-        this.formService = formService;
+    public ProcessService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 

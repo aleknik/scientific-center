@@ -91,7 +91,9 @@ public class PaperController {
         final TaskDto task = processService.getTask(taskId);
         final String paperId = (String) processService.getVariable(task.getProcessInstanceId(), "paperId");
 
-        paperService.setReviewMessages(reviewDtos);
+        if (!reviewDtos.isEmpty()) {
+            paperService.setReviewMessages(reviewDtos);
+        }
         paperService.submitRevision(Long.parseLong(paperId), file);
 
         final ArrayList<TaskFormFieldDto> taskFormFieldDtos = new ArrayList<>();

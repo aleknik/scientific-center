@@ -3,6 +3,7 @@ import { PaperService } from 'src/app/core/http/paper.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Paper } from 'src/app/shared/model/paper.model';
+import { Review } from 'src/app/shared/model/review.model';
 
 @Component({
   selector: 'app-format',
@@ -39,7 +40,7 @@ export class FormatComponent implements OnInit {
   }
 
   submit() {
-    this.paperService.resubmit(this.taskId, this.file).subscribe(result => {
+    this.paperService.resubmit(this.taskId, this.file, new Array<Review>()).subscribe(result => {
       this.toastr.success('Formated paper submitted');
     });
   }
