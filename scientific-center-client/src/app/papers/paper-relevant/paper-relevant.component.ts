@@ -49,7 +49,6 @@ export class PaperRelevantComponent implements OnInit {
     this.paperService.postRelevant(this.taskId, formfields).subscribe(res => {
       this.toastr.success('Paper submitted');
       this.router.navigate(['tasks']);
-
     });
   }
 

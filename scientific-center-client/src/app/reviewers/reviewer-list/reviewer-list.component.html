@@ -53,7 +53,7 @@
             class="float-right fa fa-trash fa-2x icon-pad pointer" (click)="removeReviewer(reviewer)">
           </span></p>
       </li>
-      <label>Deadline days</label>
+      <label>Deadline</label>
       <input type="number" class="form-control" [(ngModel)]="date" name="date">
       <br>
       <button [disabled]="choosenReviewers.length < 2 || !date" class="btn btn-lg btn-primary btn-block"

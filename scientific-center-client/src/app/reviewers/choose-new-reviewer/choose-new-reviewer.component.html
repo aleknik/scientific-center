@@ -54,7 +54,7 @@
           </span></p>
       </li>
       <label>Deadline</label>
-      <input type="datetime-local" class="form-control" [(ngModel)]="date" name="date">
+      <input type="number" class="form-control" [(ngModel)]="date" name="date">
       <br>
       <button [disabled]="choosenReviewers.length !== 1 || !date" class="btn btn-lg btn-primary btn-block"
         (click)="submitReviewers()">Submit</button>

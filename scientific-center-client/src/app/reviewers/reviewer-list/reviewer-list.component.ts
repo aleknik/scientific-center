@@ -63,7 +63,7 @@ export class ReviewerListComponent implements OnInit {
   }
 
   submitReviewers() {
-    this.paperService.addReviewers(this.taskId, this.choosenReviewers, `P${this.date}D`).subscribe(res => {
+    this.paperService.addReviewers(this.taskId, this.choosenReviewers, `PT${this.date}S`).subscribe(res => {
       this.toastrService.success("Reviewers submitted");
       this.router.navigate(['tasks']);
     });

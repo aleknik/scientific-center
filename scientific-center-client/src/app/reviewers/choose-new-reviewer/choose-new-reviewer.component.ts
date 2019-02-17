@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ReviewerSearchResult } from 'src/app/shared/model/reviewer-search-result.model';
 import { ReviewerQuery } from 'src/app/shared/model/reviewer-query.model';
 import { ReviewerService } from 'src/app/core/http/reviewer.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { PaperService } from 'src/app/core/http/paper.service';
 
@@ -25,7 +25,8 @@ export class ChooseNewReviewerComponent implements OnInit {
   constructor(private reviewerService: ReviewerService,
     private route: ActivatedRoute,
     private toastrService: ToastrService,
-    private paperService: PaperService) { }
+    private paperService: PaperService,
+    private router: Router) { }
 
   ngOnInit() {
     this.query.includeScienceField = true;
@@ -61,8 +62,9 @@ export class ChooseNewReviewerComponent implements OnInit {
   }
 
   submitReviewers() {
-    this.paperService.addReviewer(this.taskId, this.choosenReviewers[0], new Date(this.date).toISOString()).subscribe(res => {
+    this.paperService.addReviewer(this.taskId, this.choosenReviewers[0], `PT${this.date}S`).subscribe(res => {
       this.toastrService.success("Reviewer submitted");
+      this.router.navigate(['tasks']);
     });
   }
 }
