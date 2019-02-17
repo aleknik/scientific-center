@@ -108,14 +108,17 @@ public class PaperService {
                 .map(r -> reviewerRepository.findById(r.getId()).orElseThrow(() -> new BadRequestException("Reviewer not found")))
                 .collect(Collectors.toSet());
 
-        paper.setReviewers(foundReviewers);
-        paper.getReviews().clear();
+        paper.getReviewers().addAll(foundReviewers);
 
         return paperRepository.save(paper);
     }
 
     public Paper setReviewer(long paperId, Reviewer reviewer) {
         final Paper paper = findById(paperId);
+
+        if (paper.getReviewers().stream().anyMatch(r -> r.getId() == reviewer.getId())) {
+            throw new BadRequestException("This reviewer already reviewed this paper");
+        }
         final Reviewer foundReviewer = reviewerRepository.findById(reviewer.getId()).orElseThrow(() -> new BadRequestException("Reviewer not found"));
 
         paper.getReviewers().add(foundReviewer);

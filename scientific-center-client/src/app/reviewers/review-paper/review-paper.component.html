@@ -4,13 +4,13 @@
     <form class="form" (ngSubmit)="submit()" #myForm="ngForm">
       <h2 class="form-heading">Paper review</h2>
       <label>Comments</label>
-      <input type="text" class="form-control" [(ngModel)]="comments" name="comments">
+      <input type="text" class="form-control" [(ngModel)]="comments" name="comments" required>
       <label>Suggestion</label>
       <select name="scienceField" class="form-control" [(ngModel)]="suggestion" required>
         <option *ngFor="let suggestion of suggestions" [ngValue]="suggestion">{{suggestion}}</option>
       </select>
       <label>Comments for editor</label>
-      <input type="text" class="form-control" [(ngModel)]="staffComments" name="staffComments">
+      <input type="text" class="form-control" [(ngModel)]="staffComments" name="staffComments" required>
       <br>
       <button id="signinButton" [disabled]="myForm.form.invalid" class="btn btn-lg btn-primary btn-block"
         type="submit">Submit</button>

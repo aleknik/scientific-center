@@ -1,28 +1,21 @@
 package io.github.aleknik.scientificcenterservice.service.task;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.aleknik.scientificcenterservice.model.domain.Paper;
 import io.github.aleknik.scientificcenterservice.model.domain.PaperReview;
 import io.github.aleknik.scientificcenterservice.model.domain.Reviewer;
-import io.github.aleknik.scientificcenterservice.model.dto.payment.UserDto;
 import io.github.aleknik.scientificcenterservice.repository.PaperRepository;
 import io.github.aleknik.scientificcenterservice.repository.UserRepository;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedHashMap;
-
 @Service
 public class SavePaperReview implements JavaDelegate {
-
-    private final ObjectMapper mapper;
 
     private final PaperRepository paperRepository;
     private final UserRepository userRepository;
 
-    public SavePaperReview(ObjectMapper mapper, PaperRepository paperRepository, UserRepository userRepository) {
-        this.mapper = mapper;
+    public SavePaperReview(PaperRepository paperRepository, UserRepository userRepository) {
         this.paperRepository = paperRepository;
         this.userRepository = userRepository;
     }
@@ -34,17 +27,16 @@ public class SavePaperReview implements JavaDelegate {
         final String suggestion = (String) delegateExecution.getVariable("suggestion");
         final String staffComments = (String) delegateExecution.getVariable("staffComments");
 
-        final LinkedHashMap revDto = (LinkedHashMap) delegateExecution.getVariable("reviewer");
-        final UserDto reviewerDto = mapper.convertValue(revDto, UserDto.class);
+        final String reviewerUsername = (String) delegateExecution.getVariable("reviewer");
 
         final String paperId = (String) delegateExecution.getVariable("paperId");
         final Paper paper = paperRepository.findById(Long.valueOf(paperId)).get();
 
-        final Reviewer reviewer = (Reviewer) userRepository.findById(reviewerDto.getId()).get();
+        final Reviewer reviewer = (Reviewer) userRepository.findByUsername(reviewerUsername).get();
 
-        if (paper.getReviews().stream().anyMatch(r -> r.getReviewer().getId() == reviewerDto.getId())) {
+        if (paper.getReviews().stream().anyMatch(r -> r.getReviewer().getUsername().equals(reviewerUsername))) {
             final PaperReview paperReview = paper.getReviews().stream()
-                    .filter(r -> r.getReviewer().getId() == reviewerDto.getId()).findFirst().get();
+                    .filter(r -> r.getReviewer().getUsername().equals(reviewerUsername)).findFirst().get();
             paperReview.setComment(comments);
             paperReview.setSuggestion(suggestion);
             paperReview.setPrivateComment(staffComments);

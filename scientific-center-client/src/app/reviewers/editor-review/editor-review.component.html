@@ -3,15 +3,15 @@
   <div class="col-md-4">
     <form class="form" (ngSubmit)="submit()" #myForm="ngForm">
       <h2 class="form-heading">Paper review</h2>
-      <label>Need new reviewers</label>
+      <label>Need new reviewer</label>
       <input type="checkbox" class="form-control" [(ngModel)]="needNewReviewers" name="needNewReviewers">
       <label>Decision</label>
       <select name="scienceField" class="form-control" [(ngModel)]="decision" required>
         <option *ngFor="let suggestion of suggestions" [ngValue]="suggestion">{{suggestion}}</option>
       </select>
       <br>
-      <button id="signinButton" [disabled]="myForm.form.invalid" class="btn btn-lg btn-primary btn-block"
-        type="submit">Submit</button>
+      <button id="signinButton" [disabled]="myForm.form.invalid && !needNewReviewers"
+        class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
     </form>
     <br>
     <button class="btn btn-success btn-block" (click)="download()">Download</button>

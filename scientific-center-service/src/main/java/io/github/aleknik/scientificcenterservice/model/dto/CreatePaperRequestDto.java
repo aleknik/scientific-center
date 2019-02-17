@@ -17,8 +17,6 @@ public class CreatePaperRequestDto {
 
     private List<AuthorDto> coauthors;
 
-    private List<Reviewer> reviewers;
-
     public CreatePaperRequestDto() {
     }
 
@@ -62,11 +60,4 @@ public class CreatePaperRequestDto {
         this.coauthors = coauthors;
     }
 
-    public List<Reviewer> getReviewers() {
-        return reviewers;
-    }
-
-    public void setReviewers(List<Reviewer> reviewers) {
-        this.reviewers = reviewers;
-    }
 }

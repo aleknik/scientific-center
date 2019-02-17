@@ -7,7 +7,6 @@ import io.github.aleknik.scientificcenterservice.model.dto.elasticsearch.PaperQu
 import io.github.aleknik.scientificcenterservice.model.dto.elasticsearch.PaperSearchDto;
 import io.github.aleknik.scientificcenterservice.model.dto.elasticsearch.ReviewerSearchDto;
 import io.github.aleknik.scientificcenterservice.model.dto.payment.PaymentStatus;
-import io.github.aleknik.scientificcenterservice.model.dto.payment.UserDto;
 import io.github.aleknik.scientificcenterservice.security.RoleConstants;
 import io.github.aleknik.scientificcenterservice.service.JournalService;
 import io.github.aleknik.scientificcenterservice.service.PaperService;
@@ -197,16 +196,30 @@ public class PaperController {
         final TaskDto task = processService.getTask(taskId);
         final String paperId = (String) processService.getVariable(task.getProcessInstanceId(), "paperId");
 
-        final Paper paper = paperService.setReviewers(Long.parseLong(paperId), reviewerDtos.stream().map(dto -> {
+        final Paper paperEntity = paperService.findById(Long.parseLong(paperId));
+
+        if (!paperEntity.getReviewers().isEmpty()) {
+            if (reviewerDtos.size() != 1) {
+                throw new BadRequestException("You can choose only one reviewer for extra review");
+            }
+            final ReviewerSearchDto reviewerSearchDto = reviewerDtos.get(0);
+            if (paperEntity.getReviewers().stream().anyMatch(r -> r.getId() == reviewerSearchDto.getId())) {
+                throw new BadRequestException("This reviewer already reviewed this paper");
+            }
+        } else if (reviewerDtos.size() < 2) {
+            throw new BadRequestException("You must chose two reviewers at minimum");
+        }
+
+        paperService.setReviewers(Long.parseLong(paperId), reviewerDtos.stream().map(dto -> {
             final Reviewer reviewer = new Reviewer();
             reviewer.setId(dto.getId());
             return reviewer;
         }).collect(Collectors.toList()));
 
+
         final ArrayList<TaskFormFieldDto> taskFormFieldDtos = new ArrayList<>();
-        taskFormFieldDtos.add(new TaskFormFieldDto("reviewers", new ArrayList<>(paper.getReviewers()
-                .stream()
-                .map(r -> new UserDto(r.getId(), r.getUsername())).collect(Collectors.toList()))));
+        taskFormFieldDtos.add(new TaskFormFieldDto("reviewers", new ArrayList<>(reviewerDtos.stream().map(r -> userService.findById(r.getId()))
+                .map(User::getUsername).collect(Collectors.toList()))));
         taskFormFieldDtos.add(new TaskFormFieldDto("reviewDate", date));
         processService.submitTaskForm(taskId, taskFormFieldDtos);
 
@@ -218,13 +231,19 @@ public class PaperController {
         final TaskDto task = processService.getTask(taskId);
         final String paperId = (String) processService.getVariable(task.getProcessInstanceId(), "paperId");
 
+        final Paper paperEntity = paperService.findById(Long.parseLong(paperId));
+
+        if (paperEntity.getReviewers().stream().anyMatch(r -> r.getId() == reviewerDto.getId())) {
+            throw new BadRequestException("This reviewer already reviewed this paper");
+        }
+
         final Reviewer reviewer = new Reviewer();
         reviewer.setId(reviewerDto.getId());
         paperService.setReviewer(Long.parseLong(paperId), reviewer);
 
         final User user = userService.findById(reviewerDto.getId());
         final ArrayList<TaskFormFieldDto> taskFormFieldDtos = new ArrayList<>();
-        taskFormFieldDtos.add(new TaskFormFieldDto("reviewer", new UserDto(user.getId(), user.getUsername())));
+        taskFormFieldDtos.add(new TaskFormFieldDto("reviewer", user.getUsername()));
         taskFormFieldDtos.add(new TaskFormFieldDto("reviewDate", date));
         processService.submitTaskForm(taskId, taskFormFieldDtos);
 
@@ -251,8 +270,6 @@ public class PaperController {
                 c.getLastName(),
                 new Address(c.getCity(), c.getCountry()),
                 c.getEmail())).collect(Collectors.toSet()));
-        paper.setReviewers(new HashSet<>(createPaperRequestDto.getReviewers()));
-
         return paper;
     }
 

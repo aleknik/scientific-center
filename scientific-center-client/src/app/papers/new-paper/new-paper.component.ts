@@ -35,13 +35,6 @@ export class NewPaperComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.taskId = params['taskId'];
       this.getScienceFields();
-      this.getReviewers();
-    });
-  }
-
-  getReviewers() {
-    this.reviewerService.findAll().subscribe(res => {
-      this.paper.reviewers = res;
     });
   }
 
