@@ -10,6 +10,8 @@ import { PaperQuery } from 'src/app/shared/model/paper-query.model';
 import { TaskForm } from 'src/app/shared/model/task-form.model';
 import { FormField } from 'src/app/shared/model/form-field.model';
 import { ReviewerSearchResult } from 'src/app/shared/model/reviewer-search-result.model';
+import { FormatPaper } from 'src/app/shared/model/format-paper.model';
+import { Review } from 'src/app/shared/model/review.model';
 
 @Injectable({
   providedIn: 'root'
@@ -57,7 +59,7 @@ export class PaperService extends RestService {
   }
 
   downloadPaperByTask(taskId: string) {
-    return this.http.get(`${this.baseUrl}/download/tasl/${taskId}`, { responseType: 'blob' })
+    return this.http.get(`${this.baseUrl}/download/task/${taskId}`, { responseType: 'blob' })
       .pipe(catchError(this.handleError<any>()));
   }
 
@@ -76,8 +78,23 @@ export class PaperService extends RestService {
       .pipe(catchError(this.handleError<Paper>()));
   }
 
-  addReviewers(taskId: string, reviewers: ReviewerSearchResult[]) {
-    return this.http.post<ReviewerSearchResult[]>(`${this.baseUrl}/reviewers/${taskId}`, reviewers)
+  addReviewers(taskId: string, reviewers: ReviewerSearchResult[], date: string) {
+    return this.http.post<ReviewerSearchResult[]>(`${this.baseUrl}/reviewers/${taskId}`, reviewers, { params: { 'date': date } })
       .pipe(catchError(this.handleError<ReviewerSearchResult[]>()));
+  }
+
+  addReviewer(taskId: string, reviewer: ReviewerSearchResult, date: string) {
+    return this.http.post<ReviewerSearchResult>(`${this.baseUrl}/new-reviewer/${taskId}`, reviewer, { params: { 'date': date } })
+      .pipe(catchError(this.handleError<ReviewerSearchResult>()));
+  }
+
+  getFormatData(taskId: string) {
+    return this.http.get<FormatPaper>(`${this.baseUrl}/format-data/${taskId}`)
+      .pipe(catchError(this.handleError<FormatPaper>()));
+  }
+
+  getReviews(taskId: string) {
+    return this.http.get<Review[]>(`${this.baseUrl}/reviews/${taskId}`)
+      .pipe(catchError(this.handleError<Review[]>()));
   }
 }

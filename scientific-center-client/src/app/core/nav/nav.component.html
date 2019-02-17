@@ -6,27 +6,26 @@
   </button>
   <div class="collapse navbar-collapse" [collapse]="isCollapsed">
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item dropdown" dropdown>
+      <li class="nav-item dropdown" *ngIf="isAuthenticated()" dropdown>
         <a class="nav-link dropdown-toggle" href dropdownToggle (click)="false" id="navbarDropdownMenuLink"
           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Papers
         </a>
         <div *dropdownMenu class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
           <a class="dropdown-item" routerLink="/papers">Search papers</a>
-          <a class="dropdown-item" *ngIf="isAuthor()" routerLink="/papers/new">Publish paper</a>
         </div>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="/journals">Journals</a>
+        <a class="nav-link" *ngIf="isAuthenticated()" routerLink="/journals">Journals</a>
       </li>
       <li class="nav-item" *ngIf="isEditor()">
         <a class="nav-link" routerLink="/payments/register">Payment methods</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="/tasks">Tasks</a>
+        <a class="nav-link" *ngIf="isAuthenticated()" routerLink="/tasks">Tasks</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" (click)="submitPaper()">Submit paper</a>
+        <a class="nav-link" *ngIf="isAuthor()" (click)="submitPaper()">Submit paper</a>
       </li>
     </ul>
     <ul class="navbar-nav ml-auto">

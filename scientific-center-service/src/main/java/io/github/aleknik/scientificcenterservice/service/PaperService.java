@@ -102,6 +102,16 @@ public class PaperService {
                 .collect(Collectors.toSet());
 
         paper.setReviewers(foundReviewers);
+        paper.getReviews().clear();
+
+        return paperRepository.save(paper);
+    }
+
+    public Paper setReviewer(long paperId, Reviewer reviewer) {
+        final Paper paper = findById(paperId);
+        final Reviewer foundReviewer = reviewerRepository.findById(reviewer.getId()).orElseThrow(() -> new BadRequestException("Reviewer not found"));
+
+        paper.getReviewers().add(foundReviewer);
 
         return paperRepository.save(paper);
     }

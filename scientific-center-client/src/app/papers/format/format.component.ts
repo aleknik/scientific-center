@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PaperService } from 'src/app/core/http/paper.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Paper } from 'src/app/shared/model/paper.model';
 
 @Component({
   selector: 'app-format',
@@ -12,6 +13,8 @@ export class FormatComponent implements OnInit {
 
   file: File;
   taskId: string;
+  paper: Paper;
+  message: string;
 
   constructor(private paperService: PaperService,
     private toastr: ToastrService,
@@ -21,6 +24,13 @@ export class FormatComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.taskId = params['taskId'];
+      this.getData();
+    });
+  }
+  getData(): any {
+    this.paperService.getFormatData(this.taskId).subscribe(res => {
+      this.paper = res.paper;
+      this.message = res.message;
     });
   }
 

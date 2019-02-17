@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Journal } from 'src/app/shared/model/journal.model';
 import { JournalService } from 'src/app/core/http/journal.service';
 import { ToastrService } from 'ngx-toastr';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-choose-journal',
@@ -17,7 +17,8 @@ export class ChooseJournalComponent implements OnInit {
   journals = new Array<Journal>();
 
   constructor(private journalService: JournalService, private toastService: ToastrService,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute,
+    private router: Router) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -34,6 +35,7 @@ export class ChooseJournalComponent implements OnInit {
   choose() {
     this.journalService.chooseJournal(this.taskId, this.journal).subscribe(res => {
       this.toastService.success("Journal choosen");
+      this.router.navigate(['tasks']);
     });
   }
 

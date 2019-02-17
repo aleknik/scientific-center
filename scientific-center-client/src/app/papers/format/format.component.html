@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-md-2"></div>
-  <form class="col-md-8 form" (ngSubmit)="submit()" #paperForm="ngForm">
+  <form class="col-md-4 form" (ngSubmit)="submit()" #paperForm="ngForm">
     <h2 class="form-heading">Submit formated paper</h2>
     <label>Upload pdf</label>
     <input type="file" class="form-control-file" (change)="fileChange($event)" accept=".pdf">
@@ -9,4 +9,17 @@
     <button [disabled]="paperForm.form.invalid" class="btn btn-lg btn-primary btn-block" type="submit">Submit
       revision</button>
   </form>
+  <div class="col-md-4">
+    <h2>Paper formating details</h2>
+    <h3>Title</h3>
+    <p>{{paper.title}}</p>
+    <h3>Abstract</h3>
+    <p>{{paper.paperAbstract}}</p>
+    <h3>Keywords</h3>
+    <ul>
+      <li *ngFor="let word of paper.keywords">{{word}}</li>
+    </ul>
+    <h3>Editor message</h3>
+    <p>{{message}}</p>
+  </div>
 </div>

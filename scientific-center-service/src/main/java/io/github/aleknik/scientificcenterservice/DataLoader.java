@@ -62,7 +62,7 @@ public class DataLoader implements ApplicationRunner {
         addEditor("nikolic95@gmail.com", "editor", "pass", "Aleksandar", "Nkolic", AddressConstants.NOVI_SAD, "dipl. inz.", journal1);
         addEditor("nikolic95@gmail.com", "editor2", "pass", "Monika", "Erdeg", AddressConstants.NOVI_SAD, "dipl. inz.", journal2);
 
-        final Editor editor3 = addEditor("editor3@editor", "editor3", "pass", "Bojan", "Nikolic", AddressConstants.NOVI_SAD, "dipl. inz.", journal2);
+        final Editor editor3 = addEditor("nikolic95@gmail.com", "editor3", "pass", "Bojan", "Nikolic", AddressConstants.NOVI_SAD, "dipl. inz.", journal2);
 
         journal2 = journalRepository.findById(journal2.getId()).get();
         journal2.getJournalEditors().add(new JournalEditor(journal2, editor3, field1));

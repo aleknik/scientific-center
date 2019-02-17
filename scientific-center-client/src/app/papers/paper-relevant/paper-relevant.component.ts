@@ -5,6 +5,7 @@ import { FormField } from 'src/app/shared/model/form-field.model';
 import { VariableValue } from 'src/app/shared/model/variable-value.model';
 import * as FileSaver from "file-saver"
 import { Paper } from 'src/app/shared/model/paper.model';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-paper-relevant',
@@ -23,7 +24,8 @@ export class PaperRelevantComponent implements OnInit {
 
   constructor(private paperService: PaperService,
     private route: ActivatedRoute,
-    private router: Router) { }
+    private router: Router,
+    private toastr: ToastrService) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -38,12 +40,17 @@ export class PaperRelevantComponent implements OnInit {
   }
 
   submit() {
+    const isoDate = this.date ? new Date(this.date).toISOString() : null;
     const formfields = new Array<FormField>();
     formfields.push(this.createFormField('paperRelevant', this.isRelevant));
     formfields.push(this.createFormField('properlyFormatted', this.isFormated));
     formfields.push(this.createFormField('message', this.message));
-    formfields.push(this.createFormField('date', new Date(this.date).toISOString()));
-    this.paperService.postRelevant(this.taskId, formfields).subscribe(res => { });
+    formfields.push(this.createFormField('date', isoDate));
+    this.paperService.postRelevant(this.taskId, formfields).subscribe(res => {
+      this.toastr.success('Paper submitted');
+      this.router.navigate(['tasks']);
+
+    });
   }
 
   createFormField(key: string, value: any): FormField {

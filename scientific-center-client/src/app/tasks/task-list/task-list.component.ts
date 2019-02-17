@@ -67,7 +67,10 @@ export class TaskListComponent implements OnInit {
         this.router.navigate(['journal-subscribe', task.id]);
         break;
       }
-
+      case "ChooseNewReviewer": {
+        this.router.navigate(['new-review', task.id]);
+        break;
+      }
       default: {
         console.log("Invalid choice");
         break;

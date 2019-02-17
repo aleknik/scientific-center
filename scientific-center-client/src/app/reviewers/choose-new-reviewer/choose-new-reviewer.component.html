@@ -53,10 +53,10 @@
             class="float-right fa fa-trash fa-2x icon-pad pointer" (click)="removeReviewer(reviewer)">
           </span></p>
       </li>
-      <label>Deadline days</label>
-      <input type="number" class="form-control" [(ngModel)]="date" name="date">
+      <label>Deadline</label>
+      <input type="datetime-local" class="form-control" [(ngModel)]="date" name="date">
       <br>
-      <button [disabled]="choosenReviewers.length < 2 || !date" class="btn btn-lg btn-primary btn-block"
+      <button [disabled]="choosenReviewers.length !== 1 || !date" class="btn btn-lg btn-primary btn-block"
         (click)="submitReviewers()">Submit</button>
     </ul>
   </div>

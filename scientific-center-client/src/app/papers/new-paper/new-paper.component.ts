@@ -57,7 +57,8 @@ export class NewPaperComponent implements OnInit {
 
   create() {
     this.paperService.createPaper(this.taskId, this.paper, this.file).subscribe(result => {
-      this.toastr.success('Paper created');
+      this.toastr.success('Paper submitted');
+      this.router.navigate(['tasks']);
     });
   }
 

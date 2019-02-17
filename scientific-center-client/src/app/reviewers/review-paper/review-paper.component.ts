@@ -3,6 +3,9 @@ import { ReviewerService } from 'src/app/core/http/reviewer.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormField } from 'src/app/shared/model/form-field.model';
 import { VariableValue } from 'src/app/shared/model/variable-value.model';
+import { PaperService } from 'src/app/core/http/paper.service';
+import * as FileSaver from "file-saver"
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-review-paper',
@@ -20,7 +23,9 @@ export class ReviewPaperComponent implements OnInit {
 
   constructor(private reviewerService: ReviewerService,
     private route: ActivatedRoute,
-    private router: Router) { }
+    private router: Router,
+    private paperService: PaperService,
+    private toastr: ToastrService) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -33,7 +38,10 @@ export class ReviewPaperComponent implements OnInit {
     formfields.push(this.createFormField('comments', this.comments));
     formfields.push(this.createFormField('suggestion', this.suggestion));
     formfields.push(this.createFormField('staffComments', this.staffComments));
-    this.reviewerService.postReview(this.taskId, formfields).subscribe(res => { });
+    this.reviewerService.postReview(this.taskId, formfields).subscribe(res => {
+      this.toastr.success("Reviewers submitted");
+      this.router.navigate(['tasks']);
+    });
   }
 
   createFormField(key: string, value: any): FormField {
@@ -44,5 +52,15 @@ export class ReviewPaperComponent implements OnInit {
 
     return formField;
   }
+
+  download() {
+    this.paperService.downloadPaperByTask(this.taskId).subscribe(res => this.downloadFile(res));
+  }
+
+  downloadFile(data) {
+    const blob = new Blob([data], { type: 'application/octet-stream' });
+    FileSaver.saveAs(blob, `${this.taskId}.pdf`);
+  }
+
 
 }

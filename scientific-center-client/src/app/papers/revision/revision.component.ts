@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PaperService } from 'src/app/core/http/paper.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Review } from 'src/app/shared/model/review.model';
 
 @Component({
   selector: 'app-revision',
@@ -12,6 +13,7 @@ export class RevisionComponent implements OnInit {
 
   file: File;
   taskId: string;
+  reviews = new Array<Review>();
 
   constructor(private paperService: PaperService,
     private toastr: ToastrService,
@@ -21,6 +23,7 @@ export class RevisionComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.taskId = params['taskId'];
+      this.getReviews();
     });
   }
 
@@ -31,7 +34,14 @@ export class RevisionComponent implements OnInit {
   submit() {
     this.paperService.resubmit(this.taskId, this.file).subscribe(result => {
       this.toastr.success('Revision submitted');
+      this.router.navigate(['tasks']);
     });
+  }
+
+  getReviews(): any {
+    this.paperService.getReviews(this.taskId).subscribe(res => {
+      this.reviews = res;
+    })
   }
 
 }

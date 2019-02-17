@@ -21,6 +21,8 @@ public class PaperDto {
 
     private List<String> keywords;
 
+    private String DOI;
+
     public PaperDto() {
     }
 
@@ -82,5 +84,13 @@ public class PaperDto {
 
     public void setKeywords(List<String> keywords) {
         this.keywords = keywords;
+    }
+
+    public String getDOI() {
+        return DOI;
+    }
+
+    public void setDOI(String DOI) {
+        this.DOI = DOI;
     }
 }

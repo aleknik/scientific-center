@@ -20,6 +20,8 @@ import { RevisionComponent } from '../papers/revision/revision.component';
 import { EditorRevisionReviewComponent } from '../reviewers/editor-revision-review/editor-revision-review.component';
 import { FormatComponent } from '../papers/format/format.component';
 import { SubscribeComponent } from '../journals/subscribe/subscribe.component';
+import { ChooseNewReviewerComponent } from '../reviewers/choose-new-reviewer/choose-new-reviewer.component';
+import { IsAuthenticatedGuard } from './is-authenticated.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: '/papers', pathMatch: 'full' },
@@ -28,29 +30,30 @@ const routes: Routes = [
 
   { path: 'signup', component: SignupComponent },
 
-  { path: 'papers', component: PaperListComponent },
-  { path: 'papers/new/:taskId', component: NewPaperComponent },
-  { path: 'papers/:id', component: PaperDetailsComponent },
-  { path: 'format/:taskId', component: FormatComponent },
+  { path: 'papers', component: PaperListComponent, canActivate: [IsAuthenticatedGuard] },
+  { path: 'papers/new/:taskId', component: NewPaperComponent, canActivate: [IsAuthenticatedGuard] },
+  { path: 'papers/:id', component: PaperDetailsComponent, canActivate: [IsAuthenticatedGuard] },
+  { path: 'format/:taskId', component: FormatComponent, canActivate: [IsAuthenticatedGuard] },
 
-  { path: 'paper-revision/:taskId', component: RevisionComponent },
-  { path: 'reviewers/:taskId', component: ReviewerListComponent },
-  { path: 'review-paper/:taskId', component: ReviewPaperComponent },
-  { path: 'editor-review/:taskId', component: EditorReviewComponent },
-  { path: 'editor-revision-review/:taskId', component: EditorRevisionReviewComponent },
+  { path: 'paper-revision/:taskId', component: RevisionComponent, canActivate: [IsAuthenticatedGuard] },
+  { path: 'reviewers/:taskId', component: ReviewerListComponent, canActivate: [IsAuthenticatedGuard] },
+  { path: 'review-paper/:taskId', component: ReviewPaperComponent, canActivate: [IsAuthenticatedGuard] },
+  { path: 'editor-review/:taskId', component: EditorReviewComponent, canActivate: [IsAuthenticatedGuard] },
+  { path: 'editor-revision-review/:taskId', component: EditorRevisionReviewComponent, canActivate: [IsAuthenticatedGuard] },
+  { path: 'new-review/:taskId', component: ChooseNewReviewerComponent, canActivate: [IsAuthenticatedGuard] },
 
-  { path: 'payments/register', component: RegisterPaymentComponent },
-  { path: 'payments/callback/:status', component: CallbackComponent },
+  { path: 'payments/register', component: RegisterPaymentComponent, canActivate: [IsAuthenticatedGuard] },
+  { path: 'payments/callback/:status', component: CallbackComponent, canActivate: [IsAuthenticatedGuard] },
 
-  { path: 'journal-subscribe/:taskId', component: SubscribeComponent },
-  { path: 'journals', component: JournalListComponent },
-  { path: 'journals/choose/:taskId', component: ChooseJournalComponent },
-  { path: 'journals/:id', component: JournalDetailsComponent },
-  { path: 'journals/:journalId/issues/:issueId', component: IssueDetailsComponent },
+  { path: 'journal-subscribe/:taskId', component: SubscribeComponent, canActivate: [IsAuthenticatedGuard] },
+  { path: 'journals', component: JournalListComponent, canActivate: [IsAuthenticatedGuard] },
+  { path: 'journals/choose/:taskId', component: ChooseJournalComponent, canActivate: [IsAuthenticatedGuard] },
+  { path: 'journals/:id', component: JournalDetailsComponent, canActivate: [IsAuthenticatedGuard] },
+  { path: 'journals/:journalId/issues/:issueId', component: IssueDetailsComponent, canActivate: [IsAuthenticatedGuard] },
 
-  { path: 'tasks', component: TaskListComponent },
+  { path: 'tasks', component: TaskListComponent, canActivate: [IsAuthenticatedGuard] },
 
-  { path: 'paper-relevant/:taskId', component: PaperRelevantComponent },
+  { path: 'paper-relevant/:taskId', component: PaperRelevantComponent, canActivate: [IsAuthenticatedGuard] },
 ];
 
 @NgModule({

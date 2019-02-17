@@ -37,14 +37,22 @@ public class SavePaperReview implements JavaDelegate {
         final LinkedHashMap revDto = (LinkedHashMap) delegateExecution.getVariable("reviewer");
         final UserDto reviewerDto = mapper.convertValue(revDto, UserDto.class);
 
+        final String paperId = (String) delegateExecution.getVariable("paperId");
+        final Paper paper = paperRepository.findById(Long.valueOf(paperId)).get();
+
         final Reviewer reviewer = (Reviewer) userRepository.findById(reviewerDto.getId()).get();
 
-        final PaperReview paperReview = new PaperReview(reviewer, comments, suggestion, staffComments);
+        if (paper.getReviews().stream().anyMatch(r -> r.getReviewer().getId() == reviewerDto.getId())) {
+            final PaperReview paperReview = paper.getReviews().stream()
+                    .filter(r -> r.getReviewer().getId() == reviewerDto.getId()).findFirst().get();
+            paperReview.setComment(comments);
+            paperReview.setSuggestion(suggestion);
+            paperReview.setPrivateComment(staffComments);
+        } else {
+            final PaperReview paperReview = new PaperReview(reviewer, comments, suggestion, staffComments);
+            paper.getReviews().add(paperReview);
+        }
 
-        final String paperId = (String) delegateExecution.getVariable("paperId");
-
-        final Paper paper = paperRepository.findById(Long.valueOf(paperId)).get();
-        paper.getReviews().add(paperReview);
 
         paperRepository.save(paper);
     }

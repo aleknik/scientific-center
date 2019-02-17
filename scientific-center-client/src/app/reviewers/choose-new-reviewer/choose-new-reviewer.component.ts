@@ -1,18 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { ReviewerSearchResult } from 'src/app/shared/model/reviewer-search-result.model';
-import { ReviewerService } from 'src/app/core/http/reviewer.service';
 import { ReviewerQuery } from 'src/app/shared/model/reviewer-query.model';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ReviewerService } from 'src/app/core/http/reviewer.service';
+import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { PaperService } from 'src/app/core/http/paper.service';
-import { query } from '@angular/animations';
 
 @Component({
-  selector: 'app-reviewer-list',
-  templateUrl: './reviewer-list.component.html',
-  styleUrls: ['./reviewer-list.component.css']
+  selector: 'app-choose-new-reviewer',
+  templateUrl: './choose-new-reviewer.component.html',
+  styleUrls: ['./choose-new-reviewer.component.css']
 })
-export class ReviewerListComponent implements OnInit {
+export class ChooseNewReviewerComponent implements OnInit {
 
   reviewers = new Array<ReviewerSearchResult>();
 
@@ -26,8 +25,7 @@ export class ReviewerListComponent implements OnInit {
   constructor(private reviewerService: ReviewerService,
     private route: ActivatedRoute,
     private toastrService: ToastrService,
-    private paperService: PaperService,
-    private router: Router) { }
+    private paperService: PaperService) { }
 
   ngOnInit() {
     this.query.includeScienceField = true;
@@ -50,7 +48,7 @@ export class ReviewerListComponent implements OnInit {
   }
 
   addReviewer(reviewer: ReviewerSearchResult) {
-    if (!this.choosenReviewers.some(r => r.id === reviewer.id)) {
+    if (!this.choosenReviewers.some(r => r.id === reviewer.id) && this.choosenReviewers.length === 0) {
       this.choosenReviewers.push(reviewer);
     }
   }
@@ -63,9 +61,8 @@ export class ReviewerListComponent implements OnInit {
   }
 
   submitReviewers() {
-    this.paperService.addReviewers(this.taskId, this.choosenReviewers, `P${this.date}D`).subscribe(res => {
-      this.toastrService.success("Reviewers submitted");
-      this.router.navigate(['tasks']);
+    this.paperService.addReviewer(this.taskId, this.choosenReviewers[0], new Date(this.date).toISOString()).subscribe(res => {
+      this.toastrService.success("Reviewer submitted");
     });
   }
 }

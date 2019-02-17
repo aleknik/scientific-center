@@ -1,20 +1,25 @@
 <div class="row">
   <div class="col-md-2"></div>
-  <form class="col-md-4 form" (ngSubmit)="submit()" #myForm="ngForm">
-    <h2 class="form-heading">Editor review</h2>
-    <label>Is paper relevant</label>
-    <input type="checkbox" class="form-control" [(ngModel)]="isRelevant" name="relevant">
-    <label>Is paper formated</label>
-    <input type="checkbox" class="form-control" [(ngModel)]="isFormated" name="formated">
-    <label>Message</label>
-    <input type="text" class="form-control" [(ngModel)]="message" name="message">
-    <label>Deadline</label>
-    <input type="datetime-local" class="form-control" [(ngModel)]="date" name="date">
-
-    <button id="signinButton" [disabled]="myForm.form.invalid" class="btn btn-lg btn-primary btn-block"
-      type="submit">Submit</button>
+  <div class="col-md-4">
+    <form class="form" (ngSubmit)="submit()" #myForm="ngForm">
+      <h2 class="form-heading">Editor review</h2>
+      <label>Is paper relevant</label>
+      <input type="checkbox" class="form-control" [(ngModel)]="isRelevant" name="relevant">
+      <label>Is paper formated</label>
+      <input type="checkbox" class="form-control" [(ngModel)]="isFormated" name="formated">
+      <label>Message</label>
+      <input type="text" class="form-control" [(ngModel)]="message" name="message">
+      <label>Deadline</label>
+      <input type="datetime-local" class="form-control" [(ngModel)]="date" name="date">
+      <br>
+      <button id="signinButton" [disabled]="myForm.form.invalid || (!isFormated && !date)"
+        class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+    </form>
+    <br>
     <button class="btn btn-success btn-block" (click)="download()">Download</button>
-  </form>
+  </div>
+
+
   <div class="col-md-4">
     <h2 class="form-heading">Paper details</h2>
     <h3>Title</h3>

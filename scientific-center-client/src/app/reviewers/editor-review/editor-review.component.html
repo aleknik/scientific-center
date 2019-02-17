@@ -1,17 +1,33 @@
 <div class="row">
-  <div class="col-md-4"></div>
-  <form class="col-md-4 form" (ngSubmit)="submit()" #myForm="ngForm">
-    <h2 class="form-heading">Paper review</h2>
-    <label>Need new reviewers</label>
-    <input type="checkbox" class="form-control" [(ngModel)]="needNewReviewers" name="needNewReviewers">
-    <label>Decision</label>
-    <select name="scienceField" class="form-control" [(ngModel)]="decision" required>
-      <option *ngFor="let suggestion of suggestions" [ngValue]="suggestion">{{suggestion}}</option>
-    </select>
+  <div class="col-md-2"></div>
+  <div class="col-md-4">
+    <form class="form" (ngSubmit)="submit()" #myForm="ngForm">
+      <h2 class="form-heading">Paper review</h2>
+      <label>Need new reviewers</label>
+      <input type="checkbox" class="form-control" [(ngModel)]="needNewReviewers" name="needNewReviewers">
+      <label>Decision</label>
+      <select name="scienceField" class="form-control" [(ngModel)]="decision" required>
+        <option *ngFor="let suggestion of suggestions" [ngValue]="suggestion">{{suggestion}}</option>
+      </select>
 
-    <button id="signinButton" [disabled]="myForm.form.invalid" class="btn btn-lg btn-primary btn-block"
-      type="submit">Submit</button>
+      <button id="signinButton" [disabled]="myForm.form.invalid" class="btn btn-lg btn-primary btn-block"
+        type="submit">Submit</button>
+    </form>
+    <br>
     <button class="btn btn-success btn-block" (click)="download()">Download</button>
-  </form>
+  </div>
 
+  <h2>Reviewer comments</h2>
+  <div class="col-md-2">
+    <ul class="list-group">
+      <li class="list-group-item" *ngFor="let review of reviews">
+        <h3>Comments</h3>
+        <p>{{review.comment}}</p>
+        <h3>Suggestion</h3>
+        <p>{{review.suggestion}}</p>
+        <h3>Private comment</h3>
+        <p>{{review.privateComment}}</p>
+      </li>
+    </ul>
+  </div>
 </div>

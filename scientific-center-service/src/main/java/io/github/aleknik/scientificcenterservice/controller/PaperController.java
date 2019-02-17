@@ -2,10 +2,7 @@ package io.github.aleknik.scientificcenterservice.controller;
 
 import io.github.aleknik.scientificcenterservice.controller.exception.BadRequestException;
 import io.github.aleknik.scientificcenterservice.model.domain.*;
-import io.github.aleknik.scientificcenterservice.model.dto.CreatePaperRequestDto;
-import io.github.aleknik.scientificcenterservice.model.dto.JournalDto;
-import io.github.aleknik.scientificcenterservice.model.dto.PaperDto;
-import io.github.aleknik.scientificcenterservice.model.dto.TaskFormFieldDto;
+import io.github.aleknik.scientificcenterservice.model.dto.*;
 import io.github.aleknik.scientificcenterservice.model.dto.elasticsearch.PaperQueryDto;
 import io.github.aleknik.scientificcenterservice.model.dto.elasticsearch.PaperSearchDto;
 import io.github.aleknik.scientificcenterservice.model.dto.elasticsearch.ReviewerSearchDto;
@@ -118,8 +115,10 @@ public class PaperController {
 
         final PaperDto paperDto = new PaperDto();
         paperDto.setTitle(paper.getTitle());
+        paperDto.setDOI(paper.getDOI());
         paperDto.setPaperAbstract(paper.getPaperAbstract());
         paperDto.setPrice(paper.getJournal().getPaperPrice());
+        paperDto.setKeywords(paper.getKeywords().stream().map(Keyword::getName).collect(Collectors.toList()));
 
         final JournalDto journalDto = new JournalDto();
         journalDto.setOpenAccess(paper.getJournal().isOpenAccess());
@@ -192,7 +191,7 @@ public class PaperController {
     }
 
     @PostMapping("/reviewers/{taskId}")
-    public ResponseEntity chooseReviewers(@PathVariable String taskId, @RequestBody List<ReviewerSearchDto> reviewerDtos) {
+    public ResponseEntity chooseReviewers(@PathVariable String taskId, @RequestBody List<ReviewerSearchDto> reviewerDtos, @RequestParam String date) {
         final TaskDto task = processService.getTask(taskId);
         final String paperId = (String) processService.getVariable(task.getProcessInstanceId(), "paperId");
 
@@ -206,6 +205,25 @@ public class PaperController {
         taskFormFieldDtos.add(new TaskFormFieldDto("reviewers", new ArrayList<>(paper.getReviewers()
                 .stream()
                 .map(r -> new UserDto(r.getId(), r.getUsername())).collect(Collectors.toList()))));
+        taskFormFieldDtos.add(new TaskFormFieldDto("reviewDate", date));
+        processService.submitTaskForm(taskId, taskFormFieldDtos);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/new-reviewer/{taskId}")
+    public ResponseEntity chooseNewReviewers(@PathVariable String taskId, @RequestBody ReviewerSearchDto reviewerDto, @RequestParam String date) {
+        final TaskDto task = processService.getTask(taskId);
+        final String paperId = (String) processService.getVariable(task.getProcessInstanceId(), "paperId");
+
+        final Reviewer reviewer = new Reviewer();
+        reviewer.setId(reviewerDto.getId());
+        paperService.setReviewer(Long.parseLong(paperId), reviewer);
+
+        final User user = userService.findById(Long.parseLong(paperId));
+        final ArrayList<TaskFormFieldDto> taskFormFieldDtos = new ArrayList<>();
+        taskFormFieldDtos.add(new TaskFormFieldDto("reviewer", new UserDto(user.getId(), user.getUsername())));
+        taskFormFieldDtos.add(new TaskFormFieldDto("reviewDate", date));
         processService.submitTaskForm(taskId, taskFormFieldDtos);
 
         return ResponseEntity.noContent().build();
@@ -237,12 +255,26 @@ public class PaperController {
     }
 
     @GetMapping("/format-data/{taskId}")
-    public ResponseEntity getPaperMessage(@PathVariable String taskId) {
+    public ResponseEntity getPaperFormatData(@PathVariable String taskId) {
+        final TaskDto task = processService.getTask(taskId);
+        final String paperId = (String) processService.getVariable(task.getProcessInstanceId(), "paperId");
+        final String message = (String) processService.getVariable(task.getProcessInstanceId(), "message");
 
-        // TODO
 
-        return null;
+        final Paper paper = paperService.findById(Long.parseLong(paperId));
+
+        return ResponseEntity.ok(new FormatPaperDto(new PaperDto(paper), message));
     }
 
+
+    @GetMapping("/reviews/{taskId}")
+    public ResponseEntity getReviews(@PathVariable String taskId) {
+        final TaskDto task = processService.getTask(taskId);
+        final String paperId = (String) processService.getVariable(task.getProcessInstanceId(), "paperId");
+
+        final Paper paper = paperService.findById(Long.parseLong(paperId));
+
+        return ResponseEntity.ok(paper.getReviews().stream().map(pr -> new ReviewDto(pr, true)).collect(Collectors.toList()));
+    }
 
 }

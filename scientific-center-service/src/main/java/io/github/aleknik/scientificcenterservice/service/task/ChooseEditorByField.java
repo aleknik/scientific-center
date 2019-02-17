@@ -35,17 +35,20 @@ public class ChooseEditorByField implements JavaDelegate {
         final String paperId = (String) delegateExecution.getVariable("paperId");
         final Paper paper = paperService.findById(Long.parseLong(paperId));
 
-        final Optional<JournalEditor> journalEditor = journal.getJournalEditors()
+        final Optional<Editor> journalEditor = journal.getJournalEditors()
                 .stream()
-                .filter(je -> je.getScienceField().getId() == paper.getScienceField().getId()).findFirst();
+                .filter(je -> je.getScienceField().getId() == paper.getScienceField().getId()).findFirst().map(JournalEditor::getEditor);
         Editor editor;
-        if (journalEditor.isPresent()) {
-            editor = journalEditor.get().getEditor();
-        } else {
-            editor = journal.getEditor();
-        }
+        editor = journalEditor.orElseGet(journal::getEditor);
 
-        delegateExecution.setVariable("chosenEditor", editor.getUsername());
+        delegateExecution.setVariable("fieldEditor", editor.getUsername());
+
+        final long count = journal.getReviewers()
+                .stream()
+                .filter(r -> r.getScienceFields().stream().anyMatch(f -> f.getId() == paper.getScienceField().getId()))
+                .count();
+
+        delegateExecution.setVariable("chosenEditor", count >= 2 ? editor.getUsername() : journal.getEditor().getUsername());
 
         mailService.sendMail(editor.getEmail(), "Paper assigned", String.format("You have been assigned a paper '%s'", paper.getTitle()));
 

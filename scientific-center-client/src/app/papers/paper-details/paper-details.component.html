@@ -1,13 +1,21 @@
 <div class="row">
   <div class="col-md-4"></div>
   <div class="col-md-4">
-    <h2>{{paper.title}}</h2>
+    <h3>Title</h3>
+    <p>{{paper.title}}</p>
+    <h3>DOI</h3>
+    <p>{{paper.doi}}</p>
+    <h3>Abstract</h3>
     <p>{{paper.paperAbstract}}</p>
+    <h3>Keywords</h3>
+    <ul>
+      <li *ngFor="let word of paper.keywords">{{word}}</li>
+    </ul>
     <button *ngIf="showBuy()" class="btn btn-primary btn-block" (click)="buyPaper()">Buy</button>
     <button *ngIf="showProcessing()" class="btn btn-primary btn-block" disabled="true">Validating
       payment...</button>
     <button *ngIf="showDownload()" class="btn btn-success btn-block" (click)="download()">Dwwnload</button>
     <br />
-    <button class="btn btn-primary btn-block" [routerLink]="['/papers', paperId, 'reviewers']">Reviewers</button>
+    <!-- <button class="btn btn-primary btn-block" [routerLink]="['/papers', paperId, 'reviewers']">Reviewers</button> -->
   </div>
 </div>

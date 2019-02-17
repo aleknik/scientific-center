@@ -39,6 +39,8 @@ public class Paper extends BaseModel {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<PaperReview> reviews = new HashSet<>();
 
+    private String DOI;
+
     public Paper() {
     }
 
@@ -128,5 +130,13 @@ public class Paper extends BaseModel {
 
     public void setReviews(Set<PaperReview> reviews) {
         this.reviews = reviews;
+    }
+
+    public String getDOI() {
+        return DOI;
+    }
+
+    public void setDOI(String DOI) {
+        this.DOI = DOI;
     }
 }
