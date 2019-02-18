@@ -74,10 +74,16 @@ public class ReviewerController {
     public ResponseEntity query(@RequestBody ReviewerQueryDto queryDto) {
         final Paper paper = paperService.findById(queryDto.getPaperId());
 
-        Set<ReviewerSearchDto> results = null;
+        Set<ReviewerSearchDto> results = new HashSet<>(reviewerSearchService.searchByJournal(paper.getJournal().getId()));
 
         if (queryDto.isIncludeScienceField()) {
-            results = new HashSet<>(reviewerSearchService.searchByJournalAndField(paper.getJournal().getId(), paper.getScienceField().getId()));
+            final HashSet<ReviewerSearchDto> field = new HashSet<>(reviewerSearchService.searchByJournalAndField(paper.getJournal().getId(), paper.getScienceField().getId()));
+
+            if (results != null) {
+                results.retainAll(field);
+            } else {
+                results = field;
+            }
         }
         if (queryDto.isIncludeMoreLikeThis()) {
             final String content = paperSearchService.getContent(paper.getId());

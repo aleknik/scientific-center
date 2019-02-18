@@ -36,6 +36,12 @@ public class ReviewerSearchService {
         this.userRepository = userRepository;
     }
 
+    public List<ReviewerSearchDto> searchByJournal(long journalId) {
+        final QueryBuilder journalQuery = nestedQuery("journals", boolQuery().must(termQuery("journals.externalId", journalId)), ScoreMode.None);
+        final BoolQueryBuilder query = boolQuery().must(journalQuery);
+        return search(query);
+    }
+
     public List<ReviewerSearchDto> searchByJournalAndField(long journalId, long fieldId) {
         final QueryBuilder journalQuery = nestedQuery("journals", boolQuery().must(termQuery("journals.externalId", journalId)), ScoreMode.None);
 

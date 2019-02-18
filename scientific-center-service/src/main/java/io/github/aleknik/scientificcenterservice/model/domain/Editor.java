@@ -1,9 +1,6 @@
 package io.github.aleknik.scientificcenterservice.model.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "editor")
@@ -11,7 +8,7 @@ public class Editor extends User {
 
     private String title;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Journal journal;
 
     public Editor() {

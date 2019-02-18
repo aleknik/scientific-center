@@ -17,7 +17,7 @@ public class Journal extends BaseModel {
 
     private BigDecimal subscriptionPrice;
 
-    @OneToOne(fetch = FetchType.EAGER, mappedBy = "journal")
+    @OneToOne(fetch = FetchType.EAGER)
     private Editor editor;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE, mappedBy = "journal")

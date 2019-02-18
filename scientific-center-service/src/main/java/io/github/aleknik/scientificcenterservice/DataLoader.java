@@ -59,13 +59,21 @@ public class DataLoader implements ApplicationRunner {
 
         Journal journal1 = addJournal("Journal 1", BigDecimal.valueOf(1), BigDecimal.valueOf(5), false);
         Journal journal2 = addJournal("Journal 2", BigDecimal.valueOf(1), BigDecimal.valueOf(5), true);
-        addEditor("nikolic95@gmail.com", "editor", "pass", "Aleksandar", "Nkolic", AddressConstants.NOVI_SAD, "dipl. inz.", journal1);
-        addEditor("nikolic95@gmail.com", "editor2", "pass", "Monika", "Erdeg", AddressConstants.NOVI_SAD, "dipl. inz.", journal2);
+        addEditor("nikolic95@gmail.com", "editor", "pass", "Aleksandar", "Nkolic", AddressConstants.NOVI_SAD, "dipl. inz.", journal1, true);
+        journal1 = journalRepository.save(journal1);
+        addEditor("nikolic95@gmail.com", "editor2", "pass", "Monika", "Erdeg", AddressConstants.NOVI_SAD, "dipl. inz.", journal2, true);
+        journal2 = journalRepository.save(journal2);
 
-        final Editor editor3 = addEditor("nikolic95@gmail.com", "editor3", "pass", "Bojan", "Nikolic", AddressConstants.NOVI_SAD, "dipl. inz.", journal2);
+        final Editor editor3 = addEditor("nikolic95@gmail.com", "editor3", "pass", "Bojan", "Nikolic", AddressConstants.NOVI_SAD, "dipl. inz.", journal2, false);
 
         journal2 = journalRepository.findById(journal2.getId()).get();
         journal2.getJournalEditors().add(new JournalEditor(journal2, editor3, field1));
+        journal2 = journalRepository.save(journal2);
+
+        final Editor editor4 = addEditor("nikolic95@gmail.com", "editor4", "pass", "Alisa", "Nikolic", AddressConstants.NOVI_SAD, "dipl. inz.", journal2, false);
+
+        journal2 = journalRepository.findById(journal2.getId()).get();
+        journal2.getJournalEditors().add(new JournalEditor(journal2, editor4, field3));
         journal2 = journalRepository.save(journal2);
 
         addAuthor("nikolic95@gmail.com", "author", "pass", "Luka", "Maletin", AddressConstants.BELGRADE);
@@ -78,7 +86,7 @@ public class DataLoader implements ApplicationRunner {
                 Arrays.asList(journal1, journal2), Arrays.asList(field1, field2));
 
         addReviewer("nikolic95@gmail.com", "reviewer2", "pass", "Sara", "Peric", AddressConstants.NOVI_SAD, "dipl. inz.",
-                Arrays.asList(journal1, journal2), Arrays.asList(field1, field2, field3));
+                Arrays.asList(journal1, journal2), Arrays.asList(field1, field2));
 
         addReviewer("nikolic95@gmail.com", "reviewer3", "pass", "Katarina", "Cukurov", AddressConstants.NOVI_SAD, "dipl. inz.",
                 Arrays.asList(journal1, journal2), Arrays.asList(field1, field2, field3));
@@ -94,11 +102,14 @@ public class DataLoader implements ApplicationRunner {
         return journalRepository.save(journal);
     }
 
-    private Editor addEditor(String email, String username, String password, String firstName, String lastName, Address address, String title, Journal journal) {
+    private Editor addEditor(String email, String username, String password, String firstName, String lastName, Address address, String title, Journal journal, boolean chief) {
         final Editor editor = new Editor(email, username, password, firstName, lastName, address);
         editor.setTitle(title);
         editor.setJournal(journal);
-        journal.setEditor(editor);
+        if (chief) {
+            journal.setEditor(editor);
+        }
+
 
         return (Editor) userService.createUser(editor, RoleConstants.EDITOR);
     }
